@@ -37,7 +37,7 @@ ResultSet res=null;
 		
 		boolean existe=false;
 		try {
-			con = Conexion.getPoolConexion().getConnection();
+			con = conexion.getPoolConexion().getConnection();
 			
 			seleccionar = con.prepareStatement(sql2);
 			

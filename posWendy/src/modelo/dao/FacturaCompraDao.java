@@ -198,7 +198,7 @@ public class FacturaCompraDao {
 		
 		boolean existe=false;
 		try {
-			con = Conexion.getPoolConexion().getConnection();
+			con = conexion.getPoolConexion().getConnection();
 			
 			seleccionarFacturas = con.prepareStatement(sql);
 			
@@ -324,7 +324,7 @@ public class FacturaCompraDao {
 		
 		boolean existe=false;
 		try {
-			con = Conexion.getPoolConexion().getConnection();
+			con = conexion.getPoolConexion().getConnection();
 			
 			seleccionarFacturas = con.prepareStatement(sql);
 			seleccionarFacturas.setInt(1, id);
@@ -418,7 +418,7 @@ public class FacturaCompraDao {
 		
 		boolean existe=false;
 		try {
-			con = Conexion.getPoolConexion().getConnection();
+			con = conexion.getPoolConexion().getConnection();
 			
 			seleccionarFacturas = con.prepareStatement(sql);
 			

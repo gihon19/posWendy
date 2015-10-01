@@ -4,9 +4,11 @@ package modelo;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.*;
 import java.util.Properties;
 
+import javax.net.ssl.HttpsURLConnection;
 import javax.sql.DataSource;
 import javax.swing.JOptionPane;
 
@@ -22,26 +24,37 @@ import org.apache.commons.dbcp.BasicDataSource;
 public class Conexion {
 	
 	
-	//10.10.10.8:3306
+	//10.10.10.8:3306  http://192.168.1.112/
 		private  BasicDataSource basicDataSource;
 	   private DataSource dataSource;
 	   static String bd = "admin_tools";
-	   static String login = "root";
-	   static String password = "jdmm123";
-	   static String url = "jdbc:mysql://localhost:3306/"+bd;
+	   static String login = "user_pos";
+	   static String password = "admin123.";
+	   static String url = "jdbc:mysql://192.168.1.112:3306/"+bd;
 	   static String driver="com.mysql.jdbc.Driver";
    private Usuario usuarioLogin=null;
 
    Connection conn = null;
    
-   private static DataSource poolConexiones=null;
+   private  DataSource poolConexiones=null;
+   //private static DataSource poolConexionRemote=null;
+   
+   private boolean nivelFac=false;
+   
+   
+   
+   
+   public Conexion(String sql){
+	   poolConexiones=setDataSourceRemote("mysql");
+   }
    
    
 
    /** Constructor de DbConnection */
    public Conexion() {
 	   
-	   poolConexiones=Conexion.setDataSource("mysql");
+	   poolConexiones=setDataSource("mysql");
+	   //poolConexionRemote=setDataSourceRemote("mysql");
 	   
 	   /*BasicDataSource basicDataSource = new BasicDataSource();
 	   
@@ -109,6 +122,63 @@ public class Conexion {
       }*/
 	  // conn.p
    }
+   
+   private static DataSource setDataSourceRemote(String dbType) {
+       //Properties props = new Properties();
+       //FileInputStream fis = null;
+       BasicDataSource ds = new BasicDataSource();
+        
+       /*try {
+          fis = new FileInputStream( "db.config");
+    	   //Conexion.class.getResource("/View/imagen/actualizar.png");
+    	   //ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+    	   //fis = ClassLoader.class.getResourceAsStream("/path/to/your/xml");
+           props.load(fis);
+       }catch(IOException e){
+           e.printStackTrace();
+           return null;
+       }*/
+       if("mysql".equals(dbType)){
+    	   
+    	   //miscelaneaswyc.com
+           ds.setDriverClassName(driver);
+           ds.setUrl("jdbc:mysql://108.179.232.14:3306/miswendy_admin_tools");
+           ds.setUsername("miswendy_pos");
+           ds.setPassword("bTp.rxN-*~Z4");
+          // ds.setMinIdle(20);
+           ds.setMaxActive(10);
+           ds.setMaxIdle(5);
+           ds.setMinIdle(3);
+           ds.setInitialSize(2);
+           
+           
+           
+           
+           
+           /*ds.setDriverClassName(props.getProperty("MYSQL_DB_DRIVER_CLASS"));
+           ds.setUrl(props.getProperty("MYSQL_DB_URL"));
+           ds.setUsername(props.getProperty("MYSQL_DB_USERNAME"));
+           ds.setPassword(props.getProperty("MYSQL_DB_PASSWORD"));
+          // ds.setMinIdle(20);
+           ds.setMaxActive(10);
+           ds.setMaxIdle(5);
+           ds.setMinIdle(3);
+           ds.setInitialSize(2);*/
+       }/*else if("oracle".equals(dbType)){
+           ds.setDriverClassName(props.getProperty("ORACLE_DB_DRIVER_CLASS"));
+           ds.setUrl(props.getProperty("ORACLE_DB_URL"));
+           ds.setUsername(props.getProperty("ORACLE_DB_USERNAME"));
+           ds.setPassword(props.getProperty("ORACLE_DB_PASSWORD"));
+       }*/else{
+           return null;
+       }
+        
+       return ds;
+   }
+
+public boolean getNivelFact(){
+	   return this.nivelFac;
+   }
    public Usuario getUsuarioLogin(){
 	   return usuarioLogin;
    }
@@ -134,9 +204,29 @@ public class Conexion {
 	}
    }*/
    
-   public static DataSource getPoolConexion(){
+   public DataSource getPoolConexion(){
 	   return poolConexiones;
    }
+   
+  /* public static DataSource getPoolConexionRemote(){
+	   return poolConexionRemote;
+   }*/
+   public void setUsuario(Usuario u){
+	   this.usuarioLogin=u;
+   }
+   public boolean getConnectionStatus () {
+       boolean conStatus = false;
+       try {
+           URL u = new URL("https://www.google.com/");
+           HttpsURLConnection huc = (HttpsURLConnection) u.openConnection();
+           huc.connect();
+           conStatus = true;
+       } catch (Exception e) { 
+           conStatus = false;
+       }        
+       return conStatus;
+   }
+   
    
    public static DataSource setDataSource(String dbType){
        //Properties props = new Properties();

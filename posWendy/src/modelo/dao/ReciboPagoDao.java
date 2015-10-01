@@ -153,7 +153,7 @@ public class ReciboPagoDao {
 		
 		boolean existe=false;
 		try {
-			con = Conexion.getPoolConexion().getConnection();
+			con = conexion.getPoolConexion().getConnection();
 			
 			todos = con.prepareStatement(sql);
 			
@@ -230,7 +230,7 @@ public class ReciboPagoDao {
 		
 		boolean existe=false;
 		try {
-			con = Conexion.getPoolConexion().getConnection();
+			con = conexion.getPoolConexion().getConnection();
 			
 			todos = con.prepareStatement(sql);
 			
@@ -306,7 +306,7 @@ public class ReciboPagoDao {
 		
 		boolean existe=false;
 		try {
-			con = Conexion.getPoolConexion().getConnection();
+			con = conexion.getPoolConexion().getConnection();
 			
 			
 			todos = con.prepareStatement(sql);

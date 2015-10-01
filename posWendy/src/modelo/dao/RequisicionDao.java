@@ -151,7 +151,7 @@ public List<Requisicion> requiPorFechas(String fecha1, String fecha2) {
 		
 		boolean existe=false;
 		try {
-			con = Conexion.getPoolConexion().getConnection();
+			con = conexion.getPoolConexion().getConnection();
 			
 			selectTodas = con.prepareStatement(sql);
 			

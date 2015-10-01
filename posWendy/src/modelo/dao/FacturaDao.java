@@ -196,7 +196,7 @@ public class FacturaDao {
 		
 		try 
 		{
-			conn=Conexion.getPoolConexion().getConnection();
+			conn=conexion.getPoolConexion().getConnection();
 			agregarFactura=conn.prepareStatement(sql);
 			agregarFactura.setBigDecimal(1,myFactura.getSubTotal() );
 			agregarFactura.setBigDecimal(2, myFactura.getTotalImpuesto());
@@ -298,7 +298,7 @@ public class FacturaDao {
 		
 		boolean existe=false;
 		try {
-			con = Conexion.getPoolConexion().getConnection();
+			con = conexion.getPoolConexion().getConnection();
 			
 			seleccionarFacturas = con.prepareStatement(sql);
 			seleccionarFacturas.setInt(1, id);
@@ -390,7 +390,7 @@ public class FacturaDao {
 		
 		boolean existe=false;
 		try {
-			con = Conexion.getPoolConexion().getConnection();
+			con = conexion.getPoolConexion().getConnection();
 			
 			seleccionarFacturas = con.prepareStatement(sql);
 			
@@ -479,7 +479,7 @@ public class FacturaDao {
 		
 		boolean existe=false;
 		try {
-			con = Conexion.getPoolConexion().getConnection();
+			con = conexion.getPoolConexion().getConnection();
 			
 			seleccionarFacturasPendientes = con.prepareStatement(sql);
 			
@@ -684,7 +684,7 @@ public class FacturaDao {
 		
 		boolean existe=false;
 		try {
-			con = Conexion.getPoolConexion().getConnection();
+			con = conexion.getPoolConexion().getConnection();
 			
 			seleccionarFacturas = con.prepareStatement(sql);
 			
@@ -824,7 +824,7 @@ public class FacturaDao {
 		
 		boolean existe=false;
 		try {
-			con = Conexion.getPoolConexion().getConnection();
+			con = conexion.getPoolConexion().getConnection();
 			
 			seleccionarFacturas = con.prepareStatement(sql);
 			

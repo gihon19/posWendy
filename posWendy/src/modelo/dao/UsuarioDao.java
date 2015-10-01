@@ -49,7 +49,7 @@ public class UsuarioDao {
 		
 		boolean existe=false;
 		try {
-			con = Conexion.getPoolConexion().getConnection();
+			con = conexion.getPoolConexion().getConnection();
 			
 			comprobarAdmin = con.prepareStatement(sql);
 			comprobarAdmin.setString(1, pwd);

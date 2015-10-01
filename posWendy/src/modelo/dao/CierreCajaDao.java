@@ -42,7 +42,7 @@ public class CierreCajaDao {
 					+ " VALUES (now(),?,?,?,?,?,?,?,?,?)";
 		 if(unCierre!=null)
 		 try {
-				con = Conexion.getPoolConexion().getConnection();
+				con = conexion.getPoolConexion().getConnection();
 				registrarCierre=
 						con.prepareStatement(sql);
 				
@@ -116,7 +116,7 @@ public CierreCaja getCierreUltimoUser(){
 		
 		boolean existe=false;
 		try {
-			con = Conexion.getPoolConexion().getConnection();
+			con = conexion.getPoolConexion().getConnection();
 			
 			seleccionarCierre = con.prepareStatement(sql2);
 			
@@ -374,7 +374,7 @@ public CierreCaja getCierreUltimoUser(){
 		
 		boolean existe=false;
 		try {
-			con = Conexion.getPoolConexion().getConnection();
+			con = conexion.getPoolConexion().getConnection();
 			
 			seleccionarCierre = con.prepareStatement(sql2);
 			
