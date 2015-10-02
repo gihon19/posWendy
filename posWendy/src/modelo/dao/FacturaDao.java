@@ -191,8 +191,9 @@ public class FacturaDao {
 				+ "usuario,"
 				+ "total_letras,"
 				+ "codigo_vendedor,"
+				+ "codigo,"
 				+ "estado_pago)"
-				+ " VALUES (now(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				+ " VALUES (now(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		
 		try 
 		{
@@ -212,7 +213,8 @@ public class FacturaDao {
 			agregarFactura.setString(12, conexion.getUsuarioLogin().getUser());
 			agregarFactura.setString(13, NumberToLetterConverter.convertNumberToLetter(myFactura.getTotal().setScale(0, BigDecimal.ROUND_HALF_EVEN).doubleValue()));
 			agregarFactura.setInt(14, myFactura.getVendedor().getCodigo());
-			agregarFactura.setInt(15,myFactura.getEstadoPago());
+			agregarFactura.setInt(15, myFactura.getCodigo());
+			agregarFactura.setInt(16,myFactura.getEstadoPago());
 			
 			
 			

@@ -30,7 +30,7 @@ public class Conexion {
 	   static String bd = "admin_tools";
 	   static String login = "user_pos";
 	   static String password = "admin123.";
-	   static String url = "jdbc:mysql://192.168.1.112:3306/"+bd;
+	   static String url = "jdbc:mysql://192.168.1.10:3306/"+bd;
 	   static String driver="com.mysql.jdbc.Driver";
    private Usuario usuarioLogin=null;
 
@@ -42,6 +42,9 @@ public class Conexion {
    private boolean nivelFac=false;
    
    
+   public void setNivelFac(boolean n){
+	   nivelFac=n;
+   }
    
    
    public Conexion(String sql){

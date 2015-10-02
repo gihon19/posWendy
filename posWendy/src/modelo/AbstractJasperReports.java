@@ -52,12 +52,18 @@ public abstract class AbstractJasperReports
 	private static JasperViewer	viewer;
 	
 	private static InputStream factura=null;
+	private static InputStream factura2=null;
+	private static InputStream facturaCredito=null;
+	private static InputStream facturaCredito2=null;
 	private static InputStream facturaCompra=null;
 	private static InputStream facturaReimpresion=null;
 	private static InputStream cierreCaja=null;
 	private static InputStream reciboPago=null;
 	
 	private static JasperReport	reportFactura;
+	private static JasperReport	reportFacturaCredito;
+	private static JasperReport	reportFacturaCredito2;
+	private static JasperReport	reportFactura2;
 	private static JasperReport	reportFacturaCompra;
 	private static JasperReport	reportFacturaReimpresion;
 	private static JasperReport	reportFacturaCierreCaja;
@@ -66,15 +72,21 @@ public abstract class AbstractJasperReports
 	
 	public static void loadFileReport(){
 		
-		factura=AbstractJasperReports.class.getResourceAsStream("/reportes/factura_texaco.jasper");
+		factura=AbstractJasperReports.class.getResourceAsStream("/reportes/factura_wendy1.jasper");
+		factura2=AbstractJasperReports.class.getResourceAsStream("/reportes/factura_wendy2.jasper");
+		facturaCredito=AbstractJasperReports.class.getResourceAsStream("/reportes/factura_credito_wendy1.jasper");
+		facturaCredito2=AbstractJasperReports.class.getResourceAsStream("/reportes/factura_credito_wendy2.jasper");
 		facturaCompra=AbstractJasperReports.class.getResourceAsStream("/reportes/Factura_Compra_Saint_Paul.jasper");
 		facturaReimpresion=AbstractJasperReports.class.getResourceAsStream("/reportes/factura_texaco_reimpresion2.jasper");
-		cierreCaja=AbstractJasperReports.class.getResourceAsStream("/reportes/Cierre_Caja_Texaco2.jasper");
+		cierreCaja=AbstractJasperReports.class.getResourceAsStream("/reportes/Cierre_Caja_Wendy.jasper");
 		reciboPago=AbstractJasperReports.class.getResourceAsStream("/reportes/recibo_pago.jasper");
 		
 		
 		try {
 			reportFactura = (JasperReport) JRLoader.loadObject( factura );
+			reportFactura2 = (JasperReport) JRLoader.loadObject( factura2 );
+			reportFacturaCredito = (JasperReport) JRLoader.loadObject( facturaCredito );
+			reportFacturaCredito2 = (JasperReport) JRLoader.loadObject( facturaCredito2 );
 			reportFacturaCompra = (JasperReport) JRLoader.loadObject( facturaCompra );
 			reportFacturaReimpresion= (JasperReport) JRLoader.loadObject( facturaReimpresion );
 			reportFacturaCierreCaja= (JasperReport) JRLoader.loadObject( cierreCaja );
@@ -108,6 +120,16 @@ public abstract class AbstractJasperReports
 			if(tipoReporte==5){
 				reportFilled = JasperFillManager.fillReport( reportReciboPago, parametros, conn );
 			}
+			if(tipoReporte==6){
+				reportFilled = JasperFillManager.fillReport( reportFactura2, parametros, conn );
+			}
+			if(tipoReporte==7){
+				reportFilled = JasperFillManager.fillReport( reportFacturaCredito, parametros, conn );
+			}
+			if(tipoReporte==8){
+				reportFilled = JasperFillManager.fillReport( reportFacturaCredito2, parametros, conn );
+			}
+			
 			
 			
 			

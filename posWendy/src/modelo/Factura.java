@@ -26,6 +26,14 @@ public class Factura {
 	private Empleado vendedor=new Empleado();
 	private boolean deseaPagar=false;
 	private int estadoPago=0;
+	private int codigo=0;
+	
+	public void setCodigo(int c){
+		codigo=c;
+	}
+	public int getCodigo(){
+		return codigo;
+	}
 	
 	public void setEstadoPago(int e){
 		estadoPago=e;

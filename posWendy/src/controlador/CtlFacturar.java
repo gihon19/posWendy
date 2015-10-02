@@ -484,16 +484,16 @@ public void calcularTotales(){
 				
 				
 				//se estable el total y impuesto en el modelo
-				myFactura.setTotal(totalItem);
+				myFactura.setTotal(totalItem.setScale(2, BigDecimal.ROUND_HALF_EVEN));
 				if(porcentaImpuesto.intValue()==15){
-					myFactura.setTotalImpuesto(impuestoItem);
+					myFactura.setTotalImpuesto(impuestoItem.setScale(2, BigDecimal.ROUND_HALF_EVEN));
 				}
 				if(porcentaImpuesto.intValue()==18){
-					myFactura.setTotalImpuesto18(impuestoItem);
+					myFactura.setTotalImpuesto18(impuestoItem.setScale(2, BigDecimal.ROUND_HALF_EVEN));
 				}
-				myFactura.setSubTotal(totalsiniva);
+				myFactura.setSubTotal(totalsiniva.setScale(2, BigDecimal.ROUND_HALF_EVEN));
 				//myFactura.getDetalles().add(detalle);
-				myFactura.setTotalDescuento(detalle.getDescuentoItem());
+				myFactura.setTotalDescuento(detalle.getDescuentoItem().setScale(2, BigDecimal.ROUND_HALF_EVEN));
 				
 				detalle.setSubTotal(totalsiniva.setScale(2, BigDecimal.ROUND_HALF_EVEN));
 				detalle.setImpuesto(impuestoItem.setScale(2, BigDecimal.ROUND_HALF_EVEN));
@@ -689,7 +689,7 @@ public void calcularTotal(DetalleFactura detalle){
 				//AbstractJasperReports.createReportFactura( conexion.getPoolConexion().getConnection(), "Cierre_Caja_Saint_Paul.jasper",1 );
 				AbstractJasperReports.createReport(conexion.getPoolConexion().getConnection(), 4, cierre.idUltimoRequistro);
 				
-				AbstractJasperReports.Imprimir2();
+				AbstractJasperReports.showViewer(view);//.Imprimir2();
 				JOptionPane.showMessageDialog(view, "Se realizo el corte correctamente.");
 				//AbstractJasperReports.showViewer(view);
 				
@@ -718,6 +718,18 @@ public void calcularTotal(DetalleFactura detalle){
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 		
+		if (e.isControlDown() && e.getKeyCode() == KeyEvent.VK_P) {
+			
+			if(conexion.getNivelFact()==false){
+				conexion.setNivelFac(true);
+				JOptionPane.showMessageDialog(view, "Cambio de servidor local...");
+			}else{
+				conexion.setNivelFac(false);
+				JOptionPane.showMessageDialog(view, "Cambio de servidor remoto...");
+			}
+			
+
+        }
 		//Recoger qué fila se ha pulsadao en la tabla
 		filaPulsada = this.view.getTableDetalle().getSelectedRow();
 		char caracter = e.getKeyChar();
@@ -846,9 +858,10 @@ public void calcularTotal(DetalleFactura detalle){
 		if(view.getModeloTabla().getRowCount()>1){
 			
 			
-			if(!view.getRdbtnCredito().isSelected()){
+			//si la factura es al contado
+			if(view.getRdbtnContado().isSelected()){
 		
-				//se muestra la vista para cobrar y introducir el cambio
+				//se muestra la vista para cobrar y introducir el cambio 
 				ViewCambioPago viewPago=new ViewCambioPago(this.view);
 				CtlCambioPago ctlPago=new CtlCambioPago(viewPago,myFactura.getTotal());
 				//se muestra y ventana del cobro y se devuelve un resultado del cobro
@@ -872,7 +885,7 @@ public void calcularTotal(DetalleFactura detalle){
 					}
 					setFactura();
 					
-					if(conexion.getNivelFact())//nivel facturacion
+					if(conexion.getNivelFact())//nivel facturacion 2
 					{
 						this.guardarLocal();
 						
@@ -890,14 +903,40 @@ public void calcularTotal(DetalleFactura detalle){
 							JOptionPane.showMessageDialog(view, "Problema con la conexion a internet");
 						}
 						
-					}
+					}//fin nivel de facturacion
 					
 				}//fin de la ventana en cobro
 			
-			}else{//si la factura es al contado se procede a guardar e imprimir 
+			}//fin de la factura al credito
+
+			if(view.getRdbtnCredito().isSelected()){//si la factura es al contado se procede a guardar e imprimir 
 				setFactura();
+				myFactura.setTipoPago(3);
+				//no se necesita el cambio porque es al credito
+				myFactura.setCambio(new BigDecimal(0));
+				myFactura.setTipoFactura(2);
 				
+				if(conexion.getNivelFact())//nivel facturacion 2
+				{
+					this.guardarLocalCredito();
+					
+					
+				}//fin del nivel de facturacion
+				else{//si la facturacion es sencilla
+					
+					//comprobamos conexion remota
+					if(conexion.getConnectionStatus()){
+						
+						this.guardarRemotoCredito();
+						this.guardarLocalCredito();
+						
+					}else{
+						JOptionPane.showMessageDialog(view, "Problema con la conexion a internet");
+					}
+					
+				}//fin nivel de facturacion
 				
+				/*
 				
 				boolean resul=facturaDao.registrarFactura(myFactura);
 				
@@ -906,8 +945,7 @@ public void calcularTotal(DetalleFactura detalle){
 					myFactura.setIdFactura(facturaDao.getIdFacturaGuardada());
 					
 						try {
-							/*this.view.setVisible(false);
-							this.view.dispose();*/
+							
 							//AbstractJasperReports.createReportFactura( conexion.getPoolConexion().getConnection(), "Factura_Saint_Paul.jasper",myFactura.getIdFactura() );
 							AbstractJasperReports.createReport(conexion.getPoolConexion().getConnection(), 1, myFactura.getIdFactura());
 							AbstractJasperReports.showViewer(view);
@@ -931,8 +969,11 @@ public void calcularTotal(DetalleFactura detalle){
 					JOptionPane.showMessageDialog(view, "No se guardo la factura", "Error Base de Datos", JOptionPane.ERROR_MESSAGE);
 					this.view.setVisible(false);
 					this.view.dispose();
-				}//fin el if donde se guarda la factura
-			}
+				}//fin el if donde se guarda la factura*/
+				
+				
+				
+			}//fin de la factura al credito
 				
 					
 		}//fin del if donde se verifica que hay articulos que facturar
@@ -979,7 +1020,7 @@ public void calcularTotal(DetalleFactura detalle){
 	private void setEmptyView(){
 		//se estable la tabla de detalles vacia
 		view.getModeloTabla().setEmptyDetalles();
-		
+		myFactura.setCodigo(0);
 		//se agrega una fila vacia a la tabla detalle
 		view.getModeloTabla().agregarDetalle();
 		
@@ -1003,6 +1044,7 @@ public void calcularTotal(DetalleFactura detalle){
 		this.view.getTxtSubtotal().setText("0.00");
 		this.view.getTxtTotal().setText("0.00");
 		this.myFactura.setObservacion("");
+		this.view.getRdbtnContado().setSelected(true);
 		
 		//se estable el focus de la view en la caja de texto buscar
 		this.view.getTxtBuscar().requestFocusInWindow();
@@ -1028,8 +1070,9 @@ public void calcularTotal(DetalleFactura detalle){
 		viewListaCliente.dispose();
 		ctlBuscarCliente=null;
 	}
-
-	public void guardarLocal(){
+	
+	
+public void guardarLocal(){
 		
 		
 		//se registra la factura	
@@ -1039,14 +1082,16 @@ public void calcularTotal(DetalleFactura detalle){
 		if(resul){
 			myFactura.setIdFactura(facturaDao.getIdFacturaGuardada());
 			
+			
+			if(conexion.getNivelFact()){//nivel de facturo 2
 				try {
 					/*this.view.setVisible(false);
 					this.view.dispose();*/
 					//AbstractJasperReports.createReportFactura( conexion.getPoolConexion().getConnection(), "Factura_Saint_Paul.jasper",myFactura.getIdFactura() );
-					AbstractJasperReports.createReport(conexion.getPoolConexion().getConnection(), 1, myFactura.getIdFactura());
+					AbstractJasperReports.createReport(conexion.getPoolConexion().getConnection(),6, myFactura.getIdFactura());
 					//AbstractJasperReports.showViewer(view);
 					AbstractJasperReports.imprimierFactura();
-					AbstractJasperReports.imprimierFactura();
+					//AbstractJasperReports.imprimierFactura();
 					//myFactura=null;
 					setEmptyView();
 					
@@ -1060,6 +1105,9 @@ public void calcularTotal(DetalleFactura detalle){
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			}//fin del nivel de factura
+			
+			setEmptyView();
 			
 			
 		}else{
@@ -1069,8 +1117,9 @@ public void calcularTotal(DetalleFactura detalle){
 		}//fin el if donde se guarda la factura
 		
 	}
+
 public void guardarRemoto(){
-		
+	
 	//dfs
 	//se registra la factura	
 	boolean resul=facturaDaoRemote.registrarFactura(myFactura);
@@ -1078,28 +1127,29 @@ public void guardarRemoto(){
 	//se porcesa el resultado de ristrar la factura
 	if(resul){
 		myFactura.setIdFactura(facturaDaoRemote.getIdFacturaGuardada());
+		myFactura.setCodigo(this.facturaDaoRemote.getIdFacturaGuardada());
 		
-			try {
-				/*this.view.setVisible(false);
-				this.view.dispose();*/
-				//AbstractJasperReports.createReportFactura( conexion.getPoolConexion().getConnection(), "Factura_Saint_Paul.jasper",myFactura.getIdFactura() );
-				AbstractJasperReports.createReport(conexionRemote.getPoolConexion().getConnection(), 1, myFactura.getIdFactura());
-				//AbstractJasperReports.showViewer(view);
-				AbstractJasperReports.imprimierFactura();
-				AbstractJasperReports.imprimierFactura();
-				//myFactura=null;
-				setEmptyView();
-				
-				//si la view es de actualizacion al cobrar se cierra la view
-				if(this.tipoView==2){
-					myFactura=null;
-					view.setVisible(false);
+				try {
+					/*this.view.setVisible(false);
+					this.view.dispose();*/
+					//AbstractJasperReports.createReportFactura( conexion.getPoolConexion().getConnection(), "Factura_Saint_Paul.jasper",myFactura.getIdFactura() );
+					AbstractJasperReports.createReport(conexionRemote.getPoolConexion().getConnection(), 1, myFactura.getIdFactura());
+					//AbstractJasperReports.showViewer(view);
+					AbstractJasperReports.imprimierFactura();
+					//AbstractJasperReports.imprimierFactura();
+					//myFactura=null;
+					//setEmptyView();
+					
+					//si la view es de actualizacion al cobrar se cierra la view
+					if(this.tipoView==2){
+						myFactura=null;
+						view.setVisible(false);
+					}
+					//myFactura.
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				//myFactura.
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		
 		
 	}else{
@@ -1109,6 +1159,112 @@ public void guardarRemoto(){
 	}//fin el if donde se guarda la factura
 	}
 	
+public void guardarRemotoCredito(){
+		
+	//dfs
+	//se registra la factura	
+	boolean resul=facturaDaoRemote.registrarFactura(myFactura);
+		
+	//se porcesa el resultado de ristrar la factura
+	if(resul){
+		myFactura.setIdFactura(facturaDaoRemote.getIdFacturaGuardada());
+		myFactura.setCodigo(this.facturaDaoRemote.getIdFacturaGuardada());
+		
+				try {
+					/*this.view.setVisible(false);
+					this.view.dispose();*/
+					//AbstractJasperReports.createReportFactura( conexion.getPoolConexion().getConnection(), "Factura_Saint_Paul.jasper",myFactura.getIdFactura() );
+					AbstractJasperReports.createReport(conexionRemote.getPoolConexion().getConnection(), 7, myFactura.getIdFactura());
+					//AbstractJasperReports.imprimierFactura();
+					//AbstractJasperReports.imprimierFactura();
+					AbstractJasperReports.showViewer(view);
+					//myFactura=null;
+					//setEmptyView();
+					
+					//si la view es de actualizacion al cobrar se cierra la view
+					if(this.tipoView==2){
+						myFactura=null;
+						view.setVisible(false);
+					}
+					//myFactura.
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		
+		
+	}else{
+		JOptionPane.showMessageDialog(view, "No se guardo la factura", "Error Base de Datos", JOptionPane.ERROR_MESSAGE);
+		this.view.setVisible(false);
+		this.view.dispose();
+	}//fin el if donde se guarda la factura
+	}
+
+	public void guardarLocalCredito(){
+		
+		
+		//se registra la factura	
+		boolean resul=facturaDao.registrarFactura(myFactura);
+			
+		//se porcesa el resultado de ristrar la factura
+		if(resul){
+			myFactura.setIdFactura(facturaDao.getIdFacturaGuardada());
+			
+			
+			if(conexion.getNivelFact()){//nivel de facturo 2
+				
+				try {
+					
+					//AbstractJasperReports.createReportFactura( conexion.getPoolConexion().getConnection(), "Factura_Saint_Paul.jasper",myFactura.getIdFactura() );
+					AbstractJasperReports.createReport(conexion.getPoolConexion().getConnection(), 8, myFactura.getIdFactura());
+					AbstractJasperReports.showViewer(view);
+					//AbstractJasperReports.imprimierFactura();
+					//myFactura=null;
+					setEmptyView();
+					
+					//si la view es de actualizacion al cobrar se cierra la view
+					if(this.tipoView==2){
+						myFactura=null;
+						view.setVisible(false);
+					}
+					//myFactura.
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				/*try {
+					
+					//AbstractJasperReports.createReportFactura( conexion.getPoolConexion().getConnection(), "Factura_Saint_Paul.jasper",myFactura.getIdFactura() );
+					AbstractJasperReports.createReport(conexion.getPoolConexion().getConnection(),8, myFactura.getIdFactura());
+					AbstractJasperReports.showViewer(view);
+					//AbstractJasperReports.imprimierFactura();
+					//AbstractJasperReports.imprimierFactura();
+					//myFactura=null;
+					setEmptyView();
+					
+					//si la view es de actualizacion al cobrar se cierra la view
+					if(this.tipoView==2){
+						myFactura=null;
+						view.setVisible(false);
+					}
+					//myFactura.
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}*/
+			}//fin del nivel de factura
+			
+			setEmptyView();
+			
+			
+		}else{
+			JOptionPane.showMessageDialog(view, "No se guardo la factura", "Error Base de Datos", JOptionPane.ERROR_MESSAGE);
+			this.view.setVisible(false);
+			this.view.dispose();
+		}//fin el if donde se guarda la factura
+		
+	}
+
 	private void selectRowInset(){
 		
 		int row = this.view.getTableDetalle().getRowCount () - 2;
