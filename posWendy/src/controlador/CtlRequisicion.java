@@ -526,7 +526,7 @@ public void calcularTotales(){
 		this.view.getCbxDepatOrigen().removeAllItems();
 		
 		
-		this.view.getCbxDepatOrigen().setSelectedIndex(1);
+		this.view.getCbxDepatOrigen().setSelectedIndex(0);
 		
 	
 		

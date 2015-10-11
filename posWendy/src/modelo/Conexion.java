@@ -26,11 +26,26 @@ public class Conexion {
 	
 	//10.10.10.8:3306  http://192.168.1.112/
 		private  BasicDataSource basicDataSource;
+	
 	   private DataSource dataSource;
 	   static String bd = "admin_tools";
 	   static String login = "user_pos";
 	   static String password = "admin123.";
-	   static String url = "jdbc:mysql://192.168.1.10:3306/"+bd;
+	   static String server = "192.168.1.10";
+	   
+	   
+	   /*private DataSource dataSource;
+	   static String bd = "admin_tools";
+	   static String login = "root";
+	   static String password = "jdmm123";
+	   static String server = "localhost";*/
+	   
+	   /*static String bd = "miswendy_admin_tools";
+	   static String login = "miswendy_pos";
+	   static String password = "bTp.rxN-*~Z4";
+	   static String server = "www.miscelaneaswyc.com";*/
+	   
+	   static String url = "jdbc:mysql://"+server+":3306/"+bd;
 	   static String driver="com.mysql.jdbc.Driver";
    private Usuario usuarioLogin=null;
 
@@ -144,8 +159,14 @@ public class Conexion {
        if("mysql".equals(dbType)){
     	   
     	   //miscelaneaswyc.com
+    	   
+    	  /* ds.setDriverClassName(driver);
+           ds.setUrl("jdbc:mysql://localhost:3306/miswendy_admin_tools");
+           ds.setUsername("root");
+           ds.setPassword("jdmm123");*/
+           
            ds.setDriverClassName(driver);
-           ds.setUrl("jdbc:mysql://108.179.232.14:3306/miswendy_admin_tools");
+           ds.setUrl("jdbc:mysql://www.miscelaneaswyc.com:3306/miswendy_admin_tools");
            ds.setUsername("miswendy_pos");
            ds.setPassword("bTp.rxN-*~Z4");
           // ds.setMinIdle(20);

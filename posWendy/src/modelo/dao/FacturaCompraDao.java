@@ -72,6 +72,7 @@ public class FacturaCompraDao {
 			res=agregarFactura.getGeneratedKeys(); //obtengo las ultimas llaves generadas
 			while(res.next()){
 				idFactura=res.getInt(1);
+				fac.setNoCompra(idFactura);
 			}
 			
 			//JOptionPane.showMessageDialog(null,""+idFactura);

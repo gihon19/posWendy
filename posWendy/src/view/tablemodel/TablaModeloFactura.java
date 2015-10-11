@@ -181,6 +181,10 @@ public class TablaModeloFactura extends AbstractTableModel {
 				//fireTableDataChanged();
 				
 				break;
+		case 2: 
+			detallesFactura.get(rowIndex).getArticulo().setPrecioVenta(new Double(v));
+			fireTableCellUpdated(rowIndex, columnIndex);
+			break;
 		case 3:
 			
 			detallesFactura.get(rowIndex).setCantidad(new BigDecimal(v));// Double.parseDouble(v));
@@ -188,7 +192,7 @@ public class TablaModeloFactura extends AbstractTableModel {
 				//fireTableDataChanged();
 			break;
 		case 6:
-			detallesFactura.get(rowIndex).setDescuento(Integer.parseInt(v));
+			detallesFactura.get(rowIndex).setDescuentoItem(new BigDecimal(v));
 			fireTableCellUpdated(rowIndex, columnIndex);
 			
 			break;
@@ -206,11 +210,12 @@ public class TablaModeloFactura extends AbstractTableModel {
 		boolean resul=false;
 		if(columnIndex==0)
 			resul= true;
-		
+		if(columnIndex==2)
+			resul=true;
 		if(columnIndex==3)
 			resul=true;
-		/*if(columnIndex==6)
-			resul=true;*/
+		if(columnIndex==6)
+			resul=true;
 	
 		
 		

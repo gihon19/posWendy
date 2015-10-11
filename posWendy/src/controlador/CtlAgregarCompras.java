@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JOptionPane;
@@ -20,6 +21,7 @@ import modelo.Articulo;
 import modelo.dao.ArticuloDao;
 import modelo.dao.DepartamentoDao;
 import modelo.dao.ImpuestoDao;
+import modelo.AbstractJasperReports;
 import modelo.Conexion;
 import modelo.Departamento;
 import modelo.DetalleFacturaProveedor;
@@ -122,8 +124,29 @@ public class CtlAgregarCompras implements ActionListener,MouseListener,TableMode
 				//se manda a guardar la factura y se procesa el resultadoa
 				boolean result=this.myFacturaDao.registrarFactura(myFactura);
 				if(result){
-					JOptionPane.showMessageDialog(view,"Se guarda la factura");
+					//JOptionPane.showMessageDialog(view,"Se guarda la factura");
+					
+					try {
+						
+						//myFacturaDao.
+						/*this.view.setVisible(false);
+						this.view.dispose();*/
+						//AbstractJasperReports.createReportFactura( conexion.getPoolConexion().getConnection(), "Factura_Saint_Paul.jasper",myFactura.getIdFactura() );
+						AbstractJasperReports.createReport(conexion.getPoolConexion().getConnection(), 2, myFactura.getNoCompra());
+						AbstractJasperReports.showViewer(view);
+						//AbstractJasperReports.imprimierFactura();
+						//AbstractJasperReports.imprimierFactura();
+						//myFactura=null;
+						//setEmptyView();
+						
+						
+						//myFactura.
+					} catch (SQLException ee) {
+						// TODO Auto-generated catch block
+						ee.printStackTrace();
+					}
 					this.view.setVisible(false);
+					
 				}else{
 					JOptionPane.showMessageDialog(view,"No se guarda la factura");
 					this.view.setVisible(false);
@@ -160,7 +183,7 @@ public class CtlAgregarCompras implements ActionListener,MouseListener,TableMode
 		//se remueve la lista por defecto
 		this.view.getCbxDepart().removeAllItems();
 	
-		this.view.getCbxDepart().setSelectedIndex(1);
+		this.view.getCbxDepart().setSelectedIndex(0);
 	}
 
 	@Override

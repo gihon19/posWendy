@@ -197,6 +197,14 @@ public class FacturaDao {
 		
 		try 
 		{
+			
+			String nombreCliente=myFactura.getCliente().getNombre();//"Consumidor final";
+			
+			//si el cliente en escrito por el bombero
+			if(myFactura.getCliente().getId()<0){
+				myClienteDao.registrarCliente(myFactura.getCliente());
+				myFactura.getCliente().setId(myClienteDao.getIdClienteRegistrado());
+			}
 			conn=conexion.getPoolConexion().getConnection();
 			agregarFactura=conn.prepareStatement(sql);
 			agregarFactura.setBigDecimal(1,myFactura.getSubTotal() );

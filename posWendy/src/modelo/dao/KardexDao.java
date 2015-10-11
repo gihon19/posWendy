@@ -15,6 +15,7 @@ public class KardexDao {
 	private PreparedStatement buscarArticulo=null;
 	private PreparedStatement insertarNuevoMovimiento=null;
 	private PreparedStatement insertarNuevo=null;
+	
 	private String ultimoRistro="SELECT "
 			+ " v_kardex.can_saldo, "
 			+ "v_kardex.precio_saldo, "
@@ -28,6 +29,27 @@ public class KardexDao {
 			+ " v_kardex.codigo_bodega = ? "
 			+ " ORDER BY "
 			+ " v_kardex.cod DESC LIMIT 1";
+	
+	
+	private String ultimoReee="SELECT"
+			+ "`articulo_kardex`.`codigo_kardex` AS `codigo_kardex`,"
+			+ "`articulo_kardex`.`codigo_articulo` AS `codigo_articulo`,"
+			+ "`articulo_kardex`.`codigo_bodega` AS `codigo_bodega`,"
+			+ "`articulo_kardex`.`cantidad_maxima` AS `cantidad_maxima`,"
+			+ "`articulo_kardex`.`cantidad_minima` AS `cantidad_minima`,"
+			+ "`articulo_kardex`.`metodo` AS `metodo`"
+			+ " FROM "
+			+ "`articulo_kardex` "
+			+ " WHERE"
+			+ "	("
+			+ "		("
+			+ "			`articulo_kardex`.`codigo_articulo` = ?"
+			+ "		)"
+			+ "		AND ("
+			+ "			`articulo_kardex`.`codigo_bodega` = ?"
+			+ "		)"
+			+ "	)";
+	
 	public KardexDao(Conexion conn){
 		conexion=conn;
 		
@@ -244,14 +266,15 @@ public class KardexDao {
 		
 		try {
 			conn=conexion.getPoolConexion().getConnection();
-			buscarArticulo=conn.prepareStatement(ultimoRistro);
+			
+			buscarArticulo=conn.prepareStatement(ultimoReee);
 			buscarArticulo.setInt(1, idArticulo);
 			buscarArticulo.setInt(2, idBodega);
 			res=buscarArticulo.executeQuery();
 			while(res.next()){
 				existe=true;
 				
-				precioCompra=res.getBigDecimal("precio_saldo");
+				//precioCompra=res.getBigDecimal("precio_saldo");
 				
 			}
 		} catch (SQLException e) {

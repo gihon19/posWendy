@@ -96,6 +96,8 @@ public class ViewFacturar extends JDialog {
 	private JTextField txtImpuesto18;
 	private JButton btnPendientes;
 	
+	private JTextField txtRtn;
+	
 	private JComboBox cbxEmpleados;
 	//se crea el modelo de la lista de los impuestos
 	private CbxTmEmpleado modeloEmpleado;//=new ComboBoxImpuesto();
@@ -212,29 +214,39 @@ public class ViewFacturar extends JDialog {
 		panelBuscar.add(lblPrecio);
 		
 		lblFecha = new JLabel("Fecha");
-		lblFecha.setBounds(20, 23, 40, 14);
+		lblFecha.setBounds(10, 23, 40, 14);
 		panelDatosFactura.add(lblFecha);
 		
 		txtFechafactura = new JTextField();
 		txtFechafactura.setEditable(false);
-		txtFechafactura.setBounds(20, 44, 104, 29);
+		txtFechafactura.setBounds(10, 44, 71, 29);
 		panelDatosFactura.add(txtFechafactura);
 		txtFechafactura.setColumns(10);
 		
 		lblCodigoCliente = new JLabel("Id Cliente");
-		lblCodigoCliente.setBounds(156, 23, 61, 14);
+		lblCodigoCliente.setBounds(91, 23, 61, 14);
 		panelDatosFactura.add(lblCodigoCliente);
 		
 		txtIdcliente = new JTextField();
-		txtIdcliente.setBounds(156, 44, 67, 29);
+		txtIdcliente.setBounds(91, 44, 49, 29);
 		panelDatosFactura.add(txtIdcliente);
 		txtIdcliente.setColumns(10);
 		
 		txtNombrecliente = new JTextField();
 		txtNombrecliente.setToolTipText("Nombre Cliente");
-		txtNombrecliente.setBounds(233, 44, 214, 29);
+		txtNombrecliente.setBounds(150, 44, 160, 29);
 		panelDatosFactura.add(txtNombrecliente);
 		txtNombrecliente.setColumns(10);
+		
+		
+		JLabel lblRtn = new JLabel("R:T:N");
+		lblRtn.setBounds(320, 23, 112, 14);
+		panelDatosFactura.add(lblRtn);
+		
+		txtRtn = new JTextField();
+		txtRtn.setBounds(320, 44, 127, 29);
+		panelDatosFactura.add(txtRtn);
+		txtRtn.setColumns(10);
 		
 		grupoOpciones = new ButtonGroup();
 		rdbtnCredito = new JRadioButton("");
@@ -251,7 +263,7 @@ public class ViewFacturar extends JDialog {
 		panelDatosFactura.add(rdbtnContado);
 		
 		lblNombreCliente = new JLabel("Nombre Cliente");
-		lblNombreCliente.setBounds(233, 23, 104, 14);
+		lblNombreCliente.setBounds(150, 23, 160, 14);
 		panelDatosFactura.add(lblNombreCliente);
 		
 		lblContado = new JLabel("Contado");
@@ -393,6 +405,9 @@ public class ViewFacturar extends JDialog {
 	public BotonActualizar getBtnActualizar(){
 		return btnActualizar;
 	}
+	public JTextField getTxtRtn(){
+		return txtRtn;
+	}
 	public BotonGuardar getBtnGuardar(){
 		return btnGuardar;
 	}
@@ -512,6 +527,7 @@ public class ViewFacturar extends JDialog {
 		this.txtDescuento.addKeyListener(c);
 		this.txtImpuesto.addKeyListener(c);
 		this.txtSubtotal.addKeyListener(c);
+		txtRtn.addKeyListener(c);
 		this.txtTotal.addKeyListener(c);
 		txtBuscar.addKeyListener(c);
 		//txtBuscar.
