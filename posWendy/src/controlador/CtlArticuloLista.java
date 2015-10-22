@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -15,6 +16,7 @@ import javax.swing.JOptionPane;
 import modelo.Articulo;
 import modelo.dao.ArticuloDao;
 import modelo.dao.CodBarraDao;
+import modelo.AbstractJasperReports;
 import modelo.Conexion;
 import modelo.Marca;
 import modelo.Proveedor;
@@ -69,7 +71,8 @@ public class CtlArticuloLista implements ActionListener,MouseListener, WindowLis
 		case "BUSCAR":
 			//si se seleciono el boton ID
 			if(this.view.getRdbtnId().isSelected()){  
-				myArticulo=myArticuloDao.buscarArticulo(Integer.parseInt(this.view.getTxtBuscar().getText()));
+				//myArticulo=myArticuloDao.buscarArticulo(Integer.parseInt(this.view.getTxtBuscar().getText()));
+				myArticulo=myArticuloDao.buscarArticuloBarraCod(this.view.getTxtBuscar().getText());
 				if(myArticulo!=null){												
 					this.view.getModelo().limpiarArticulos();
 					this.view.getModelo().agregarArticulo(myArticulo);
@@ -131,11 +134,25 @@ public class CtlArticuloLista implements ActionListener,MouseListener, WindowLis
 					this.view.getModelo().eliminarArticulos(filaPulsada);
 					this.view.getModelo().fireTableDataChanged();
 					this.view.getBtnEliminar().setEnabled(false);
+					this.view.getBtnLimpiar().setEnabled(false);
 					JOptionPane.showMessageDialog(view, "Se elimino el articulo");
 					
 				}
 				
 			}
+			break;
+			
+		case "LIMPIAR":
+			try {
+				AbstractJasperReports.createReportCodBarra(conexion.getPoolConexion().getConnection(), myArticulo.getId());
+				//AbstractJasperReports.ImprimirCodigo();
+				AbstractJasperReports.showViewer(view);
+				
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			this.view.getBtnLimpiar().setEnabled(false);
 			break;
 			
 				
@@ -197,6 +214,7 @@ public class CtlArticuloLista implements ActionListener,MouseListener, WindowLis
         	else{//si solo seleccion la fila se guarda el id de proveedor para accion de eliminar
         		
         		this.view.getBtnEliminar().setEnabled(true);
+        		this.view.getBtnLimpiar().setEnabled(true);
         		/*idProveedor=identificador;
         		filaTabla=filaPulsada;*/
         		

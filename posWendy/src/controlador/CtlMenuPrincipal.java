@@ -16,6 +16,7 @@ import view.ViewAgregarCompras;
 import view.ViewCxCPagos;
 import view.ViewFacturar;
 import view.ViewFacturas;
+import view.ViewFiltroReportDei;
 import view.ViewListaArticulo;
 import view.ViewListaClientes;
 import view.ViewListaFactura;
@@ -183,6 +184,10 @@ public class CtlMenuPrincipal implements ActionListener {
 				viewProgramarPrecio.dispose();
 				viewProgramarPrecio=null;
 				ctlProgramarPrecio=null;
+				break;
+			case "R_DEI":
+				ViewFiltroReportDei viewFiltroDei=new ViewFiltroReportDei(view);
+				CtlFiltroRepDei ctlFiltroDei=new CtlFiltroRepDei(viewFiltroDei,conexion);
 				break;
 		}
 		

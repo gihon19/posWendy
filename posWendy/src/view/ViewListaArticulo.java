@@ -269,6 +269,10 @@ public class ViewListaArticulo extends JDialog {
 		return btnAgregar;
 	}
 	
+	public JButton getBtnLimpiar(){
+		return btnLimpiar;
+	}
+	
 public void conectarControladorBuscar(CtlArticuloBuscar c){
 	
 		this.addWindowListener(c);

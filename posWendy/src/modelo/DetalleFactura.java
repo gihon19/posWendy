@@ -11,6 +11,14 @@ public class DetalleFactura {
 	private BigDecimal descuentoItem=new BigDecimal(0.0);
 	private int descuento=0;
 	private int idFactura=1;
+	private boolean accion=false;
+	
+	public void setAccion(boolean d){
+		accion=d;
+	}
+	public boolean getAccion(){
+		return accion;
+	}
 	
 	public BigDecimal getDescuentoItem(){
 		return descuentoItem;

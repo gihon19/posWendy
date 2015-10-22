@@ -59,6 +59,9 @@ public abstract class AbstractJasperReports
 	private static InputStream facturaReimpresion=null;
 	private static InputStream cierreCaja=null;
 	private static InputStream reciboPago=null;
+	private static InputStream Dei=null;
+	private static InputStream codigoBarra=null;
+	private static InputStream Devolucion=null;
 	
 	private static JasperReport	reportFactura;
 	//private static JasperReport	reportFacturaCredito;
@@ -68,6 +71,9 @@ public abstract class AbstractJasperReports
 	private static JasperReport	reportFacturaReimpresion;
 	private static JasperReport	reportFacturaCierreCaja;
 	private static JasperReport	reportReciboPago;
+	private static JasperReport	reportDei;
+	private static JasperReport	reportDevolucion;
+	private static JasperReport	reportCodigoBarra;
 	
 	
 	public static void loadFileReport(){
@@ -80,7 +86,9 @@ public abstract class AbstractJasperReports
 		facturaReimpresion=AbstractJasperReports.class.getResourceAsStream("/reportes/factura_reimpresion_wen2.jasper");
 		cierreCaja=AbstractJasperReports.class.getResourceAsStream("/reportes/Cierre_Caja_Wendy.jasper");
 		reciboPago=AbstractJasperReports.class.getResourceAsStream("/reportes/recibo_pago.jasper");
-		
+		Dei=AbstractJasperReports.class.getResourceAsStream("/reportes/ReporteDEI.jasper");
+		Devolucion=AbstractJasperReports.class.getResourceAsStream("/reportes/devoluciones_wendy.jasper");
+		codigoBarra=AbstractJasperReports.class.getResourceAsStream("/reportes/codigo_barra.jasper");
 		
 		try {
 			reportFactura = (JasperReport) JRLoader.loadObject( factura );
@@ -91,10 +99,55 @@ public abstract class AbstractJasperReports
 			reportFacturaReimpresion= (JasperReport) JRLoader.loadObject( facturaReimpresion );
 			reportFacturaCierreCaja= (JasperReport) JRLoader.loadObject( cierreCaja );
 			reportReciboPago= (JasperReport) JRLoader.loadObject( reciboPago );
+			reportDei= (JasperReport) JRLoader.loadObject( Dei );
+			reportDevolucion= (JasperReport) JRLoader.loadObject( Devolucion );
+			reportCodigoBarra= (JasperReport) JRLoader.loadObject( codigoBarra );
+			//Dei=AbstractJasperReports.class.getResourceAsStream("/reportes/ReporteDEI.jasper");
 		} catch (JRException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public static void createReportCodBarra(Connection conn,int id){
+		 Map parametros = new HashMap();
+		 parametros.put("id_articulo",id);
+		 
+		 
+		 try {
+			reportFilled = JasperFillManager.fillReport( reportCodigoBarra, parametros, conn );
+		} catch (JRException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 try {
+				conn.close();
+			} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+			}
+	}
+	
+	
+	public static void createReportDei(Connection conn,int mes,int anio,String usuario){
+		 Map parametros = new HashMap();
+		 parametros.put("Mes",mes);
+		 parametros.put("Anio",anio);
+		 parametros.put("usuario",usuario);
+		 
+		 
+		 try {
+			reportFilled = JasperFillManager.fillReport( reportDei, parametros, conn );
+		} catch (JRException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 try {
+				conn.close();
+			} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+			}
 	}
 	
 	
@@ -123,10 +176,10 @@ public abstract class AbstractJasperReports
 			if(tipoReporte==6){
 				reportFilled = JasperFillManager.fillReport( reportFactura2, parametros, conn );
 			}
-			/*if(tipoReporte==7){
-				reportFilled = JasperFillManager.fillReport( reportFacturaCredito, parametros, conn );
+			if(tipoReporte==7){
+				reportFilled = JasperFillManager.fillReport( reportDevolucion, parametros, conn );
 			}
-			if(tipoReporte==8){
+			/*if(tipoReporte==8){
 				reportFilled = JasperFillManager.fillReport( reportFacturaCredito2, parametros, conn );
 			}*/
 			

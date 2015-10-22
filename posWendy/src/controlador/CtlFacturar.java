@@ -1152,7 +1152,7 @@ public void guardarRemoto(){
 					AbstractJasperReports.createReport(conexionRemote.getPoolConexion().getConnection(), 1, myFactura.getIdFactura());
 					//AbstractJasperReports.showViewer(view);
 					AbstractJasperReports.imprimierFactura();
-					AbstractJasperReports.imprimierFactura();
+					//AbstractJasperReports.imprimierFactura();
 					//myFactura=null;
 					//setEmptyView();
 					

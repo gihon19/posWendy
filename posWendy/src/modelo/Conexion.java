@@ -28,10 +28,10 @@ public class Conexion {
 		private  BasicDataSource basicDataSource;
 	
 	   private DataSource dataSource;
-	   static String bd = "admin_tools";
+	  /* static String bd = "admin_tools";
 	   static String login = "user_pos";
 	   static String password = "admin123.";
-	   static String server = "192.168.1.10";
+	   static String server = "192.168.1.10";*/
 	   
 	   
 	   /*private DataSource dataSource;
@@ -40,10 +40,10 @@ public class Conexion {
 	   static String password = "jdmm123";
 	   static String server = "localhost";*/
 	   
-	   /*static String bd = "miswendy_admin_tools";
+	   static String bd = "miswendy_admin_tools";
 	   static String login = "miswendy_pos";
 	   static String password = "bTp.rxN-*~Z4";
-	   static String server = "www.miscelaneaswyc.com";*/
+	   static String server = "108.167.189.55";
 	   
 	   static String url = "jdbc:mysql://"+server+":3306/"+bd;
 	   static String driver="com.mysql.jdbc.Driver";
@@ -166,7 +166,7 @@ public class Conexion {
            ds.setPassword("jdmm123");*/
            
            ds.setDriverClassName(driver);
-           ds.setUrl("jdbc:mysql://www.miscelaneaswyc.com:3306/miswendy_admin_tools");
+           ds.setUrl("jdbc:mysql://108.167.189.55:3306/miswendy_admin_tools");
            ds.setUsername("miswendy_pos");
            ds.setPassword("bTp.rxN-*~Z4");
           // ds.setMinIdle(20);

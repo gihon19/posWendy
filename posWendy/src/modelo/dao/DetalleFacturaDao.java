@@ -345,7 +345,7 @@ public class DetalleFacturaDao {
 		try {
 			con = conexion.getPoolConexion().getConnection();
 			
-			detallesFacturaPendiente = con.prepareStatement("SELECT * FROM detalle_factura where numero_factura=?;");
+			detallesFacturaPendiente = con.prepareStatement("SELECT * FROM v_detalle_factura where numero_factura_detalle=?;");
 			detallesFacturaPendiente.setInt(1, idFactura);
 			
 			res = detallesFacturaPendiente.executeQuery();
@@ -355,14 +355,14 @@ public class DetalleFacturaDao {
 				//se consigue el articulo del detalle
 				Articulo articuloDetalle= new Articulo();//articuloDao.buscarArticulo(res.getInt("codigo_articulo"));
 				articuloDetalle.setId(res.getInt("codigo_articulo"));
-				//articuloDetalle.setArticulo(res.getString(""));
-				articuloDetalle.setPrecioVenta(res.getDouble("precio"));//se estable el precio del articulo
+				articuloDetalle.setArticulo(res.getString("articulo"));
+				articuloDetalle.setPrecioVenta(res.getDouble("precio_detalle"));//se estable el precio del articulo
 				unDetalle.setListArticulos(articuloDetalle);//se agrega el articulo al 
-				unDetalle.setCantidad(res.getBigDecimal("cantidad"));
-				unDetalle.setImpuesto(res.getBigDecimal("impuesto"));
-				unDetalle.setSubTotal(res.getBigDecimal("subtotal"));
-				unDetalle.setDescuentoItem(res.getBigDecimal("descuento"));
-				unDetalle.setTotal(res.getBigDecimal("total"));
+				unDetalle.setCantidad(res.getBigDecimal("cantidad_detalle"));
+				unDetalle.setImpuesto(res.getBigDecimal("impuesto_detalle"));
+				unDetalle.setSubTotal(res.getBigDecimal("subtotal_detalle"));
+				unDetalle.setDescuentoItem(res.getBigDecimal("descuento_detalle"));
+				unDetalle.setTotal(res.getBigDecimal("total_detalle"));
 				
 				
 				

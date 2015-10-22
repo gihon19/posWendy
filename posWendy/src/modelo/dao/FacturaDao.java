@@ -368,7 +368,7 @@ public class FacturaDao {
 	}
 	
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para seleccionar todos los articulos>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-	public List<Factura> todasfacturas(){
+	public List<Factura> todasfacturas(int limInf,int limSupe){
 		
 		//se crear un referencia al pool de conexiones
 		//DataSource ds = DBCPDataSourceFactory.getDataSource("mysql");
@@ -392,7 +392,9 @@ public class FacturaDao {
 				+ "encabezado_factura.usuario,"
 				+ "encabezado_factura.estado_factura, "
 				+ "encabezado_factura.agrega_kardex "
-				+ " FROM encabezado_factura ORDER BY encabezado_factura.numero_factura DESC";
+				+ " FROM encabezado_factura "
+				+ " ORDER BY encabezado_factura.numero_factura DESC "
+				+ " LIMIT ?,?";
         //Statement stmt = null;
        	List<Factura> facturas=new ArrayList<Factura>();
 		
@@ -402,7 +404,11 @@ public class FacturaDao {
 		try {
 			con = conexion.getPoolConexion().getConnection();
 			
+			
 			seleccionarFacturas = con.prepareStatement(sql);
+			
+			seleccionarFacturas.setInt(1, limInf);
+			seleccionarFacturas.setInt(2, limSupe);
 			
 			res = seleccionarFacturas.executeQuery();
 			while(res.next()){
@@ -424,7 +430,7 @@ public class FacturaDao {
 				unaFactura.setTipoFactura(res.getInt("tipo_factura"));
 				unaFactura.setAgregadoAkardex(res.getInt("agrega_kardex"));
 				
-				unaFactura.setDetalles(detallesDao.getDetallesFactura(res.getInt("numero_factura")));
+				//unaFactura.setDetalles(detallesDao.getDetallesFactura(res.getInt("numero_factura")));
 				
 				
 				facturas.add(unaFactura);
