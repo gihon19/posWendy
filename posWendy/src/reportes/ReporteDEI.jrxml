@@ -11,9 +11,9 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
-	<property name="ireport.zoom" value="1.2722928551174544"/>
-	<property name="ireport.x" value="187"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="864"/>
+	<property name="ireport.y" value="108"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -291,7 +291,7 @@ YEAR (fecha) =$P{Anio}]]>
 					</textElement>
 					<textFieldExpression><![CDATA[" "+$F{no_factura_inicio}+" "]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
+				<textField isStretchWithOverflow="true" pattern="###0">
 					<reportElement style="Detail" x="120" y="0" width="59" height="15" uuid="dda20ac8-36df-4619-b0db-4ed038010d62"/>
 					<box>
 						<topPen lineWidth="0.2" lineStyle="Solid" lineColor="#666666"/>
@@ -482,7 +482,7 @@ YEAR (fecha) =$P{Anio}]]>
 				<textFieldExpression><![CDATA[$V{isv18_1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00">
-				<reportElement x="432" y="0" width="59" height="17" uuid="7aa5d7bd-eaf9-45d1-beb6-370fce98be74"/>
+				<reportElement x="432" y="0" width="60" height="17" uuid="7aa5d7bd-eaf9-45d1-beb6-370fce98be74"/>
 				<box rightPadding="3">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>

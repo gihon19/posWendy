@@ -691,38 +691,60 @@ public void calcularTotal(DetalleFactura detalle){
 	}
 	private void cierreCaja() {
 		// TODO Auto-generated method stub
-		CierreCajaDao cierre=new CierreCajaDao(conexion);
 		
-		if(cierre.registrarCierre())
+		
+		
+		
+		
+		if(conexion.getNivelFact())//nivel facturacion 2
 		{
-			try {
-				//AbstractJasperReports.createReportFactura( conexion.getPoolConexion().getConnection(), "Cierre_Caja_Saint_Paul.jasper",1 );
-				AbstractJasperReports.createReport(conexion.getPoolConexion().getConnection(), 4, cierre.idUltimoRequistro);
-				
-				AbstractJasperReports.showViewer(view);//.Imprimir2();
-				JOptionPane.showMessageDialog(view, "Se realizo el corte correctamente.");
-				//AbstractJasperReports.showViewer(view);
-				
-				//this.view.setModal(false);
-				//AbstractJasperReports.imprimierFactura();
-				
-				
-				
-				
-				/*if(!cierre.registrarCierre()){
-					JOptionPane.showMessageDialog(view, "No se guardo el cierre de corte. Vuelva a hacer el corte.");
+			CierreCajaDao cierre=new CierreCajaDao(conexion);
+		
+		
+				if(cierre.registrarCierre())
+				{
+					try {
+						//AbstractJasperReports.createReportFactura( conexion.getPoolConexion().getConnection(), "Cierre_Caja_Saint_Paul.jasper",1 );
+						AbstractJasperReports.createReport(conexion.getPoolConexion().getConnection(), 4, cierre.idUltimoRequistro);
+						
+						AbstractJasperReports.showViewer(view);
+						
+					} catch (SQLException ee) {
+						// TODO Auto-generated catch block
+						ee.printStackTrace();
+					}
 				}else{
-					AbstractJasperReports.Imprimir2();
-					JOptionPane.showMessageDialog(view, "Se realizo el corte correctamente.");
-				}*/
-				
-			} catch (SQLException ee) {
-				// TODO Auto-generated catch block
-				ee.printStackTrace();
-			}
-		}else{
-			JOptionPane.showMessageDialog(view, "No se guardo el cierre de corte. Vuelva a hacer el corte.");
+					JOptionPane.showMessageDialog(view, "No se guardo el cierre de corte. Vuelva a hacer el corte.");
+				}
 		}
+		else{//si la facturacion es sencilla
+			
+			//comprobamos conexion remota
+			if(conexion.getConnectionStatus()){
+				
+				CierreCajaDao cierre=new CierreCajaDao(conexionRemote);
+				
+				if(cierre.registrarCierre())
+				{
+					try {
+						//AbstractJasperReports.createReportFactura( conexion.getPoolConexion().getConnection(), "Cierre_Caja_Saint_Paul.jasper",1 );
+						AbstractJasperReports.createReport(conexion.getPoolConexion().getConnection(), 4, cierre.idUltimoRequistro);
+						
+						AbstractJasperReports.showViewer(view);
+						
+					} catch (SQLException ee) {
+						// TODO Auto-generated catch block
+						ee.printStackTrace();
+					}
+				}else{
+					JOptionPane.showMessageDialog(view, "No se guardo el cierre de corte. Vuelva a hacer el corte.");
+				}
+				
+			}else{
+				JOptionPane.showMessageDialog(view, "Problema con la conexion a internet");
+			}
+			
+		}//fin nivel de facturacion
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {

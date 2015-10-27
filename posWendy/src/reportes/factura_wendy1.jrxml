@@ -7,7 +7,7 @@
 	<property name="com.jaspersoft.studio.unit.pageWidth" value="mm"/>
 	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="883"/>
+	<property name="ireport.y" value="432"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -21,44 +21,22 @@
 	<parameter name="numero_factura" class="java.lang.Integer"/>
 	<queryString>
 		<![CDATA[SELECT
-     v_encabezado_factura.`numero_factura`,
-     v_encabezado_factura.`fecha`,
-     v_encabezado_factura.`codigo_cliente`,
-     v_encabezado_factura.`nombre_cliente`,
-     v_encabezado_factura.`direccion`,
-     v_encabezado_factura.`telefono`,
-     v_encabezado_factura.`movil`,
-     v_encabezado_factura.`rtn`,
-     v_encabezado_factura.`subtotal`,
-     v_encabezado_factura.`impuesto`,
-     v_encabezado_factura.`total`,
-     v_encabezado_factura.`codigo`,
-     v_encabezado_factura.`isv18`,
-     v_encabezado_factura.`estado_factura`,
-     v_encabezado_factura.`usuario`,
-     v_encabezado_factura.`pago`,
-     v_encabezado_factura.`tipo_factura`,
-     v_encabezado_factura.`descuento`,
-     v_detalle_factura.`total_detalle`,
-     v_detalle_factura.`subtotal_detalle`,
-     v_detalle_factura.`descuento_detalle`,
-     v_detalle_factura.`impuesto_detalle`,
-     v_detalle_factura.`cantidad_detalle`,
-     v_detalle_factura.`precio_detalle`,
-     v_detalle_factura.`articulo`,
-     v_detalle_factura.`numero_factura_detalle`,
-     v_encabezado_factura.`cambio`,
-     v_encabezado_factura.`total_letras`,
-     v_encabezado_factura.`vendedor` AS factura_vendedor
+   *
 FROM
-     `v_detalle_factura` v_detalle_factura INNER JOIN `v_encabezado_factura` v_encabezado_factura ON v_detalle_factura.`numero_factura_detalle` = v_encabezado_factura.`numero_factura`
+    v_facturas
 WHERE
-     v_encabezado_factura.numero_factura = $P{numero_factura}]]>
+    numero_factura = $P{numero_factura}]]>
 	</queryString>
 	<field name="numero_factura" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="fecha" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha2" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha1" class="java.sql.Date">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="codigo_cliente" class="java.lang.Long">
@@ -76,19 +54,10 @@ WHERE
 	<field name="movil" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="rtn" class="java.lang.String">
+	<field name="pago" class="java.lang.Float">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="subtotal" class="java.lang.Float">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="impuesto" class="java.lang.Float">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="total" class="java.lang.Float">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="codigo" class="java.lang.String">
+	<field name="usuario" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="isv18" class="java.lang.Float">
@@ -97,40 +66,49 @@ WHERE
 	<field name="estado_factura" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="usuario" class="java.lang.String">
+	<field name="codigo" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="pago" class="java.lang.Float">
+	<field name="total" class="java.lang.Float">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="tipo_factura" class="java.lang.String">
+	<field name="impuesto" class="java.lang.Float">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="descuento" class="java.lang.String">
+	<field name="subtotal" class="java.lang.Float">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="total_detalle" class="java.lang.Float">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="subtotal_detalle" class="java.lang.Float">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="descuento_detalle" class="java.lang.Float">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="impuesto_detalle" class="java.lang.Float">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="cantidad_detalle" class="java.lang.Float">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="precio_detalle" class="java.lang.Float">
+	<field name="rtn" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="articulo" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="numero_factura_detalle" class="java.lang.Integer">
+	<field name="precio_detalle" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cantidad_detalle" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="impuesto_detalle" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="descuento_detalle" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="subtotal_detalle" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total_detalle" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="codigo_articulo" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="descuento" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tipo_factura" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="cambio" class="java.lang.Double">
@@ -139,7 +117,18 @@ WHERE
 	<field name="total_letras" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="factura_vendedor" class="java.lang.String"/>
+	<field name="tipo_pago" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vendedor" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_tipo_factura" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="agrega_kardex" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -278,7 +267,7 @@ WHERE
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement positionType="FixRelativeToBottom" x="1" y="236" width="178" height="1" uuid="8039a7c9-2f56-4904-b8fc-d244f0b02f7f"/>
+				<reportElement positionType="FixRelativeToBottom" x="1" y="244" width="178" height="1" uuid="8039a7c9-2f56-4904-b8fc-d244f0b02f7f"/>
 				<graphicElement>
 					<pen lineWidth="0.5" lineColor="#999999"/>
 				</graphicElement>
@@ -323,7 +312,7 @@ WHERE
 				<textElement>
 					<font fontName="Arial" size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{factura_vendedor}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{vendedor}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="1" y="225" width="58" height="10" uuid="a627d26e-4d64-422a-a9d0-3aaee6b51aef"/>
@@ -335,15 +324,15 @@ WHERE
 		</band>
 	</title>
 	<columnHeader>
-		<band height="16" splitType="Stretch">
+		<band height="10" splitType="Stretch">
 			<line>
-				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="180" height="1" uuid="e9d2002a-c8ee-4649-a258-640dad29110c"/>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="9" width="180" height="1" uuid="e9d2002a-c8ee-4649-a258-640dad29110c"/>
 				<graphicElement>
 					<pen lineWidth="0.5" lineColor="#999999"/>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement style="Column header" x="18" y="0" width="96" height="15" forecolor="#030303" uuid="6754685d-6437-47f3-b59f-16c8525a9d66"/>
+				<reportElement style="Column header" x="18" y="0" width="96" height="10" forecolor="#030303" uuid="6754685d-6437-47f3-b59f-16c8525a9d66"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -356,7 +345,7 @@ WHERE
 				<text><![CDATA[Descripcion]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="1" y="0" width="18" height="15" forecolor="#030303" uuid="db89b4fe-2010-469d-8892-93072362eb72"/>
+				<reportElement style="Column header" x="1" y="0" width="18" height="10" forecolor="#030303" uuid="db89b4fe-2010-469d-8892-93072362eb72"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -369,7 +358,7 @@ WHERE
 				<text><![CDATA[Cant]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="145" y="0" width="35" height="15" forecolor="#030303" uuid="3e2a378b-fd1a-4d1f-b6e4-4b80ab2a9568"/>
+				<reportElement style="Column header" x="145" y="0" width="35" height="10" forecolor="#030303" uuid="3e2a378b-fd1a-4d1f-b6e4-4b80ab2a9568"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -382,7 +371,7 @@ WHERE
 				<text><![CDATA[Total]]></text>
 			</staticText>
 			<staticText>
-				<reportElement style="Column header" x="113" y="0" width="33" height="15" forecolor="#030303" uuid="2745c6d9-e21d-43f9-8e56-cbfb8d4339f3"/>
+				<reportElement style="Column header" x="113" y="0" width="33" height="10" forecolor="#030303" uuid="2745c6d9-e21d-43f9-8e56-cbfb8d4339f3"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -397,7 +386,7 @@ WHERE
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="19" splitType="Stretch">
+		<band height="17" splitType="Stretch">
 			<frame>
 				<reportElement style="Detail" mode="Opaque" x="0" y="0" width="180" height="15" backcolor="#FFFFFF" uuid="fa7cec56-4ec1-48e6-a26e-7266a995d174"/>
 				<textField isStretchWithOverflow="true">
@@ -456,9 +445,9 @@ WHERE
 		</band>
 	</detail>
 	<summary>
-		<band height="163">
+		<band height="153">
 			<frame>
-				<reportElement mode="Opaque" x="0" y="12" width="180" height="148" forecolor="#D0B48E" backcolor="#FFFFFF" uuid="5d8169bd-4a75-48c8-8a68-6d3ad5ba9402"/>
+				<reportElement mode="Opaque" x="0" y="4" width="180" height="148" forecolor="#D0B48E" backcolor="#FFFFFF" uuid="5d8169bd-4a75-48c8-8a68-6d3ad5ba9402"/>
 				<textField pattern="¤ #,##0.00">
 					<reportElement x="114" y="20" width="66" height="10" uuid="1639fd03-04ec-4493-8e17-f0ecd7f5978e"/>
 					<textElement textAlignment="Right">
@@ -586,13 +575,7 @@ WHERE
 				</line>
 			</frame>
 			<line>
-				<reportElement positionType="FixRelativeToBottom" x="3" y="10" width="177" height="1" uuid="63bab24d-615c-4c2d-9327-78d2ff918f5f"/>
-				<graphicElement>
-					<pen lineWidth="0.5" lineColor="#999999"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement positionType="FixRelativeToBottom" x="3" y="10" width="177" height="1" uuid="058af450-81fc-412d-b317-427d5813c04a"/>
+				<reportElement positionType="FixRelativeToBottom" x="3" y="3" width="177" height="1" uuid="058af450-81fc-412d-b317-427d5813c04a"/>
 				<graphicElement>
 					<pen lineWidth="0.5" lineColor="#999999"/>
 				</graphicElement>
