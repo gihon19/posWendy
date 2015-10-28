@@ -28,7 +28,7 @@ public class Conexion {
 		private  BasicDataSource basicDataSource;
 	
 	   private DataSource dataSource;
-	  /* static String bd = "admin_tools";
+	   /*static String bd = "admin_tools";
 	   static String login = "user_pos";
 	   static String password = "admin123.";
 	   static String server = "192.168.1.10";*/
@@ -170,10 +170,11 @@ public class Conexion {
            ds.setUsername("miswendy_pos");
            ds.setPassword("bTp.rxN-*~Z4");
           // ds.setMinIdle(20);
-           ds.setMaxActive(10);
+           ds.setMaxActive(5);
            ds.setMaxIdle(5);
+           
            ds.setMinIdle(3);
-           ds.setInitialSize(2);
+           ds.setInitialSize(5);
            
            
            
@@ -273,10 +274,10 @@ public boolean getNivelFact(){
            ds.setUsername(login);
            ds.setPassword(password);
           // ds.setMinIdle(20);
-           ds.setMaxActive(10);
+           ds.setMaxActive(5);
            ds.setMaxIdle(5);
            ds.setMinIdle(3);
-           ds.setInitialSize(2);
+           ds.setInitialSize(5);
            
            
            

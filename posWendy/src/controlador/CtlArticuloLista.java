@@ -48,7 +48,7 @@ public class CtlArticuloLista implements ActionListener,MouseListener, WindowLis
 		this.view=v;
 		myArticulo=new Articulo();
 		myArticuloDao=new ArticuloDao(conexion);
-		cargarTabla(myArticuloDao.todoArticulos());
+		cargarTabla(myArticuloDao.todoArticulos(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 		
 		view.conectarControlador(this);
 		
@@ -91,7 +91,7 @@ public class CtlArticuloLista implements ActionListener,MouseListener, WindowLis
 				}
 			
 			if(this.view.getRdbtnTodos().isSelected()){  
-				cargarTabla(myArticuloDao.todoArticulos());
+				cargarTabla(myArticuloDao.todoArticulos(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 				this.view.getTxtBuscar().setText("");
 				}
 			break;
@@ -153,6 +153,19 @@ public class CtlArticuloLista implements ActionListener,MouseListener, WindowLis
 				e1.printStackTrace();
 			}
 			this.view.getBtnLimpiar().setEnabled(false);
+			break;
+			
+		case "NEXT":
+			view.getModelo().netPag();
+			cargarTabla(myArticuloDao.todoArticulos(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
+			break;
+		case "LAST":
+			view.getModelo().lastPag();
+			cargarTabla(myArticuloDao.todoArticulos(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
 			break;
 			
 				

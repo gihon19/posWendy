@@ -228,7 +228,7 @@ public void conectarControlador(CtlFacturas c){
 	}
 
 	public JTextField getTxtPagina(){
-	return txtPagina;
+		return txtPagina;
 	}
 	
 	public JTable getTablaFacturas(){

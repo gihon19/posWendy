@@ -7,7 +7,7 @@
 	<property name="com.jaspersoft.studio.unit.pageWidth" value="mm"/>
 	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="432"/>
+	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -386,7 +386,7 @@ WHERE
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="17" splitType="Stretch">
+		<band height="15" splitType="Stretch">
 			<frame>
 				<reportElement style="Detail" mode="Opaque" x="0" y="0" width="180" height="15" backcolor="#FFFFFF" uuid="fa7cec56-4ec1-48e6-a26e-7266a995d174"/>
 				<textField isStretchWithOverflow="true">

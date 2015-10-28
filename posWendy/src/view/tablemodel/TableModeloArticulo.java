@@ -18,6 +18,31 @@ public class TableModeloArticulo extends AbstractTableModel {
 	private String []columnNames={"Id","Nombre","Marca","Impuesto","Precio Venta"};
 	private List<Articulo> articulos = new ArrayList<Articulo>();
 	
+	private int limiteInferior=0;
+	private int limiteSuperior=30;
+	private int noPagina=1;
+	
+	public int getLimiteInferior(){
+		return limiteInferior;
+	}
+	public int getLimiteSuperior(){
+		return limiteSuperior;
+	}
+	public int getNoPagina(){
+		return noPagina;
+	}
+	
+	public void netPag(){
+		limiteInferior+=30;
+		//limiteSuperior+=30;
+		noPagina++;
+	}
+	public void lastPag(){
+		//limiteSuperior-=30;
+		limiteInferior-=30;
+		noPagina--;
+	}
+	
 	
 	public void agregarArticulo(Articulo articulo) {
 		articulos.add(articulo);

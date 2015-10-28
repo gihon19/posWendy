@@ -83,7 +83,7 @@ public abstract class AbstractJasperReports
 		//facturaCredito=AbstractJasperReports.class.getResourceAsStream("/reportes/factura_credito_wendy1.jasper");
 		//facturaCredito2=AbstractJasperReports.class.getResourceAsStream("/reportes/factura_credito_wendy2.jasper");
 		facturaCompra=AbstractJasperReports.class.getResourceAsStream("/reportes/factura_compra.jasper");
-		facturaReimpresion=AbstractJasperReports.class.getResourceAsStream("/reportes/factura_reimpresion_wen2.jasper");
+		facturaReimpresion=AbstractJasperReports.class.getResourceAsStream("/reportes/factura_reimpresion_wen1.jasper");
 		cierreCaja=AbstractJasperReports.class.getResourceAsStream("/reportes/Cierre_Caja_Wendy.jasper");
 		reciboPago=AbstractJasperReports.class.getResourceAsStream("/reportes/recibo_pago.jasper");
 		Dei=AbstractJasperReports.class.getResourceAsStream("/reportes/ReporteDEI.jasper");

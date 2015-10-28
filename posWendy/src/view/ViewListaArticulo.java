@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -24,6 +25,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.JPopupMenu;
@@ -46,6 +48,7 @@ public class ViewListaArticulo extends JDialog {
 	protected JPanel panelAccion;
 	protected JPanel panelSuperior;
 	protected JPanel panelBusqueda;
+	protected JPanel panelPaginacion;
 	
 	
 	protected BotonAgregar btnAgregar;
@@ -65,6 +68,10 @@ public class ViewListaArticulo extends JDialog {
 	
 	private JTable tablaArticulos;
 	private TableModeloArticulo modelo;
+	
+	private JButton btnSiguiente;
+	private JButton btnAnterior;
+	private JTextField txtPagina;
 	
 	
 	
@@ -123,6 +130,7 @@ public class ViewListaArticulo extends JDialog {
 		panelAccion=new JPanel();
 		panelBusqueda=new JPanel();
 		panelSuperior=new JPanel();
+		panelPaginacion=new JPanel();
 		
 		panelAccion.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Acciones de registro", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		panelBusqueda.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Busqueda de registros", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
@@ -189,7 +197,23 @@ public class ViewListaArticulo extends JDialog {
 		panelSuperior.add(panelBusqueda);
 		getContentPane().add(panelSuperior, BorderLayout.NORTH);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
-		setSize(710,600);
+		setSize(710,665);
+		
+		getContentPane().add(panelPaginacion, BorderLayout.SOUTH);
+		panelPaginacion.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		btnAnterior = new JButton("Anterior");
+		panelPaginacion.add(btnAnterior);
+		
+		txtPagina = new JTextField();
+		txtPagina.setEditable(false);
+		txtPagina.setHorizontalAlignment(SwingConstants.CENTER);
+		txtPagina.setText("1");
+		panelPaginacion.add(txtPagina);
+		txtPagina.setColumns(4);
+		
+		btnSiguiente = new JButton("Siguiente");
+		panelPaginacion.add(btnSiguiente);
 		
 		//se hace visible
 		//setVisible(true);
@@ -235,8 +259,18 @@ public class ViewListaArticulo extends JDialog {
 		 txtBuscar.addActionListener(c);
 		 txtBuscar.setActionCommand("BUSCAR");
 		 
+		 btnSiguiente.addActionListener(c);
+		 btnSiguiente.setActionCommand("NEXT");
+		 
+		 btnAnterior.addActionListener(c);
+		 btnAnterior.setActionCommand("LAST");
+		 
 		 tablaArticulos.addMouseListener(c);
 		 tablaArticulos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	}
+	
+	public JTextField getTxtPagina(){
+		return txtPagina;
 	}
 	
 	public JTable getTablaArticulos(){

@@ -611,9 +611,6 @@ public class ArticuloDao {
 		} // fin de finally
 	}
 	
-	
-	
-
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para seleccionar todos los articulos>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 	public List<Articulo> todoArticulos(){
 		
@@ -633,6 +630,76 @@ public class ArticuloDao {
 			
 			seleccionarTodasLosArticulos = con.prepareStatement("SELECT * FROM v_articulos;");
 			
+			
+			
+			res = seleccionarTodasLosArticulos.executeQuery();
+			while(res.next()){
+				Articulo unArticulo=new Articulo();
+				existe=true;
+				unArticulo.setId(Integer.parseInt(res.getString("codigo_articulo")));
+				unArticulo.setArticulo(res.getString("articulo"));
+				unArticulo.getMarcaObj().setMarca(res.getString("marca"));
+				unArticulo.getMarcaObj().setId(res.getInt("codigo_marca"));
+				unArticulo.getImpuestoObj().setPorcentaje(res.getString("impuesto"));
+				unArticulo.getImpuestoObj().setId(res.getInt("codigo_impuesto"));
+				unArticulo.setPrecioVenta(res.getDouble("precio_articulo"));
+				unArticulo.setTipoArticulo(res.getInt("tipo_articulo"));
+				//unArticulo.setPreciosVenta(preciosDao.getPreciosArticulo(unArticulo.getId()));
+				
+				
+				articulos.add(unArticulo);
+			 }
+					
+			} catch (SQLException e) {
+					JOptionPane.showMessageDialog(null, "Error, no se conecto");
+					System.out.println(e);
+			}
+		finally
+		{
+			try{
+				
+				if(res != null) res.close();
+                if(seleccionarTodasLosArticulos != null)seleccionarTodasLosArticulos.close();
+                if(con != null) con.close();
+                
+				
+				} // fin de try
+				catch ( SQLException excepcionSql )
+				{
+					excepcionSql.printStackTrace();
+					//conexion.desconectar();
+				} // fin de catch
+		} // fin de finally
+		
+		
+			if (existe) {
+				return articulos;
+			}
+			else return null;
+		
+	}
+	
+
+	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para seleccionar todos los articulos>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+	public List<Articulo> todoArticulos(int limInf,int limSupe){
+		
+		
+		
+        Connection con = null;
+        
+        
+      
+       	List<Articulo> articulos=new ArrayList<Articulo>();
+		
+		ResultSet res=null;
+		
+		boolean existe=false;
+		try {
+			con = conexion.getPoolConexion().getConnection();
+			
+			seleccionarTodasLosArticulos = con.prepareStatement("SELECT * FROM v_articulos ORDER BY codigo_articulo DESC LIMIT ?,?;");
+			seleccionarTodasLosArticulos.setInt(1, limInf);
+			seleccionarTodasLosArticulos.setInt(2, limSupe);
 			res = seleccionarTodasLosArticulos.executeQuery();
 			while(res.next()){
 				Articulo unArticulo=new Articulo();
