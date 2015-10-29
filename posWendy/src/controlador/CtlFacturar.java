@@ -511,7 +511,7 @@ public void calcularTotales(){
 				
 				//se establece en la y el impuesto en el item de la vista
 				//detalle.setImpuesto(impuesto2.setScale(2, BigDecimal.ROUND_HALF_EVEN));
-				detalle.setTotal(totalItem.setScale(0, BigDecimal.ROUND_HALF_EVEN));
+				detalle.setTotal(totalItem.setScale(2, BigDecimal.ROUND_HALF_EVEN));
 				
 				//se establece el total e impuesto en el vista
 				this.view.getTxtTotal().setText(""+myFactura.getTotal().setScale(2, BigDecimal.ROUND_HALF_EVEN));
