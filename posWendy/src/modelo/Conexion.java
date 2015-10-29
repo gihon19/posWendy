@@ -28,10 +28,10 @@ public class Conexion {
 		private  BasicDataSource basicDataSource;
 	
 	   private DataSource dataSource;
-	   /*static String bd = "admin_tools";
+	   static String bd = "admin_tools";
 	   static String login = "user_pos";
 	   static String password = "admin123.";
-	   static String server = "192.168.1.10";*/
+	   static String server = "192.168.1.10";
 	   
 	   
 	   /*private DataSource dataSource;
@@ -40,10 +40,10 @@ public class Conexion {
 	   static String password = "jdmm123";
 	   static String server = "localhost";*/
 	   
-	   static String bd = "miswendy_admin_tools";
+	   /*static String bd = "miswendy_admin_tools";
 	   static String login = "miswendy_pos";
 	   static String password = "bTp.rxN-*~Z4";
-	   static String server = "108.167.189.55";
+	   static String server = "108.167.189.55";*/
 	   
 	   static String url = "jdbc:mysql://"+server+":3306/"+bd;
 	   static String driver="com.mysql.jdbc.Driver";
