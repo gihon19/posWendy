@@ -174,7 +174,7 @@ public class Conexion {
            ds.setMaxIdle(5);
            
            ds.setMinIdle(3);
-           ds.setInitialSize(5);
+           ds.setInitialSize(3);
            
            
            
@@ -277,7 +277,7 @@ public boolean getNivelFact(){
            ds.setMaxActive(5);
            ds.setMaxIdle(5);
            ds.setMinIdle(3);
-           ds.setInitialSize(5);
+           ds.setInitialSize(3);
            
            
            

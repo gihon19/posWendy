@@ -533,6 +533,7 @@ public class ViewFacturar extends JDialog {
 		//txtBuscar.
 		txtArticulo.addKeyListener(c);
 		txtPrecio.addKeyListener(c);
+		cbxEmpleados.addKeyListener(c);
 		//KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 		//manager.addKeyEventDispatcher( c);
 		//this.addWindowListener(c);
