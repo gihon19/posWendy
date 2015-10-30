@@ -1173,7 +1173,7 @@ public void guardarRemoto(){
 					//AbstractJasperReports.createReportFactura( conexion.getPoolConexion().getConnection(), "Factura_Saint_Paul.jasper",myFactura.getIdFactura() );
 					AbstractJasperReports.createReport(conexionRemote.getPoolConexion().getConnection(), 1, myFactura.getIdFactura());
 					AbstractJasperReports.imprimierFactura();
-					//AbstractJasperReports.imprimierFactura();
+					AbstractJasperReports.imprimierFactura();
 					
 					
 					//si la view es de actualizacion al cobrar se cierra la view
