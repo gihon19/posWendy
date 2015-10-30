@@ -531,6 +531,7 @@ public class ViewFacturar extends JDialog {
 		this.txtTotal.addKeyListener(c);
 		txtBuscar.addKeyListener(c);
 		//txtBuscar.
+		cbxEmpleados.addKeyListener(c);
 		txtArticulo.addKeyListener(c);
 		txtPrecio.addKeyListener(c);
 		cbxEmpleados.addKeyListener(c);
