@@ -462,6 +462,7 @@ public class ArticuloDao {
 				unArticulo.getImpuestoObj().setId(res.getInt("codigo_impuesto"));
 				unArticulo.setPrecioVenta(res.getDouble("precio_articulo"));
 				unArticulo.setTipoArticulo(res.getInt("tipo_articulo"));
+				unArticulo.setCodigoBarra(res.getString("codigo_barra"));
 				//unArticulo.setPreciosVenta(preciosDao.getPreciosArticulo(unArticulo.getId()));
 				
 			 }
@@ -499,6 +500,8 @@ public class ArticuloDao {
 	}
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para eliminar un articulo>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 	public boolean eliminarArticulo(int id){
+		
+		
 		int resultado=0;
 		Connection conn=null;
 		
@@ -524,7 +527,7 @@ public class ArticuloDao {
 			} // fin de try
 			catch ( SQLException excepcionSql )
 			{
-			excepcionSql.printStackTrace();
+				excepcionSql.printStackTrace();
 			//conexion.desconectar();
 			} // fin de catch
 		} // fin de finally

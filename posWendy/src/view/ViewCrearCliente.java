@@ -7,7 +7,12 @@ import javax.swing.JTextField;
 import view.botones.BotonActualizar;
 import view.botones.BotonCancelar;
 import view.botones.BotonGuardar;
+import view.rendes.PanelPadre;
 import controlador.CtlCliente;
+
+import java.awt.Color;
+
+import javax.swing.JPanel;
 
 public class ViewCrearCliente extends JDialog{
 	private JTextField txtNombre;
@@ -21,69 +26,78 @@ public class ViewCrearCliente extends JDialog{
 	private BotonGuardar btnGuardar;
 	
 	public ViewCrearCliente() {
+		
+	
+	
+		
 		setTitle("Crear Cliente");
 		
-		this.setSize(451,333);
+		this.setSize(365,415);
 		getContentPane().setLayout(null);
 		
+		JPanel JplPrincipal = new PanelPadre();
+		JplPrincipal.setBounds(0, 0, 349, 376);
+		getContentPane().add(JplPrincipal);
+		JplPrincipal.setLayout(null);
+		
 		JLabel lblNombre = new JLabel("Nombre:");
-		lblNombre.setBounds(21, 11, 60, 14);
-		getContentPane().add(lblNombre);
+		lblNombre.setBounds(19, 4, 60, 14);
+		JplPrincipal.add(lblNombre);
 		
 		txtNombre = new JTextField();
-		txtNombre.setBounds(91, 8, 311, 20);
-		getContentPane().add(txtNombre);
+		txtNombre.setBounds(19, 22, 311, 32);
+		JplPrincipal.add(txtNombre);
 		txtNombre.setColumns(10);
 		
 		JLabel lblDireccion = new JLabel("Direccion:");
-		lblDireccion.setBounds(21, 51, 64, 14);
-		getContentPane().add(lblDireccion);
+		lblDireccion.setBounds(19, 58, 64, 14);
+		JplPrincipal.add(lblDireccion);
 		
 		txtDireccion = new JTextField();
-		txtDireccion.setBounds(91, 48, 311, 20);
-		getContentPane().add(txtDireccion);
+		txtDireccion.setBounds(19, 76, 311, 32);
+		JplPrincipal.add(txtDireccion);
 		txtDireccion.setColumns(10);
 		
 		JLabel lblTelefono = new JLabel("Telefono:");
-		lblTelefono.setBounds(21, 94, 60, 14);
-		getContentPane().add(lblTelefono);
+		lblTelefono.setBounds(19, 112, 60, 14);
+		JplPrincipal.add(lblTelefono);
 		
 		txtTelefono = new JTextField();
-		txtTelefono.setBounds(91, 91, 311, 20);
-		getContentPane().add(txtTelefono);
+		txtTelefono.setBounds(19, 130, 311, 32);
+		JplPrincipal.add(txtTelefono);
 		txtTelefono.setColumns(10);
 		
 		JLabel lblMovil = new JLabel("Movil:");
-		lblMovil.setBounds(21, 131, 64, 14);
-		getContentPane().add(lblMovil);
+		lblMovil.setBounds(19, 166, 64, 14);
+		JplPrincipal.add(lblMovil);
 		
 		txtMovil = new JTextField();
-		txtMovil.setBounds(91, 128, 311, 20);
-		getContentPane().add(txtMovil);
+		txtMovil.setBounds(19, 184, 311, 32);
+		JplPrincipal.add(txtMovil);
 		txtMovil.setColumns(10);
 		
 		JLabel lblRtn = new JLabel("RTN:");
-		lblRtn.setBounds(21, 175, 60, 14);
-		getContentPane().add(lblRtn);
+		lblRtn.setBounds(19, 220, 60, 14);
+		JplPrincipal.add(lblRtn);
 		
 		txtRtn = new JTextField();
-		txtRtn.setBounds(91, 172, 311, 20);
-		getContentPane().add(txtRtn);
+		txtRtn.setBounds(19, 238, 311, 32);
+		JplPrincipal.add(txtRtn);
 		txtRtn.setColumns(10);
 		
 		// botones de accion
 		btnCancelar = new BotonCancelar();
-		btnCancelar.setLocation(280, 231);
-		getContentPane().add(btnCancelar);
+		btnCancelar.setLocation(186, 283);
+		JplPrincipal.add(btnCancelar);
 		
-		btnGuardar = new BotonGuardar();	
-		btnGuardar.setLocation(52, 231);
-		getContentPane().add(btnGuardar);
+		btnGuardar = new BotonGuardar();
+		btnGuardar.setLocation(25, 283);
+		JplPrincipal.add(btnGuardar);
 		
 		btnActualizar=new BotonActualizar();
-		btnActualizar.setLocation(52, 231);
+		btnActualizar.setLocation(25, 283);
+		JplPrincipal.add(btnActualizar);
 		btnActualizar.setVisible(false);
-		getContentPane().add(btnActualizar);
 		
 		
 	}

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteKardex" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="df013db5-f76e-44d3-b0df-bcbc46d93160">
-	<property name="com.jaspersoft.studio.data.sql.tables" value="Y2xpbmljYS52X2NpZXJyZV9jYWphIEFTICw4Nyw2NyxiYWZiN2E1Yi1jZWEzLTRlNTMtOGJiOS1i&#xA;NzhiNzk3ODJlODI7"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="clinica data source"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="inch"/>
 	<property name="com.jaspersoft.studio.unit.pageWidth" value="inch"/>
@@ -14,10 +14,10 @@
 	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="336"/>
-	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
-	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
-	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
-	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<style name="Title" fontName="SansSerif" fontSize="50" isBold="true"/>
+	<style name="SubTitle" forecolor="#736343" fontName="SansSerif" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="SansSerif" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="SansSerif" fontSize="12"/>
 	<style name="Row" mode="Transparent">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
@@ -115,88 +115,89 @@ where
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<title>
-		<band height="106" splitType="Stretch">
+		<band height="140" splitType="Stretch">
 			<staticText>
-				<reportElement style="Title" x="2" y="45" width="570" height="22" uuid="bc1ce1da-8232-46ea-be55-cec4abb986dd"/>
+				<reportElement style="Title" x="2" y="84" width="570" height="22" uuid="bc1ce1da-8232-46ea-be55-cec4abb986dd"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="16"/>
+					<font fontName="SansSerif" size="16"/>
 				</textElement>
 				<text><![CDATA[Kardex]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="19" width="571" height="12" uuid="62ab06e3-8503-4626-af69-a4bfa871b17c"/>
-				<textElement textAlignment="Center">
-					<font size="9"/>
+				<reportElement x="2" y="109" width="38" height="13" uuid="d3030f1a-e077-42a6-9e00-ad68a9808f50"/>
+				<textElement markup="none">
+					<font fontName="SansSerif"/>
 				</textElement>
-				<text><![CDATA[La Masica, Atlantida, Bo El Centro,Carretera Tela a Ceiba.]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="2" y="3" width="570" height="23" uuid="3c2bd69a-9200-41f6-af53-6a56715225f5"/>
-				<textElement textAlignment="Center">
-					<font size="13"/>
-				</textElement>
-				<text><![CDATA[MISCELANEAS W&C S DE R.L]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="32" width="572" height="14" uuid="a1709503-4ace-42cf-9af1-2a4b0fbe7a50"/>
-				<textElement textAlignment="Center">
-					<font size="9"/>
-				</textElement>
-				<text><![CDATA[Telefono (504) 2436-3194   RTN:01059015783604]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="2" y="67" width="38" height="13" uuid="d3030f1a-e077-42a6-9e00-ad68a9808f50"/>
-				<textElement markup="none"/>
 				<text><![CDATA[Articulo:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="40" y="67" width="141" height="13" uuid="3255f18b-d3c3-412f-af66-d9fb4d137b18"/>
+				<reportElement x="40" y="109" width="141" height="13" uuid="3255f18b-d3c3-412f-af66-d9fb4d137b18"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{codigo_articulo}+":"+$F{articulo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="191" y="67" width="47" height="13" uuid="86a5618f-feb7-435a-9cfc-cc719efa157a"/>
-				<textElement markup="none"/>
+				<reportElement x="191" y="109" width="47" height="13" uuid="86a5618f-feb7-435a-9cfc-cc719efa157a"/>
+				<textElement markup="none">
+					<font fontName="SansSerif"/>
+				</textElement>
 				<text><![CDATA[Ubicacion:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="237" y="67" width="190" height="13" uuid="8a491ba7-cb84-4276-b069-cfe22b28825f"/>
+				<reportElement x="237" y="109" width="190" height="13" uuid="8a491ba7-cb84-4276-b069-cfe22b28825f"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{codigo_bodega}+" : "+$F{descripcion_bodega}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="520" y="67" width="43" height="13" uuid="69b54b8a-db9d-4708-953d-0fe7e02bdc4d"/>
+				<reportElement x="520" y="109" width="43" height="13" uuid="69b54b8a-db9d-4708-953d-0fe7e02bdc4d"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{cod}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="452" y="67" width="69" height="13" uuid="ddd1e9cd-a36d-40dc-8a04-012473ea4977"/>
-				<textElement markup="none"/>
+				<reportElement x="452" y="109" width="69" height="13" uuid="ddd1e9cd-a36d-40dc-8a04-012473ea4977"/>
+				<textElement markup="none">
+					<font fontName="SansSerif"/>
+				</textElement>
 				<text><![CDATA[Codigo Kardex:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="70" y="80" width="53" height="13" uuid="9177c8f7-86c0-4746-a73b-e97e6c79a360"/>
+				<reportElement x="70" y="122" width="53" height="13" uuid="9177c8f7-86c0-4746-a73b-e97e6c79a360"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{cantidad_minima}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="2" y="80" width="69" height="13" uuid="2b040992-c835-42f9-8d71-c7bd98436656"/>
-				<textElement markup="none"/>
+				<reportElement x="2" y="122" width="69" height="13" uuid="2b040992-c835-42f9-8d71-c7bd98436656"/>
+				<textElement markup="none">
+					<font fontName="SansSerif"/>
+				</textElement>
 				<text><![CDATA[Cant Minima:]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="-80" y="87" width="43" height="13" uuid="89ebd050-e3ed-4b3c-9b8e-0a0f1d9ef736"/>
-				<textFieldExpression><![CDATA[$F{descripcion_bodega}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="-80" y="87" width="43" height="13" uuid="77c68194-d890-46dc-9d0d-3be5807bb155"/>
-				<textFieldExpression><![CDATA[$F{descripcion_bodega}]]></textFieldExpression>
-			</textField>
 			<staticText>
-				<reportElement x="191" y="80" width="68" height="13" uuid="b8dab30a-67c2-4b2d-9c9b-51b74e79733a"/>
-				<textElement markup="none"/>
+				<reportElement x="191" y="122" width="68" height="13" uuid="b8dab30a-67c2-4b2d-9c9b-51b74e79733a"/>
+				<textElement markup="none">
+					<font fontName="SansSerif"/>
+				</textElement>
 				<text><![CDATA[Cant Maxima:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="256" y="80" width="100" height="13" uuid="373a5a5f-eaf9-4086-82f0-98ebc07b539d"/>
+				<reportElement x="256" y="122" width="170" height="13" uuid="373a5a5f-eaf9-4086-82f0-98ebc07b539d"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{cantidad_maxima}]]></textFieldExpression>
 			</textField>
+			<subreport>
+				<reportElement x="-21" y="3" width="612" height="81" uuid="889c6a95-fdcc-401d-bd73-97477de83d93"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["reportes/factura_carta_datos_empresa.jasper"]]></subreportExpression>
+			</subreport>
 		</band>
 	</title>
 	<columnHeader>
@@ -217,7 +218,7 @@ where
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8"/>
+					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<text><![CDATA[Concepto]]></text>
 			</staticText>
@@ -231,7 +232,7 @@ where
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8"/>
+					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<text><![CDATA[FRA]]></text>
 			</staticText>
@@ -245,7 +246,7 @@ where
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cant]]></text>
 			</staticText>
@@ -259,7 +260,7 @@ where
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[VR. Unitario]]></text>
 			</staticText>
@@ -273,7 +274,7 @@ where
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8"/>
+					<font fontName="SansSerif" size="8"/>
 				</textElement>
 				<text><![CDATA[Fecha]]></text>
 			</staticText>
@@ -287,7 +288,7 @@ where
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[VR. TOTAL]]></text>
 			</staticText>
@@ -301,7 +302,7 @@ where
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[Detalle]]></text>
 			</staticText>
@@ -315,7 +316,7 @@ where
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Entradas]]></text>
 			</staticText>
@@ -329,7 +330,7 @@ where
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[VR. TOTAL]]></text>
 			</staticText>
@@ -343,7 +344,7 @@ where
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Salidas]]></text>
 			</staticText>
@@ -357,7 +358,7 @@ where
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[VR. Unitario]]></text>
 			</staticText>
@@ -371,7 +372,7 @@ where
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cant]]></text>
 			</staticText>
@@ -385,7 +386,7 @@ where
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[VR. TOTAL]]></text>
 			</staticText>
@@ -399,7 +400,7 @@ where
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="9" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Saldos]]></text>
 			</staticText>
@@ -413,7 +414,7 @@ where
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[VR. Unitario]]></text>
 			</staticText>
@@ -427,7 +428,7 @@ where
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Cant]]></text>
 			</staticText>
@@ -447,7 +448,7 @@ where
 						<rightPen lineWidth="0.5" lineStyle="Solid"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="9"/>
+						<font fontName="SansSerif" size="9"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{precio_ingreso}]]></textFieldExpression>
 				</textField>
@@ -461,7 +462,7 @@ where
 						<rightPen lineWidth="0.5" lineStyle="Solid"/>
 					</box>
 					<textElement verticalAlignment="Middle">
-						<font size="8"/>
+						<font fontName="SansSerif" size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
 				</textField>
@@ -475,7 +476,7 @@ where
 						<rightPen lineWidth="0.5" lineStyle="Solid"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8"/>
+						<font fontName="SansSerif" size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{no_documento}]]></textFieldExpression>
 				</textField>
@@ -489,7 +490,7 @@ where
 						<rightPen lineWidth="0.5" lineStyle="Solid"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8"/>
+						<font fontName="SansSerif" size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 				</textField>
@@ -503,7 +504,7 @@ where
 						<rightPen lineWidth="0.5" lineStyle="Solid"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="9"/>
+						<font fontName="SansSerif" size="9"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{total_ingreso}]]></textFieldExpression>
 				</textField>
@@ -517,7 +518,7 @@ where
 						<rightPen lineWidth="0.5" lineStyle="Solid"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="9"/>
+						<font fontName="SansSerif" size="9"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{can_ingreso}]]></textFieldExpression>
 				</textField>
@@ -531,7 +532,7 @@ where
 						<rightPen lineWidth="0.5" lineStyle="Solid"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="9"/>
+						<font fontName="SansSerif" size="9"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{can_salida}]]></textFieldExpression>
 				</textField>
@@ -545,9 +546,9 @@ where
 						<rightPen lineWidth="0.5" lineStyle="Solid"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="9"/>
+						<font fontName="SansSerif" size="9"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{total_ingreso}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{total_salida}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
 					<reportElement style="Detail" x="334" y="0" width="52" height="15" uuid="72d20c28-c8bb-4172-afde-bc647c657ad4"/>
@@ -559,9 +560,9 @@ where
 						<rightPen lineWidth="0.5" lineStyle="Solid"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="9"/>
+						<font fontName="SansSerif" size="9"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{precio_ingreso}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{precio_salida}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
 					<reportElement style="Detail" x="514" y="0" width="56" height="15" uuid="b3660684-4c2f-459b-9753-e27414aa0888"/>
@@ -573,7 +574,7 @@ where
 						<rightPen lineWidth="0.5" lineStyle="Solid"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="9"/>
+						<font fontName="SansSerif" size="9"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{total_saldo}]]></textFieldExpression>
 				</textField>
@@ -587,7 +588,7 @@ where
 						<rightPen lineWidth="0.5" lineStyle="Solid"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="9"/>
+						<font fontName="SansSerif" size="9"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{can_saldo}]]></textFieldExpression>
 				</textField>
@@ -601,7 +602,7 @@ where
 						<rightPen lineWidth="0.5" lineStyle="Solid"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="9"/>
+						<font fontName="SansSerif" size="9"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{precio_saldo}]]></textFieldExpression>
 				</textField>
@@ -613,7 +614,7 @@ where
 			<staticText>
 				<reportElement x="144" y="0" width="82" height="14" uuid="d2fac952-5ba4-4c66-ab8f-65adb6c44b67"/>
 				<textElement>
-					<font size="9"/>
+					<font fontName="SansSerif" size="9"/>
 				</textElement>
 				<text><![CDATA[Aprobado Por:]]></text>
 			</staticText>
@@ -626,21 +627,21 @@ where
 					<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right">
-					<font size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Usuario: "+$P{usuario}+" "]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
 				<reportElement style="Column header" x="53" y="2" width="40" height="17" forecolor="#736343" uuid="bbd3b315-c6b6-4593-be0f-3ea68478bfe3"/>
 				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="false"/>
+					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="Column header" x="0" y="2" width="51" height="17" forecolor="#736343" uuid="f6953e48-c066-4cfa-b7e5-ae4b207b2cb7"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="8" isBold="false"/>
+					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Pag "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>

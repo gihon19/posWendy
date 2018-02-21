@@ -54,7 +54,7 @@ public class DetalleFacturaProveedorDao {
 			
 			
 			
-			Inventario inventario=new Inventario();
+			/*Inventario inventario=new Inventario();
 			//se consigue el inventario del articulo
 			inventario=inventarioDao.buscarArticulo(detalle.getArticulo().getId());
 			
@@ -85,7 +85,7 @@ public class DetalleFacturaProveedorDao {
 			myKardex.getBodega().setId(1);
 			myKardex.setNoDocumento(""+noCompra);
 			
-			kardexDao.agregarEntrada(myKardex);
+			kardexDao.agregarEntrada(myKardex);*/
 			
 			
 			resultado=true;
@@ -129,7 +129,7 @@ public class DetalleFacturaProveedorDao {
 		try {
 			con = conexion.getPoolConexion().getConnection();
 			
-			detallesFactura = con.prepareStatement("SELECT * FROM detalle_factura_compra where numero_compra=?;");
+			detallesFactura = con.prepareStatement("SELECT * FROM v_detalle_factura_compra where numero_compra_detalle=?;");
 			detallesFactura.setInt(1, idCompra);
 			
 			res = detallesFactura.executeQuery();
@@ -138,12 +138,12 @@ public class DetalleFacturaProveedorDao {
 				existe=true;
 				//se consigue el articulo del detalle
 				Articulo articuloDetalle=articuloDao.buscarArticulo(res.getInt("codigo_articulo"));
-				articuloDetalle.setPrecioVenta(res.getDouble("precio"));//se estable el precio del articulo
+				articuloDetalle.setPrecioVenta(res.getDouble("precio_detalle"));//se estable el precio del articulo
 				unDetalle.setListArticulos(articuloDetalle);//se agrega el articulo al 
-				unDetalle.setCantidad(res.getBigDecimal("cantidad"));
-				unDetalle.setImpuesto(res.getBigDecimal("impuesto"));
+				unDetalle.setCantidad(res.getBigDecimal("cantidad_detalle"));
+				unDetalle.setImpuesto(res.getBigDecimal("impuesto_detalle"));
 				//unDetalle.setSubTotal(res.getDouble("subtotal"));
-				unDetalle.setTotal(res.getBigDecimal("subtotal"));
+				unDetalle.setTotal(res.getBigDecimal("subtotal_detalle"));
 				
 				
 				

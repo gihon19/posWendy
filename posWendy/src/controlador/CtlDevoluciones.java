@@ -82,6 +82,8 @@ public class CtlDevoluciones implements ActionListener, MouseListener, TableMode
 					
 					//se cambia el estado de las facturas pagas
 					if(view.getModeloTabla().getDetalles().get(x).getAccion()==true){
+						String entrada=JOptionPane.showInputDialog(view.getModeloTabla().getDetalles().get(x).getArticulo().getArticulo()+" cantidad a devolver:");
+						view.getModeloTabla().getDetalles().get(x).setCantidad(new BigDecimal(entrada));
 						boolean resu=this.devolucionDao.agregarDetalle(view.getModeloTabla().getDetalles().get(x), myFactura.getIdFactura());
 					}
 				}

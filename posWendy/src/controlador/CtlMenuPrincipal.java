@@ -16,9 +16,12 @@ import view.ViewAgregarCompras;
 import view.ViewCxCPagos;
 import view.ViewFacturar;
 import view.ViewFacturas;
+import view.ViewFiltroComisiones;
 import view.ViewFiltroReportDei;
 import view.ViewListaArticulo;
+import view.ViewListaCierresCaja;
 import view.ViewListaClientes;
+import view.ViewListaEmpleados;
 import view.ViewListaFactura;
 import view.ViewListaFacturasCompra;
 import view.ViewListaMarca;
@@ -26,6 +29,7 @@ import view.ViewListaPagos;
 import view.ViewListaPrecioProgramar;
 import view.ViewListaProveedor;
 import view.ViewListaRequisiciones;
+import view.ViewListaUsuarios;
 import view.ViewMenuPrincipal;
 import view.ViewRequisicion;
 
@@ -188,6 +192,65 @@ public class CtlMenuPrincipal implements ActionListener {
 			case "R_DEI":
 				ViewFiltroReportDei viewFiltroDei=new ViewFiltroReportDei(view);
 				CtlFiltroRepDei ctlFiltroDei=new CtlFiltroRepDei(viewFiltroDei,conexion);
+				break;
+				
+			case "USUARIOS":
+				
+				ViewListaUsuarios viewListaUsuarios=new ViewListaUsuarios(view);
+				CtlUsuariosLista ctlUsuarios=new CtlUsuariosLista(viewListaUsuarios,conexion);
+				viewListaUsuarios.dispose();
+				viewListaUsuarios=null;
+				ctlUsuarios=null;
+				/*ViewCrearUsuario viewCrearUsuario=new ViewCrearUsuario(view);
+				CtlUsuario ctlUsuario=new CtlUsuario(viewCrearUsuario, conexion);
+				viewCrearUsuario.setVisible(true);*/
+				
+				break;
+				
+			case "INVENTARIO":
+				try {
+					//AbstractJasperReports.createReportFactura( conexion.getPoolConexion().getConnection(), "Cierre_Caja_Saint_Paul.jasper",1 );
+					AbstractJasperReports.createReportInventario(conexion.getPoolConexion().getConnection(), conexion.getUsuarioLogin().getUser());
+					
+					//this.view.setModal(false);
+					//AbstractJasperReports.imprimierFactura();
+					AbstractJasperReports.showViewer(this.view);
+					
+					
+				} catch (SQLException ee) {
+					// TODO Auto-generated catch block
+					ee.printStackTrace();
+				}
+				break;
+				
+				
+			case "CIERRES_CAJA":
+				
+				ViewListaCierresCaja viewCierres=new ViewListaCierresCaja(view);
+				CtlCierresCajaLista ctlCierres=new CtlCierresCajaLista(viewCierres,conexion);
+				
+				viewCierres.dispose();
+				viewCierres=null;
+				ctlCierres=null;
+				break;
+				
+			case "EMPLEADOS":
+				
+				ViewListaEmpleados viewEmpleados=new ViewListaEmpleados(view);
+				CtlEmpleadosLista ctlListaEmpleados=new CtlEmpleadosLista(viewEmpleados,conexion);
+				
+				viewEmpleados.dispose();
+				viewEmpleados=null;
+				ctlListaEmpleados=null;
+				
+				break;
+			case "COMISIONES":
+				ViewFiltroComisiones viewComisiones=new ViewFiltroComisiones(view);
+				CtlFiltroRepComisiones ctlComisiones= new CtlFiltroRepComisiones(viewComisiones,conexion);
+				viewComisiones.dispose();
+				viewComisiones=null;
+				ctlComisiones=null;
+				
 				break;
 		}
 		

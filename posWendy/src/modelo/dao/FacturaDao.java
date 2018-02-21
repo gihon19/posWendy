@@ -107,11 +107,22 @@ public class FacturaDao {
 				+ "descuento,"
 				+ "estado_factura,"
 				+ "tipo_factura,"
-				+ "usuario)"
-				+ " VALUES (now(),?,?,?,?,?,?,?,?)";
+				+ "usuario,"
+				+ "subtotal_excento,"
+				+ "subtotal15,"
+				+ "subtotal18,"
+				+ "isvOtros)"
+				+ " VALUES (now(),?,?,?,?,?,?,?,?,?,?,?,?)";
 		
 		try 
 		{
+			String nombreCliente=myFactura.getCliente().getNombre();//"Consumidor final";
+			
+			//si el cliente en escrito por el bombero
+			if(myFactura.getCliente().getId()<0){
+				myClienteDao.registrarCliente(myFactura.getCliente());
+				myFactura.getCliente().setId(myClienteDao.getIdClienteRegistrado());
+			}
 			conn=conexion.getPoolConexion().getConnection();
 			agregarFactura=conn.prepareStatement(sql);
 			agregarFactura.setBigDecimal(1,myFactura.getSubTotal() );
@@ -122,6 +133,10 @@ public class FacturaDao {
 			agregarFactura.setString(6, "ACT");
 			agregarFactura.setInt(7, myFactura.getTipoFactura());
 			agregarFactura.setString(8, conexion.getUsuarioLogin().getUser());
+			agregarFactura.setBigDecimal(9, myFactura.getSubTotalExcento());
+			agregarFactura.setBigDecimal(10, myFactura.getSubTotal15());
+			agregarFactura.setBigDecimal(11, myFactura.getSubTotal18());
+			agregarFactura.setBigDecimal(12, myFactura.getTotalOtrosImpuesto1());
 			
 			
 			
@@ -192,15 +207,20 @@ public class FacturaDao {
 				+ "total_letras,"
 				+ "codigo_vendedor,"
 				+ "codigo,"
-				+ "estado_pago)"
-				+ " VALUES (now(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				+ "estado_pago,"
+				+ "subtotal_excento,"
+				+ "subtotal15,"
+				+ "subtotal18,"
+				+ "isvOtros,"
+				+ "cod_rango)"
+				+ " VALUES (now(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		
 		try 
 		{
 			
 			String nombreCliente=myFactura.getCliente().getNombre();//"Consumidor final";
 			
-			//si el cliente en escrito por el bombero
+			//si el cliente en escrito por el usuario
 			if(myFactura.getCliente().getId()<0){
 				myClienteDao.registrarCliente(myFactura.getCliente());
 				myFactura.getCliente().setId(myClienteDao.getIdClienteRegistrado());
@@ -221,8 +241,17 @@ public class FacturaDao {
 			agregarFactura.setString(12, conexion.getUsuarioLogin().getUser());
 			agregarFactura.setString(13, NumberToLetterConverter.convertNumberToLetter(myFactura.getTotal().setScale(0, BigDecimal.ROUND_HALF_EVEN).doubleValue()));
 			agregarFactura.setInt(14, myFactura.getVendedor().getCodigo());
-			agregarFactura.setInt(15, myFactura.getCodigo());
+			agregarFactura.setInt(15, 1);
 			agregarFactura.setInt(16,myFactura.getEstadoPago());
+			agregarFactura.setBigDecimal(17, myFactura.getSubTotalExcento());
+			agregarFactura.setBigDecimal(18, myFactura.getSubTotal15());
+			agregarFactura.setBigDecimal(19, myFactura.getSubTotal18());
+			agregarFactura.setBigDecimal(20, myFactura.getTotalOtrosImpuesto1());
+			
+			
+			//para relacionar el codigo de cai con cada factura
+			EmpresaDao empresa=new EmpresaDao(conexion);
+			agregarFactura.setInt(21, empresa.getIdCaiAct());
 			
 			
 			
@@ -252,6 +281,7 @@ public class FacturaDao {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e.getMessage());
 			//conexion.desconectar();
 			resultado= false;
 		}
@@ -372,7 +402,7 @@ public class FacturaDao {
 		
 		//se crear un referencia al pool de conexiones
 		//DataSource ds = DBCPDataSourceFactory.getDataSource("mysql");
-		
+		String hola="";
 		
         Connection con = null;
         
@@ -396,6 +426,7 @@ public class FacturaDao {
 				+ " ORDER BY encabezado_factura.numero_factura DESC "
 				+ " LIMIT ?,?";*/
         //Statement stmt = null;
+       // fdsfasfas
         String sql="select * from v_encabezado_factura ORDER BY numero_factura DESC LIMIT ?,?";
        	List<Factura> facturas=new ArrayList<Factura>();
 		
@@ -477,7 +508,7 @@ public class FacturaDao {
 		
         Connection con = null;
         
-    	String sql="SELECT "
+    	/*String sql="SELECT "
 				+ "encabezado_factura_temp.numero_factura, "
 				+ "DATE_FORMAT(encabezado_factura_temp.fecha, '%d/%m/%Y') as fecha,"
 				+ " encabezado_factura_temp.subtotal, "
@@ -491,7 +522,9 @@ public class FacturaDao {
 				+ "encabezado_factura_temp.descuento,"
 				+ "encabezado_factura_temp.pago, "
 				+ "encabezado_factura_temp.usuario "
-				+ "FROM encabezado_factura_temp";
+				+ "FROM encabezado_factura_temp";*/
+    	
+    	String sql="select * from v_encabezado_factura_temp where usuario=?; ";
         //Statement stmt = null;
        	List<Factura> facturas=new ArrayList<Factura>();
 		
@@ -502,13 +535,17 @@ public class FacturaDao {
 			con = conexion.getPoolConexion().getConnection();
 			
 			seleccionarFacturasPendientes = con.prepareStatement(sql);
-			
+			seleccionarFacturasPendientes.setString(1, conexion.getUsuarioLogin().getUser());
 			res = seleccionarFacturasPendientes.executeQuery();
+			
 			while(res.next()){
 				Factura unaFactura=new Factura();
 				existe=true;
 				unaFactura.setIdFactura(res.getInt("numero_factura"));
-				Cliente unCliente=myClienteDao.buscarCliente(res.getInt("codigo_cliente"));
+				Cliente unCliente=new Cliente();//myClienteDao.buscarCliente(res.getInt("codigo_cliente"));
+				unCliente.setId(res.getInt("codigo_cliente"));
+				unCliente.setNombre(res.getString("nombre_cliente"));
+				unCliente.setRtn(res.getString("rtn"));
 				
 				unaFactura.setCliente(unCliente);
 				
@@ -519,6 +556,10 @@ public class FacturaDao {
 				//unaFactura.setEstado(res.getInt("estado_factura"));
 				unaFactura.setTotalDescuento(res.getBigDecimal("descuento"));
 				unaFactura.setTipoFactura(res.getInt("tipo_factura"));
+				unaFactura.setSubTotalExcento(res.getBigDecimal("subtotal_excento"));
+				unaFactura.setSubTotal15(res.getBigDecimal("subtotal15"));
+				unaFactura.setSubTotal18(res.getBigDecimal("subtotal18"));
+				unaFactura.setTotalOtrosImpuesto(res.getBigDecimal("isvOtros"));
 				
 				unaFactura.setDetalles(detallesDao.detallesFacturaPendiente(unaFactura.getIdFactura()));
 				
@@ -945,6 +986,88 @@ public class FacturaDao {
 				} // fin de catch
 		} // fin de finally
 		return resultado;
+	}
+	
+	
+	
+	
+	/**
+	 * @return the ultimaFacturaUser
+	 * @param user el nombre del usuario
+	 */
+	public Factura getUltimaFacturaUser(String user) {
+		
+		//se crear un referencia al pool de conexiones
+				//DataSource ds = DBCPDataSourceFactory.getDataSource("mysql");
+				
+				
+		        Connection con = null;
+		        
+		    	String sql="SELECT * from encabezado_factura where usuario=? ORDER BY numero_factura DESC limit 1";
+		        //Statement stmt = null;
+		    	Factura unaFactura=new Factura();
+				
+				ResultSet res=null;
+				
+				boolean existe=false;
+				try {
+					con = conexion.getPoolConexion().getConnection();
+					
+					seleccionarFacturas = con.prepareStatement(sql);
+					seleccionarFacturas.setString(1, user);
+					
+					res = seleccionarFacturas.executeQuery();
+					while(res.next()){
+						
+						existe=true;
+						unaFactura.setIdFactura(res.getInt("numero_factura"));
+						Cliente unCliente=myClienteDao.buscarCliente(res.getInt("codigo_cliente"));
+						
+						unaFactura.setCliente(unCliente);
+						
+						unaFactura.setFecha(res.getString("fecha"));
+						unaFactura.setSubTotal(res.getBigDecimal("subtotal"));
+						unaFactura.setTotalImpuesto(res.getBigDecimal("impuesto"));
+						unaFactura.setTotal(res.getBigDecimal("total"));
+						//unaFactura.setEstado(res.getInt("estado_factura"));
+						unaFactura.setTotalDescuento(res.getBigDecimal("descuento"));
+						
+						unaFactura.setEstado(res.getString("estado_factura"));
+						unaFactura.setTipoFactura(res.getInt("tipo_factura"));
+						unaFactura.setAgregadoAkardex(res.getInt("agrega_kardex"));
+						
+						unaFactura.setDetalles(detallesDao.getDetallesFactura(res.getInt("numero_factura")));
+						
+						
+					
+					 }
+							
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				finally
+				{
+					try{
+						
+						if(res != null) res.close();
+		                if(seleccionarFacturas != null)seleccionarFacturas.close();
+		                if(con != null) con.close();
+		                
+						
+						} // fin de try
+						catch ( SQLException excepcionSql )
+						{
+							excepcionSql.printStackTrace();
+							//conexion.desconectar();
+						} // fin de catch
+				} // fin de finally
+				
+				
+					if (existe) {
+						return unaFactura;
+					}
+					else return null;
+		//return ultimaFacturaUser;
 	}
 
 	

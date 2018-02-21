@@ -118,7 +118,7 @@ public class ViewFacturaDevolucion extends JDialog {
 		btnBuscar = new BotonBuscar1();
 		btnBuscar.setEnabled(false);
 		btnBuscar.setHorizontalAlignment(SwingConstants.LEFT);
-		btnBuscar.setBounds(10, 24,158, 38);
+		btnBuscar.setBounds(10, 18,158, 67);
 		panelAcciones.add(btnBuscar);
 		//btnBuscar.getInputMap().put(KeyStroke.getKeyStroke("F1"), sumar());
 		
@@ -126,14 +126,14 @@ public class ViewFacturaDevolucion extends JDialog {
 		btnCliente.setEnabled(false);
 		btnCliente.setText("F3 Clientes");
 		btnCliente.setHorizontalAlignment(SwingConstants.LEFT);
-		btnCliente.setBounds(10, 148, 158, 38);
+		btnCliente.setBounds(10, 148, 158, 67);
 		panelAcciones.add(btnCliente);
 		
 		btnCobrar = new BotonCobrar();
 		btnCobrar.setEnabled(false);
 		btnCobrar.setText("F2 Cobrar");
 		btnCobrar.setHorizontalAlignment(SwingConstants.LEFT);
-		btnCobrar.setBounds(10, 86, 158, 38);
+		btnCobrar.setBounds(10, 85, 158, 67);
 		
 		panelAcciones.add(btnCobrar);
 		
@@ -141,7 +141,7 @@ public class ViewFacturaDevolucion extends JDialog {
 		btnActualizar.setEnabled(false);
 		btnActualizar.setText("F7 Actualizar");
 		btnActualizar.setHorizontalAlignment(SwingConstants.LEFT);
-		btnActualizar.setBounds(10, 210, 158, 38);
+		btnActualizar.setBounds(10, 210, 158, 67);
 		//getContentPane().add(btnActualizar);
 		panelAcciones.add(btnActualizar);
 		btnActualizar.setVisible(false);
@@ -149,27 +149,27 @@ public class ViewFacturaDevolucion extends JDialog {
 		btnGuardar = new BotonGuardar();
 		btnGuardar.setHorizontalAlignment(SwingConstants.LEFT);
 		btnGuardar.setText("F4 Guardar");
-		btnGuardar.setBounds(10, 210, 158, 38);
+		btnGuardar.setBounds(10, 210, 158, 67);
 		panelAcciones.add(btnGuardar);
 		
 		btnCerrar = new BotonCancelar();
 		btnCerrar.setHorizontalAlignment(SwingConstants.LEFT);
 		btnCerrar.setText("Esc Cerrar");
-		btnCerrar.setBounds(10, 396, 158, 38);
+		btnCerrar.setBounds(10, 393, 158, 66);
 		panelAcciones.add(btnCerrar);
 		
 		btnCierreCaja = new JButton("F6 Cierre");
 		btnCierreCaja.setEnabled(false);
 		btnCierreCaja.setHorizontalAlignment(SwingConstants.LEFT);
 		btnCierreCaja.setIcon(new ImageIcon(ViewFacturar.class.getResource("/view/recursos/caja.png")));
-		btnCierreCaja.setBounds(10, 334, 158, 38);
+		btnCierreCaja.setBounds(10, 334, 158, 60);
 		panelAcciones.add(btnCierreCaja);
 		
 		btnPendientes = new JButton("F5 Pendientes");
 		btnPendientes.setEnabled(false);
 		btnPendientes.setIcon(new ImageIcon(ViewFacturar.class.getResource("/view/recursos/lista.png")));
 		btnPendientes.setHorizontalAlignment(SwingConstants.LEFT);
-		btnPendientes.setBounds(10, 272, 158, 38);
+		btnPendientes.setBounds(10, 272, 158, 67);
 		panelAcciones.add(btnPendientes);
 		
 		
@@ -285,7 +285,7 @@ public class ViewFacturaDevolucion extends JDialog {
 		
 		cbxEmpleados = new JComboBox();
 		this.modeloEmpleado=new CbxTmEmpleado();
-		//cbxEmpleados.setModel(modeloEmpleado);//comentar para moder ver la vista de diseño
+		//cbxEmpleados.setModel(modeloEmpleado);//comentar para moder ver la vista de diseï¿½o
 		cbxEmpleados.setBounds(581, 48, 199, 20);
 		panelDatosFactura.add(cbxEmpleados);
 		
@@ -298,7 +298,7 @@ public class ViewFacturaDevolucion extends JDialog {
 		tableDetalle.setDefaultRenderer(String.class, renderizador);
 		//tableDetalle.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		tableDetalle.getColumnModel().getColumn(0).setPreferredWidth(100);     //Tamaño de las columnas de las tablas
+		tableDetalle.getColumnModel().getColumn(0).setPreferredWidth(50);     //Tamaï¿½o de las columnas de las tablas
 		tableDetalle.getColumnModel().getColumn(1).setPreferredWidth(200);	//
 		tableDetalle.getColumnModel().getColumn(2).setPreferredWidth(80);	//
 		tableDetalle.getColumnModel().getColumn(3).setPreferredWidth(80);	//
@@ -306,6 +306,7 @@ public class ViewFacturaDevolucion extends JDialog {
 		tableDetalle.getColumnModel().getColumn(5).setPreferredWidth(80);	//
 		tableDetalle.getColumnModel().getColumn(6).setPreferredWidth(80);	//
 		tableDetalle.getColumnModel().getColumn(7).setPreferredWidth(100);	//
+		tableDetalle.getColumnModel().getColumn(8).setPreferredWidth(150);	//
 		
 		tableDetalle.setRowHeight(30);
 		//registerEnterKey( );
@@ -324,7 +325,7 @@ public class ViewFacturaDevolucion extends JDialog {
 		txtSubtotal.setText("00");
 		
 		txtSubtotal.setEditable(false);
-		txtSubtotal.setBounds(20, 506, 207, 44);
+		txtSubtotal.setBounds(20, 506, 207, 55);
 		getContentPane().add(txtSubtotal);
 		txtSubtotal.setColumns(10);
 		
@@ -337,7 +338,7 @@ public class ViewFacturaDevolucion extends JDialog {
 		txtImpuesto.setFont(myFont);
 		txtImpuesto.setText("00");
 		txtImpuesto.setEditable(false);
-		txtImpuesto.setBounds(237, 506, 177, 44);
+		txtImpuesto.setBounds(237, 506, 177, 55);
 		getContentPane().add(txtImpuesto);
 		txtImpuesto.setColumns(10);
 		
@@ -351,7 +352,7 @@ public class ViewFacturaDevolucion extends JDialog {
 		txtTotal.setFont(myFont);
 		txtTotal.setText("00");
 		txtTotal.setEditable(false);
-		txtTotal.setBounds(778, 506, 220, 44);
+		txtTotal.setBounds(778, 506, 220, 55);
 		getContentPane().add(txtTotal);
 		txtTotal.setColumns(10);
 		
@@ -364,7 +365,7 @@ public class ViewFacturaDevolucion extends JDialog {
 		txtDescuento.setEditable(false);
 		txtDescuento.setText("00");
 		txtDescuento.setFont(myFont);
-		txtDescuento.setBounds(605, 506, 163, 44);
+		txtDescuento.setBounds(605, 506, 163, 55);
 		getContentPane().add(txtDescuento);
 		txtDescuento.setColumns(10);
 		
@@ -377,7 +378,7 @@ public class ViewFacturaDevolucion extends JDialog {
 		txtImpuesto18.setHorizontalAlignment(SwingConstants.RIGHT);
 		txtImpuesto18.setFont(myFont);
 		txtImpuesto18.setEditable(false);
-		txtImpuesto18.setBounds(424, 506, 171, 44);
+		txtImpuesto18.setBounds(424, 506, 171, 55);
 		getContentPane().add(txtImpuesto18);
 		txtImpuesto18.setColumns(10);
 		

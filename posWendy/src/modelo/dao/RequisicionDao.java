@@ -82,7 +82,15 @@ public class RequisicionDao {
 		{
 			con = conexion.getPoolConexion().getConnection();
 			
-			insertarNueva=con.prepareStatement( "INSERT INTO encabezado_requisicion(fecha,total,codigo_depart_origen,codigo_depart_destino,usuario,estado_requisicion) VALUES (now(),?,?,?,?,?)");
+			insertarNueva=con.prepareStatement( "INSERT INTO encabezado_requisicion"
+					+ "("
+						+ "fecha,"
+						+ "total,"
+						+ "codigo_depart_origen,"
+						+ "codigo_depart_destino,"
+						+ "usuario,"
+						+ "estado_requisicion"
+					+ ") VALUES (now(),?,?,?,?,?)");
 			
 			insertarNueva.setBigDecimal( 1, myRequisicion.getTotal() );
 			insertarNueva.setInt( 2, myRequisicion.getDepartamentoOrigen().getId());

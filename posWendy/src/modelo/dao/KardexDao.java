@@ -100,6 +100,56 @@ public class KardexDao {
 		return resultado;
 	}
 	
+	
+	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para buscar articulo en el kardex por por id articulo y id bodega>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+	public BigDecimal buscarExistencia(int idArticulo,int idBodega){
+		
+		BigDecimal existencia=new BigDecimal(0.00);
+		boolean existe=false;
+		Connection conn=null;
+		ResultSet res=null;
+		
+		try {
+			conn=conexion.getPoolConexion().getConnection();
+			buscarArticulo=conn.prepareStatement("SELECT can_saldo FROM v_kardex where codigo_articulo=? and codigo_bodega=? ORDER BY codigo_movimiento desc limit 1");
+			buscarArticulo.setInt(1, idArticulo);
+			buscarArticulo.setInt(2, idBodega);
+			res=buscarArticulo.executeQuery();
+			while(res.next()){
+				existe=true;
+				existencia=res.getBigDecimal("can_saldo");
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally
+		{
+			try{
+				
+				if(res != null) res.close();
+                if(buscarArticulo != null)buscarArticulo.close();
+                if(conn != null) conn.close();
+                
+				
+				} // fin de try
+				catch ( SQLException excepcionSql )
+				{
+					excepcionSql.printStackTrace();
+					//Sconexion.desconectar();
+				} // fin de catch
+		} // fin de finally
+		
+		if(existe){
+			return existencia;
+			
+		}else{
+			return null;
+		}
+		
+	}
+	
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para buscar articulo en el kardex por por id articulo y id bodega>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 	public Kardex buscarKardex(int idArticulo,int idBodega){
 		Kardex myKardex=new Kardex();

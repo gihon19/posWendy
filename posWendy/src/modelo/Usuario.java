@@ -3,6 +3,7 @@ package modelo;
 public class Usuario extends Persona {
 	private int codigo;
 	private String user="";
+	private String userOld="";
 	private String permiso="";
 	private String pwd="";
 	private int tipo_permiso;
@@ -25,6 +26,12 @@ public class Usuario extends Persona {
 	}
 	public String getUser(){
 		return user;
+	}
+	public void setUserOld(String u){
+		userOld=u;
+	}
+	public String getUserOld(){
+		return userOld;
 	}
 	
 	public void setPermiso(String p){
@@ -52,7 +59,9 @@ public class Usuario extends Persona {
 								+ "Tipo de permiso: "
 								+ this.tipo_permiso+ ", "
 										+ "Permiso: "
-										+ this.permiso;
+										+ this.permiso+", "
+										+"user old: "
+										+this.userOld;
 						
 	}
 			

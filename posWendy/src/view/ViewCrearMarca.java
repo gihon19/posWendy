@@ -45,45 +45,47 @@ public class ViewCrearMarca extends JDialog {
 	 * @wbp.parser.constructor
 	 */
 	public ViewCrearMarca(ViewListaMarca view) {
-		super(view,"Agregar marcas",Dialog.ModalityType.DOCUMENT_MODAL);
+		super(view,"Agregar categoria",Dialog.ModalityType.DOCUMENT_MODAL);
 		setResizable(false);
 		getContentPane().setLayout(null);
 		this.setFont(new Font("Verdana", Font.PLAIN, 12));
 	
 		
-		lblMarca = new JLabel("Marca");
-		lblMarca.setBounds(32, 21, 37, 14);
+		lblMarca = new JLabel("Categoria");
+		lblMarca.setBounds(22, 12, 90, 14);
 		getContentPane().add(lblMarca);
 		
 		txtMarca = new JTextField();
-		txtMarca.setBounds(132, 18, 260, 20);
+		txtMarca.setBounds(22, 38, 260, 32);
 		getContentPane().add(txtMarca);
 		txtMarca.setColumns(10);
 		
 		lblObservacion = new JLabel("Observacion");
-		lblObservacion.setBounds(32, 65, 90, 14);
+		lblObservacion.setBounds(22, 82, 90, 14);
 		getContentPane().add(lblObservacion);
 		
 		txtAreaObservacion = new JTextArea();
-		txtAreaObservacion.setBounds(132, 60, 260, 130);
+		txtAreaObservacion.setBounds(22, 108, 260, 130);
 		getContentPane().add(txtAreaObservacion);
 		
 		// botones de accion
 		
 		btnCancelar = new BotonCancelar();
-		btnCancelar.setLocation(280, 231);
+		btnCancelar.setSize(128, 78);
+		btnCancelar.setLocation(154, 277);
 		getContentPane().add(btnCancelar);
 		
 		btnActualizar=new BotonActualizar();
-		btnActualizar.setLocation(52, 231);
+		btnActualizar.setSize(136, 78);
+		btnActualizar.setLocation(22, 277);
 		getContentPane().add(btnActualizar);
 		btnActualizar.setVisible(false);
 		
 		btnGuardar = new BotonGuardar();	
-		btnGuardar.setLocation(52, 231);
+		btnGuardar.setLocation(22, 277);
 		getContentPane().add(btnGuardar);
 		
-		this.setSize(465, 321);
+		this.setSize(309, 395);
 		
 		//centrar la ventana en la pantalla
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

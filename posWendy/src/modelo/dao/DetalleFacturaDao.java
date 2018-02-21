@@ -156,8 +156,9 @@ public class DetalleFacturaDao {
 				+ "impuesto,"
 				+ "subtotal,"
 				+ "descuento,"
-				+ "total"
-				+ ") VALUES (?,?,?,?,?,?,?,?)";
+				+ "total,"
+				+ "codigo_barra"
+				+ ") VALUES (?,?,?,?,?,?,?,?,?)";
 		Connection conn=null;
 		
 		try{
@@ -172,10 +173,11 @@ public class DetalleFacturaDao {
 			agregarDetalle.setBigDecimal(6, detalle.getSubTotal());
 			agregarDetalle.setBigDecimal(7, detalle.getDescuentoItem());
 			agregarDetalle.setBigDecimal(8, detalle.getTotal());
+			agregarDetalle.setString(9, detalle.getArticulo().getCodigoBarra());
 			agregarDetalle.executeUpdate();
 			
 			
-			if(detalle.getArticulo().getTipoArticulo()!=2){
+			/*if(detalle.getArticulo().getTipoArticulo()!=2){
 				Inventario inventario=new Inventario();
 				
 				//se consigue el inventario del articulo
@@ -210,10 +212,11 @@ public class DetalleFacturaDao {
 				
 				kardexDao.agregarEntrada(myKardex);
 			
-			}
+			}*/
 			resultado=true;
 		}catch (SQLException e) {
 			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e.getMessage());
 			//conexion.desconectar();
 			resultado= false;
 		}
@@ -236,6 +239,47 @@ public class DetalleFacturaDao {
 		return resultado;
 	}
 
+	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para agreagar detalles de facturas>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+	public boolean verificarArticuloEnDetalle( int idArticulo) {
+		boolean resultado=false;
+		ResultSet res=null;
+		String sql="select * from detalle_factura where codigo_articulo=?";
+		Connection conn=null;
+		
+		try{
+			conn=conexion.getPoolConexion().getConnection();
+			agregarDetalle=conn.prepareStatement( sql);
+			
+			agregarDetalle.setInt(1, idArticulo);
+			res = detallesFacturaPendiente.executeQuery();
+			while(res.next()){
+				resultado=true;
+			}
+			
+		}catch (SQLException e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e.getMessage());
+			//conexion.desconectar();
+			resultado= false;
+		}
+		finally
+		{
+			try{
+				
+				//if(res != null) res.close();
+                if(agregarDetalle != null)agregarDetalle.close();
+                if(conn != null) conn.close();
+                
+				
+				} // fin de try
+				catch ( SQLException excepcionSql )
+				{
+					excepcionSql.printStackTrace();
+					//conexion.desconectar();
+				} // fin de catch
+		} // fin de finally
+		return resultado;
+	}
 	public List<DetalleFactura> detallesFacturaPendiente(int idFactura) {
 		List<DetalleFactura> detalles=new ArrayList<DetalleFactura>();
 		
@@ -249,7 +293,7 @@ public class DetalleFacturaDao {
 		try {
 			con = conexion.getPoolConexion().getConnection();
 			
-			detallesFacturaPendiente = con.prepareStatement("SELECT * FROM detalle_factura_temp where numero_factura=?;");
+			detallesFacturaPendiente = con.prepareStatement("SELECT * FROM detalle_factura_temp where numero_factura=? order by id ASC;");
 			detallesFacturaPendiente.setInt(1, idFactura);
 			
 			res = detallesFacturaPendiente.executeQuery();

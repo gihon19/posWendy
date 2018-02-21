@@ -20,6 +20,7 @@ public class Articulo {
 	private int tipoArticulo=0;
 	private List<PrecioArticulo> preciosVenta=new ArrayList<PrecioArticulo>();
 	private int  posicionPrecio=0;
+	private String codigoBarra="";
 	public Articulo(){
 		
 	}
@@ -31,6 +32,12 @@ public class Articulo {
 		imp=i;
 		codigos=cods;
 		precioVenta=p;
+	}
+	public void setCodigoBarra(String c){
+		codigoBarra=c;
+	}
+	public String getCodigoBarra(){
+		return codigoBarra;
 	}
 	public void setPreciosVenta(List<PrecioArticulo> precios){
 		preciosVenta=precios;

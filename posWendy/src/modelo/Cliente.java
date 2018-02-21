@@ -5,11 +5,11 @@ import java.math.BigDecimal;
 public class Cliente {
 	
 	private int id=-1;
-	private String nombre;
-	private String direccion;
-	private String telefono;
-	private String celular;
-	private String rtn;
+	private String nombre="NA";
+	private String direccion="NA";
+	private String telefono="NA";
+	private String celular="NA";
+	private String rtn="CF";
 	private BigDecimal limiteCredito=new BigDecimal(0.0);
 	private BigDecimal saldoCuenta=new BigDecimal(0.0);
 	

@@ -314,9 +314,11 @@ public class CtlFacturaPagos implements ActionListener, MouseListener, TableMode
 		
 		CtlClienteBuscar ctlBuscarCliente=new CtlClienteBuscar(viewListaCliente,conexion);
 		
-		myCliente=ctlBuscarCliente.buscarCliente(view);
+		boolean resul=ctlBuscarCliente.buscarCliente(view);
 		//se comprueba si le regreso un articulo valido
-		if(myCliente.getNombre()!=null && myCliente.getId()!=-1){
+		if(resul){
+			myCliente=ctlBuscarCliente.getCliente();
+			
 			this.view.getTxtIdcliente().setText(""+myCliente.getId());;
 			this.view.getTxtNombrecliente().setText(myCliente.getNombre());
 			view.getTxtLimiteCredito().setText("L. "+myCliente.getLimiteCredito());

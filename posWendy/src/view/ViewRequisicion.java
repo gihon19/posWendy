@@ -26,6 +26,7 @@ import javax.swing.JTextField;
 import view.botones.BotonBuscar1;
 import view.botones.BotonCancelar;
 import view.botones.BotonGuardar;
+import view.rendes.PanelPadre;
 import view.tablemodel.CbxTmDepartamento;
 import view.tablemodel.TabloModeloRequisicion;
 import controlador.CtlRequisicion;
@@ -65,7 +66,7 @@ public class ViewRequisicion extends JDialog {
 	
 	
 	public ViewRequisicion(Window view){
-		super(view,"Requisicion de insumos",Dialog.ModalityType.DOCUMENT_MODAL);
+		super(view,"Requisicion de articulos",Dialog.ModalityType.DOCUMENT_MODAL);
 		Font myFont=new Font("OCR A Extended", Font.PLAIN, 45);
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -74,18 +75,20 @@ public class ViewRequisicion extends JDialog {
 			}
 		});
 		
-		panelAcciones=new JPanel();
+		panelAcciones=new PanelPadre();
 		panelAcciones.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Opciones", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		panelAcciones.setBounds(20, 11, 164, 459);
 		panelAcciones.setLayout(null);
 		
 		getContentPane().add(panelAcciones);
 		
+		getContentPane().setBackground(PanelPadre.color1);
 		
-		panelDatosFactura=new JPanel();
+		
+		panelDatosFactura=new PanelPadre();
 		//panelDatosFactura.setBackground(Color.WHITE);
 		panelDatosFactura.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Datos Generales", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panelDatosFactura.setBounds(208, 11, 790, 73);
+		panelDatosFactura.setBounds(208, 11, 709, 73);
 		panelDatosFactura.setLayout(null);
 		
 		getContentPane().add(panelDatosFactura);
@@ -101,7 +104,7 @@ public class ViewRequisicion extends JDialog {
 		panelDatosFactura.add(txtFecha);
 		
 		lblDepartamento = new JLabel("Departamento Origen de los Articulos");
-		lblDepartamento.setBounds(124, 11, 235, 29);
+		lblDepartamento.setBounds(124, 11, 249, 29);
 		panelDatosFactura.add(lblDepartamento);
 		
 		cbxModeloOrigen= new CbxTmDepartamento();
@@ -113,19 +116,19 @@ public class ViewRequisicion extends JDialog {
 		panelDatosFactura.add(cbxDepatOrigen);
 		
 		JLabel lblDepartamentoDestinoDe = new JLabel("Departamento Destino de los Articulos");
-		lblDepartamentoDestinoDe.setBounds(399, 11, 235, 29);
+		lblDepartamentoDestinoDe.setBounds(399, 11, 282, 29);
 		panelDatosFactura.add(lblDepartamentoDestinoDe);
 		
 		cbxDepartDestino = new JComboBox();
 		cbxDepartDestino.setModel(cbxModeloDestino);//comentar para ver la view
-		cbxDepartDestino.setBounds(399, 32, 235, 29);
+		cbxDepartDestino.setBounds(399, 32, 282, 29);
 		panelDatosFactura.add(cbxDepartDestino);
 		
 		
 		
-		panelBuscar= new JPanel();
+		panelBuscar= new PanelPadre();
 		panelBuscar.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Buscar Articulo", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panelBuscar.setBounds(208, 95, 790, 59);
+		panelBuscar.setBounds(208, 95, 709, 73);
 		panelBuscar.setLayout(null);
 		//getContentPane().geti
 		getContentPane().add(panelBuscar);
@@ -136,39 +139,39 @@ public class ViewRequisicion extends JDialog {
 		tableDetalle.setModel(modeloTabla);
 		
 		JScrollPane scrollPane = new JScrollPane(tableDetalle);
-		scrollPane.setBounds(208, 171, 790, 295);
+		scrollPane.setBounds(208, 182, 709, 284);
 		getContentPane().add(scrollPane);
 		
 		
 		
 		txtBuscar = new JTextField();
-		txtBuscar.setBounds(10, 28, 208, 20);
+		txtBuscar.setBounds(10, 28, 208, 32);
 		panelBuscar.add(txtBuscar);
 		txtBuscar.setColumns(10);
 		
 		txtArticulo = new JTextField();
 		txtArticulo.setEditable(false);
-		txtArticulo.setBounds(284, 28, 258, 20);
+		txtArticulo.setBounds(251, 28, 258, 32);
 		panelBuscar.add(txtArticulo);
 		txtArticulo.setColumns(10);
 		
 		txtPrecio = new JTextField();
 		txtPrecio.setHorizontalAlignment(SwingConstants.RIGHT);
 		txtPrecio.setEditable(false);
-		txtPrecio.setBounds(611, 28, 104, 20);
+		txtPrecio.setBounds(547, 28, 134, 32);
 		panelBuscar.add(txtPrecio);
 		txtPrecio.setColumns(10);
 		
 		JLabel lblArticulo = new JLabel("Articulo:");
-		lblArticulo.setBounds(228, 31, 56, 14);
+		lblArticulo.setBounds(251, 11, 56, 14);
 		panelBuscar.add(lblArticulo);
 		
 		JLabel lblPrecio = new JLabel("Precio:");
-		lblPrecio.setBounds(563, 31, 46, 14);
+		lblPrecio.setBounds(547, 11, 46, 14);
 		panelBuscar.add(lblPrecio);
 		
 		JLabel lblTotal = new JLabel("Total");
-		lblTotal.setBounds(780, 490, 46, 14);
+		lblTotal.setBounds(697, 490, 46, 14);
 		getContentPane().add(lblTotal);
 		
 		txtTotal = new JTextField();
@@ -177,28 +180,25 @@ public class ViewRequisicion extends JDialog {
 		txtTotal.setFont(myFont);
 		txtTotal.setText("00");
 		txtTotal.setEditable(false);
-		txtTotal.setBounds(778, 506, 220, 44);
+		txtTotal.setBounds(697, 506, 220, 53);
 		getContentPane().add(txtTotal);
 		txtTotal.setColumns(10);
 		
 		btnGuardar = new BotonGuardar();
-		btnGuardar.setHorizontalAlignment(SwingConstants.LEFT);
 		btnGuardar.setText("F4 Guardar");
-		btnGuardar.setBounds(10, 73, 144, 38);
+		btnGuardar.setBounds(10, 115, 144, 80);
 		panelAcciones.add(btnGuardar);
 		
 		btnCerrar = new BotonCancelar();
-		btnCerrar.setHorizontalAlignment(SwingConstants.LEFT);
 		btnCerrar.setText("Esc Cerrar");
-		btnCerrar.setBounds(10, 122, 144, 38);
+		btnCerrar.setBounds(10, 206, 144, 80);
 		panelAcciones.add(btnCerrar);
 		
 		btnBuscar = new BotonBuscar1();
-		btnBuscar.setHorizontalAlignment(SwingConstants.LEFT);
-		btnBuscar.setBounds(10, 24,144, 38);
+		btnBuscar.setBounds(10, 24,144, 80);
 		panelAcciones.add(btnBuscar);
 		
-		this.setSize(1024, 605);
+		this.setSize(973, 605);
 		getContentPane().setLayout(null);
 		
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

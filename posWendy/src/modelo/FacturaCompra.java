@@ -5,18 +5,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FacturaCompra {
-	private String fechaCompra;
-	private int noCompra;
-	private String idFactura;
+	private String fechaCompra="1990/01/01";
+	private int noCompra=-1;
+	private String idFactura="1";
 	private Integer tipoFactura=1;
 	private Proveedor proveedor;
 	private List<DetalleFacturaProveedor> detalles=new ArrayList<DetalleFacturaProveedor>();
 	private BigDecimal totalImpuesto=new BigDecimal(0.0);
 	private BigDecimal total=new BigDecimal(0.0);
 	private BigDecimal subTotal=new BigDecimal(0.0);
-	private String fechaVencimento=null;
-	private String estado;
-	private int agregadoAkardex;
+	private String fechaVencimento="1990/01/01";
+	private String estado="ACT";
+	private int agregadoAkardex=0;
 	private Departamento depart;
 	
 	public FacturaCompra(){

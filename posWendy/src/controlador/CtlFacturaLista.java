@@ -1,5 +1,6 @@
 package controlador;
 
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -13,6 +14,7 @@ import modelo.AbstractJasperReports;
 import modelo.Articulo;
 import modelo.Conexion;
 import modelo.Factura;
+import modelo.dao.CotizacionDao;
 import modelo.dao.FacturaDao;
 import view.ViewFacturar;
 import view.ViewListaFactura;
@@ -21,9 +23,10 @@ public class CtlFacturaLista implements ActionListener, MouseListener {
 	
 	private Conexion conexion=null;
 	private ViewListaFactura view=null;
-	private FacturaDao myFacturaDao=null;
+	private CotizacionDao myFacturaDao=null;
 	private int filaPulsada;
 	private Factura myFactura;
+	private boolean resultado;
 	
 	public CtlFacturaLista(){
 		
@@ -34,11 +37,11 @@ public class CtlFacturaLista implements ActionListener, MouseListener {
 		view=v;
 		view.conectarControlador(this);
 		conexion=conn;
-		myFacturaDao=new FacturaDao(conexion);
-		cargarTabla(myFacturaDao.facturasEnProceso());
-		myFactura=new Factura();
+		myFacturaDao=new CotizacionDao(conexion);
+		cargarTabla(myFacturaDao.getCotizaciones());
+		//setMyFactura(new Factura());
 		
-		view.setVisible(true);
+		//view.setVisible(true);
 	}
 	
 	public void cargarTabla(List<Factura> facturas){
@@ -50,6 +53,9 @@ public class CtlFacturaLista implements ActionListener, MouseListener {
 				this.view.getModelo().agregarFactura(facturas.get(c));
 				
 			}
+		}else{
+			JOptionPane.showMessageDialog(view, "No se encontro ninguna cotizacion. Escriba otra busqueda", "Error al buscar", JOptionPane.ERROR_MESSAGE);
+			view.getTxtBuscar().requestFocusInWindow();
 		}
 	}
 
@@ -63,15 +69,22 @@ public class CtlFacturaLista implements ActionListener, MouseListener {
         	
         	
         	//se consigue el proveedore de la fila seleccionada
-        	myFactura=this.view.getModelo().getFactura(filaPulsada);
+        	setMyFactura(this.view.getModelo().getFactura(filaPulsada));
         	
         	//si fue doble click mostrar modificar
         	if (e.getClickCount() == 2) {
         		
-        		ViewFacturar viewFacturar=new ViewFacturar(this.view);
+        		
+        		setResultado(true);
+    			//myArticuloDao.desconectarBD();
+    			this.view.setVisible(false);
+    			//JOptionPane.showMessageDialog(null,myMarca);
+    			this.view.dispose();
+        		
+        		/*	ViewFacturar viewFacturar=new ViewFacturar(this.view);
         		CtlFacturar ctlFacturar=new CtlFacturar(viewFacturar,conexion);
         		
-        		viewFacturar.getBtnPendientes().setEnabled(false);
+        		//viewFacturar.get.getBtnPendientes().setEnabled(false);
         		
         		//viewFacturar.getBtnCobrar()
         		
@@ -82,7 +95,7 @@ public class CtlFacturaLista implements ActionListener, MouseListener {
         		myFactura=ctlFacturar.actualizarFactura(myFactura);
         		
         		
-        		//si la factura se cobro se regresara null sino modificamos la factura en la lista
+        	//si la factura se cobro se regresara null sino modificamos la factura en la lista
         		if(myFactura==null){
         			this.view.getModelo().eliminarFactura(filaPulsada);
         			myFacturaDao.EliminarTemp(idFactura);
@@ -92,7 +105,7 @@ public class CtlFacturaLista implements ActionListener, MouseListener {
         		}
         		viewFacturar.dispose();
         		ctlFacturar=null;
-        		
+        		*/
         	}//fin del if del doble click
         	else{//si solo seleccion la fila se guarda el id de proveedor para accion de eliminar
         		
@@ -132,7 +145,7 @@ public class CtlFacturaLista implements ActionListener, MouseListener {
 		// TODO Auto-generated method stub
 
 	}
-	
+/*	
 private void cobrar(){
 		
 		
@@ -168,7 +181,7 @@ private void cobrar(){
 		}
 		
 	}
-
+*/
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -176,6 +189,56 @@ private void cobrar(){
 		String comando=e.getActionCommand();
 		
 		switch(comando){
+		
+		
+		case "BUSCAR":
+			//si se seleciono el boton ID
+			if(this.view.getRdbtnId().isSelected()){ 
+				
+	
+				myFactura=myFacturaDao.cotizacionPorId(Integer.parseInt(this.view.getTxtBuscar().getText()));
+				if(myFactura!=null){
+					resultado=true;
+					this.view.getModelo().limpiarFacturas();
+					this.view.getModelo().agregarFactura(myFactura);//.agregarArticulo(myArticulo);
+					//view.setVisible(false);
+				}else{
+					JOptionPane.showMessageDialog(view, "No se encontro ninguna cotizacion. Escriba otra busqueda", "Error al buscar", JOptionPane.ERROR_MESSAGE);
+					this.view.getTxtBuscar().setText("");
+				}
+			} 
+			
+			if(this.view.getRdbtnCliente().isSelected()){ //si esta selecionado la busqueda por nombre	
+				
+				cargarTabla(myFacturaDao.cotizacionesDelCliente(view.getTxtBuscar().getText()));
+				/*
+				//cargarTabla(myArticuloDao.buscarArticulo(this.view.getTxtBuscar().getText()));
+				//JOptionPane.showMessageDialog(view, myArticulo);
+				if(this.filaPulsada>=0 && myArticulo!=null){
+					resultado=true;
+				}
+		        view.setVisible(false);*/
+				}
+			if(this.view.getRdbtnFecha().isSelected()){ 
+				
+				//JOptionPane.showMessageDialog(view, view.getTxtBuscarFecha().getText());
+				
+				cargarTabla(myFacturaDao.cotizacionesPorFecha(view.getTxtBuscarFecha().getText()));
+				
+				/*cargarTabla(myArticuloDao.buscarArticuloMarca(this.view.getTxtBuscar().getText()));
+					if(myArticulo!=null){
+						view.setVisible(false);
+					}else{
+						this.view.getTxtBuscar().setText("");
+					}*/
+				}
+			
+			if(this.view.getRdbtnTodos().isSelected()){  
+				cargarTabla(myFacturaDao.getCotizaciones());
+				/*cargarTabla(myArticuloDao.todoArticulos());
+				this.view.getTxtBuscar().setText("");*/
+				}
+			break;
 		case "INSERTAR":
 			
 			ViewFacturar vistaFacturar=new ViewFacturar(this.view);
@@ -199,19 +262,53 @@ private void cobrar(){
 			ctlFacturar=null;
 			break;
 		case "COBRAR":
-				cobrar();
+		/*		cobrar();
 				//this.view.getBtnEliminar().setEnabled(true);
         		this.view.getBtnCobrar().setEnabled(false);
-        		this.view.getBtnEliminar().setEnabled(false);
+        		this.view.getBtnEliminar().setEnabled(false);*/
 			break;
 		case "ELIMINAR":
-			this.myFacturaDao.EliminarTemp(this.myFactura.getIdFactura());
+			/*this.myFacturaDao.EliminarTemp(this.myFactura.getIdFactura());
 			this.view.getModelo().eliminarFactura(this.filaPulsada);
 			this.view.getBtnCobrar().setEnabled(false);
-    		this.view.getBtnEliminar().setEnabled(false);
+    		this.view.getBtnEliminar().setEnabled(false);*/
 		break;
 		}
 
+	}
+
+	public boolean isResultado() {
+		return resultado;
+	}
+
+	public void setResultado(boolean resultado) {
+		this.resultado = resultado;
+	}
+
+	public Factura getMyFactura() {
+		return myFactura;
+	}
+
+	public void setMyFactura(Factura myFactura) {
+		this.myFactura = myFactura;
+	}
+	
+public boolean buscarCotizaciones(Window v){
+		
+		//this.myArticuloDao.cargarInstrucciones();
+		//cargarTabla(myArticuloDao.todoArticulos());
+		myFactura=null;
+		this.view.getRdbtnCliente().setSelected(true);
+		this.view.getBtnEliminar().setEnabled(false);
+		this.view.getBtnAgregar().setEnabled(false);
+		this.view.setLocationRelativeTo(v);
+		this.view.setModal(true);
+		view.getTxtBuscar().requestFocusInWindow();
+		
+		//view.setFocusable(true);
+		this.view.setVisible(true);
+		//
+		return resultado;
 	}
 
 }

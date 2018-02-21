@@ -6,11 +6,15 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -20,15 +24,19 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.MaskFormatter;
 
 import view.botones.BotonAgregar;
 import view.botones.BotonBuscar;
 import view.botones.BotonCobrarSmall;
 import view.botones.BotonEliminar;
+import view.rendes.PanelPadre;
 import view.rendes.RenderizadorTablaFacturas;
 import view.tablemodel.TablaModeloFacturas;
 import controlador.CtlArticuloLista;
 import controlador.CtlFacturaLista;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ViewListaFactura extends JDialog {
 	protected BorderLayout miEsquema;
@@ -45,12 +53,15 @@ public class ViewListaFactura extends JDialog {
 	
 	
 	private JRadioButton rdbtnId;
-	private JRadioButton rdbtnArticulo;
-	private JRadioButton rdbtnMarca;
-	private ButtonGroup grupoOpciones; // grupo de botones que contiene los botones de opción
+	private JRadioButton rdbtnCliente;
+	private JRadioButton rdbtnFecha;
+	private ButtonGroup grupoOpciones; // grupo de botones que contiene los botones de opciï¿½n
 	private JRadioButton rdbtnTodos;
 	protected BotonBuscar btnBuscar;
 	protected JTextField txtBuscar;
+	
+	private JFormattedTextField txtBuscarFecha;
+	private static final DateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
 	
 	
 	
@@ -60,7 +71,7 @@ public class ViewListaFactura extends JDialog {
 	public ViewListaFactura(Window view){
 		
 		miEsquema=new BorderLayout();
-		this.setTitle("Creando Facturas");
+		this.setTitle("Cotizaciones");
 		this.setLocationRelativeTo(view);
 		this.setModal(true);
 		getContentPane().setLayout(miEsquema);
@@ -68,9 +79,10 @@ public class ViewListaFactura extends JDialog {
 		
 		
 		//creacion de los paneles
-		panelAccion=new JPanel();
-		panelBusqueda=new JPanel();
-		panelSuperior=new JPanel();
+		panelAccion=new PanelPadre();
+		panelBusqueda=new PanelPadre();
+		panelSuperior=new PanelPadre();
+		//panelSuperior.setBackground(Color.CYAN);
 		
 		panelAccion.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Acciones de registro", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		panelBusqueda.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Busqueda de registros", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
@@ -95,30 +107,66 @@ public class ViewListaFactura extends JDialog {
         //configuracion del panel busqueda
         grupoOpciones = new ButtonGroup(); // crea ButtonGroup
         rdbtnTodos = new JRadioButton("Todos");
+        rdbtnTodos.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setBuscar1();
+        	}
+        });
 		rdbtnTodos.setSelected(true);
 		panelBusqueda.add(rdbtnTodos);
 		grupoOpciones.add(rdbtnTodos);
 		
 		//opciones de busquedas
 		rdbtnId = new JRadioButton("ID",false);
+		rdbtnId.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setBuscar1();
+			}
+		});
 		panelBusqueda.add(rdbtnId);
 		grupoOpciones.add(rdbtnId);
 		
-		rdbtnArticulo = new JRadioButton("Articulo",false);
-		panelBusqueda.add(rdbtnArticulo);
-		grupoOpciones.add(rdbtnArticulo);
+		rdbtnCliente = new JRadioButton("Cliente",false);
+		rdbtnCliente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setBuscar1();
+			}
+		});
+		panelBusqueda.add(rdbtnCliente);
+		grupoOpciones.add(rdbtnCliente);
 		
-		rdbtnMarca = new JRadioButton("Marca",false);
-		panelBusqueda.add(rdbtnMarca);
-		grupoOpciones.add(rdbtnMarca);
+		rdbtnFecha = new JRadioButton("Fecha",false);
+		rdbtnFecha.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setBuscar2();
+			}
+		});
+		panelBusqueda.add(rdbtnFecha);
+		grupoOpciones.add(rdbtnFecha);
 		
 		//elementos del panel buscar
 		txtBuscar=new JTextField(10);
 		panelBusqueda.add(txtBuscar);
+		
+		//caja de texto para buscar por fecha buscar por fecha
+		txtBuscarFecha=new JFormattedTextField(dateFormat);
+		txtBuscarFecha.setColumns(10);
+		MaskFormatter dateMask;
+	    try {
+	        dateMask = new MaskFormatter("##/##/####");
+	        dateMask.install(txtBuscarFecha);
+	        dateMask.setValidCharacters("0123456789");
+	    } catch (ParseException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+	    }
+	    txtBuscarFecha.setHorizontalAlignment(JTextField.RIGHT);
+	    txtBuscarFecha.setVisible(false);
+	    panelBusqueda.add(txtBuscarFecha);
+		
 				
 		btnBuscar=new BotonBuscar();
 		panelBusqueda.add(btnBuscar);
-		panelBusqueda.setVisible(false);
         //tabla y sus componentes
 		modelo=new TablaModeloFacturas();
 		tablaFacturas=new JTable();
@@ -126,7 +174,7 @@ public class ViewListaFactura extends JDialog {
 		RenderizadorTablaFacturas renderizador = new RenderizadorTablaFacturas();
 		tablaFacturas.setDefaultRenderer(String.class, renderizador);
 		
-		tablaFacturas.getColumnModel().getColumn(0).setPreferredWidth(100);     //Tamaño de las columnas de las tablas
+		tablaFacturas.getColumnModel().getColumn(0).setPreferredWidth(100);     //Tamaï¿½o de las columnas de las tablas
 		tablaFacturas.getColumnModel().getColumn(1).setPreferredWidth(300);	//de las columnas
 		tablaFacturas.getColumnModel().getColumn(2).setPreferredWidth(70);	//en la tabla
 		tablaFacturas.getColumnModel().getColumn(2).setPreferredWidth(70);	//
@@ -141,7 +189,7 @@ public class ViewListaFactura extends JDialog {
 		panelSuperior.add(panelBusqueda);
 		getContentPane().add(panelSuperior, BorderLayout.NORTH);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
-		setSize(710,600);
+		setSize(900,600);
 		
 		//se hace visible
 		//setVisible(true);
@@ -151,6 +199,20 @@ public class ViewListaFactura extends JDialog {
 		
 		
 	}
+	public void setBuscar1(){
+		txtBuscar.setVisible(true);
+		txtBuscarFecha.setVisible(false);
+		txtBuscar.repaint();
+		this.pack();
+	}
+	public void setBuscar2(){
+		txtBuscar.setVisible(false);
+		txtBuscarFecha.setVisible(true);
+		txtBuscarFecha.repaint();
+		this.pack();
+		
+		txtBuscarFecha.requestFocusInWindow();
+	}
 	
 public void conectarControlador(CtlFacturaLista c){
 		
@@ -159,14 +221,17 @@ public void conectarControlador(CtlFacturaLista c){
 		//rdbtnId.getActionCommand();
 		rdbtnId.setActionCommand("ID");
 		
-		rdbtnArticulo.addActionListener(c);
-		rdbtnArticulo.setActionCommand("ARTICULO");
+		rdbtnCliente.addActionListener(c);
+		rdbtnCliente.setActionCommand("ARTICULO");
 		
-		rdbtnMarca.addActionListener(c);
-		rdbtnMarca.setActionCommand("MARCA");
+		rdbtnFecha.addActionListener(c);
+		rdbtnFecha.setActionCommand("MARCA");
 		
 		btnBuscar.addActionListener(c);
 		btnBuscar.setActionCommand("BUSCAR");
+		//txtBuscarFecha
+		txtBuscarFecha.addActionListener(c);
+		txtBuscarFecha.setActionCommand("BUSCAR");
 		
 		 btnAgregar.addActionListener(c);
 		 btnAgregar.setActionCommand("INSERTAR");
@@ -202,11 +267,11 @@ public void conectarControlador(CtlFacturaLista c){
 	public BotonCobrarSmall getBtnCobrar(){
 		return btnCobrar;
 	}
-	public JRadioButton getRdbtnArticulo(){
-		return rdbtnArticulo;
+	public JRadioButton getRdbtnCliente(){
+		return rdbtnCliente;
 	}
-	public JRadioButton getRdbtnMarca(){
-		return  rdbtnMarca;
+	public JRadioButton getRdbtnFecha(){
+		return  rdbtnFecha;
 		
 	}
 	public JRadioButton getRdbtnTodos(){
@@ -215,6 +280,14 @@ public void conectarControlador(CtlFacturaLista c){
 	}
 	public BotonAgregar getBtnAgregar(){
 		return btnAgregar;
+	}
+
+	public JFormattedTextField getTxtBuscarFecha() {
+		return txtBuscarFecha;
+	}
+
+	public void setTxtBuscarFecha(JFormattedTextField txtBuscarFecha) {
+		this.txtBuscarFecha = txtBuscarFecha;
 	}
 
 }

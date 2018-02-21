@@ -36,6 +36,7 @@ import view.botones.BotonAgregar;
 import view.botones.BotonBuscar;
 import view.botones.BotonEliminar;
 import view.botones.BotonLimpiar;
+import view.rendes.PanelPadre;
 import view.rendes.TablaRenderizadorProveedor;
 import view.tablemodel.TablaModeloProveedor;
 
@@ -76,9 +77,9 @@ public class ViewListaProveedor extends JDialog {
 		
 		
 		//panel de la ventana
-		panelSuperior=new JPanel();
-		panelAccion=new JPanel();
-		panelBusqueda=new JPanel();
+		panelSuperior=new PanelPadre();
+		panelAccion=new PanelPadre();
+		panelBusqueda=new PanelPadre();
 		panelAccion.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Acciones de registro", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		panelBusqueda.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Busqueda de registros", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		
@@ -86,6 +87,7 @@ public class ViewListaProveedor extends JDialog {
 		tablaProvedores=new JTable();
 		modelo = new TablaModeloProveedor();//se crea el modelo de los datos de la tabla
 		tablaProvedores.setModel(modelo);
+		tablaProvedores.setBackground(PanelPadre.color1);
 		//Estitlo para la tabla		
 		TablaRenderizadorProveedor renderizador = new TablaRenderizadorProveedor();
 		tablaProvedores.setDefaultRenderer(String.class, renderizador);
@@ -137,12 +139,15 @@ public class ViewListaProveedor extends JDialog {
         panelAccion.add(btnLimpiar);
 		
 		JScrollPane scrollPane = new JScrollPane(tablaProvedores);
+		
+		scrollPane.setBackground(PanelPadre.color1);
 		//scrollPane.setBounds(36, 97, 742, 136);
 		
 		panelSuperior.add(panelAccion);
 		panelSuperior.add(panelBusqueda);
 		getContentPane().add(panelSuperior, BorderLayout.NORTH);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
+		getContentPane().setBackground(PanelPadre.color1);
 		setSize(710,600);
 		
 		

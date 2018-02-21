@@ -609,11 +609,12 @@ public class CtlAgregarCompras implements ActionListener,MouseListener,TableMode
 		//ctlArticulo.view.getTxtBuscar().selectAll();
 		//view.getTxtBuscar().requestFocusInWindow();
 		viewListaArticulo.conectarControladorBuscar(ctlArticulo);
-		Articulo myArticulo1=ctlArticulo.buscarArticulo(view);
 		
+		boolean resul=ctlArticulo.buscarArticulo(view);
 		//JOptionPane.showMessageDialog(view, myArticulo1);
 		//se comprueba si le regreso un articulo valido
-		if(myArticulo1!=null && myArticulo1.getId()!=-1){
+		if(resul){
+			Articulo myArticulo1=ctlArticulo.getArticulo();
 			this.view.getModelo().setArticulo(myArticulo1);
 			//this.view.getModelo().getDetalle(row).setCantidad(1);
 			

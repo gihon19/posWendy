@@ -31,9 +31,12 @@ import javax.swing.border.TitledBorder;
 import javax.swing.JPopupMenu;
 
 import view.botones.BotonAgregar;
+import view.botones.BotonBarcode;
 import view.botones.BotonBuscar;
 import view.botones.BotonEliminar;
+import view.botones.BotonKardex;
 import view.botones.BotonLimpiar;
+import view.rendes.PanelPadre;
 import view.rendes.TablaRenderizadorProveedor;
 import view.tablemodel.TableModeloArticulo;
 import controlador.CtlArticuloBuscar;
@@ -59,7 +62,7 @@ public class ViewListaArticulo extends JDialog {
 	private JRadioButton rdbtnId;
 	private JRadioButton rdbtnArticulo;
 	private JRadioButton rdbtnMarca;
-	private ButtonGroup grupoOpciones; // grupo de botones que contiene los botones de opción
+	private ButtonGroup grupoOpciones; // grupo de botones que contiene los botones de opciÃ³n
 	private JRadioButton rdbtnTodos;
 	protected BotonBuscar btnBuscar;
 	protected JTextField txtBuscar;
@@ -72,54 +75,14 @@ public class ViewListaArticulo extends JDialog {
 	private JButton btnSiguiente;
 	private JButton btnAnterior;
 	private JTextField txtPagina;
+	private BotonKardex btnKardex;
+	private BotonLimpiar btnInventario;
+
 	
 	
 	
 	public ViewListaArticulo(Window view){
 		super(view,"Articulos",Dialog.ModalityType.DOCUMENT_MODAL);
-		
-		/*addWindowListener(new WindowListener() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				JOptionPane.showMessageDialog(null, "Se esta cerrando");
-			}
-
-			@Override
-			public void windowOpened(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void windowClosed(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void windowIconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void windowDeiconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void windowActivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void windowDeactivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});*/
 		miEsquema=new BorderLayout();
 		//this.setTitle("Articulos");
 		getContentPane().setLayout(miEsquema);
@@ -127,10 +90,10 @@ public class ViewListaArticulo extends JDialog {
 		
 		
 		//creacion de los paneles
-		panelAccion=new JPanel();
-		panelBusqueda=new JPanel();
-		panelSuperior=new JPanel();
-		panelPaginacion=new JPanel();
+		panelAccion=new PanelPadre();
+		panelBusqueda=new PanelPadre();
+		panelSuperior=new PanelPadre();
+		panelPaginacion=new PanelPadre();
 		
 		panelAccion.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Acciones de registro", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		panelBusqueda.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Busqueda de registros", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
@@ -144,10 +107,17 @@ public class ViewListaArticulo extends JDialog {
         btnEliminar.setEnabled(false);
         panelAccion.add(btnEliminar);
         
-        btnLimpiar = new BotonLimpiar();
+        btnLimpiar = new BotonBarcode();
        // btnLimpiar.setIcon(new ImageIcon(ViewListaArticulo.class.getResource("/View/imagen/clear.png"))); // NOI18N
         panelAccion.add(btnLimpiar);
         btnLimpiar.setEnabled(false);
+        
+        btnKardex=new BotonKardex();
+        panelAccion.add(btnKardex);
+        
+        btnInventario=new BotonLimpiar();
+        panelAccion.add(btnInventario);
+        
         
         //configuracion del panel busqueda
         grupoOpciones = new ButtonGroup(); // crea ButtonGroup
@@ -183,10 +153,10 @@ public class ViewListaArticulo extends JDialog {
 		TablaRenderizadorProveedor renderizador = new TablaRenderizadorProveedor();
 		tablaArticulos.setDefaultRenderer(String.class, renderizador);
 		
-		tablaArticulos.getColumnModel().getColumn(0).setPreferredWidth(5);     //Tamaño de las columnas de las tablas
+		tablaArticulos.getColumnModel().getColumn(0).setPreferredWidth(5);     //TamaÃ±o de las columnas de las tablas
 		tablaArticulos.getColumnModel().getColumn(1).setPreferredWidth(200);	//
 		tablaArticulos.getColumnModel().getColumn(2).setPreferredWidth(100);	//
-		tablaArticulos.getColumnModel().getColumn(3).setPreferredWidth(10);	//
+		tablaArticulos.getColumnModel().getColumn(3).setPreferredWidth(10);		//
 		
 		JScrollPane scrollPane = new JScrollPane(tablaArticulos);
 		scrollPane.setBounds(36, 97, 742, 136);
@@ -197,7 +167,7 @@ public class ViewListaArticulo extends JDialog {
 		panelSuperior.add(panelBusqueda);
 		getContentPane().add(panelSuperior, BorderLayout.NORTH);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
-		setSize(710,665);
+		
 		
 		getContentPane().add(panelPaginacion, BorderLayout.SOUTH);
 		panelPaginacion.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -215,9 +185,12 @@ public class ViewListaArticulo extends JDialog {
 		btnSiguiente = new JButton("Siguiente");
 		panelPaginacion.add(btnSiguiente);
 		
+		//setSize(741,600);
 		//se hace visible
 		//setVisible(true);
 		this.setResizable(false);
+		
+		setSize(799,600);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		
@@ -264,6 +237,12 @@ public class ViewListaArticulo extends JDialog {
 		 
 		 btnAnterior.addActionListener(c);
 		 btnAnterior.setActionCommand("LAST");
+		 
+		 btnKardex.addActionListener(c);
+		 btnKardex.setActionCommand("KARDEX");
+		 
+		 btnInventario.addActionListener(c);
+		 btnInventario.setActionCommand("INVENTARIO");
 		 
 		 tablaArticulos.addMouseListener(c);
 		 tablaArticulos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -342,6 +321,11 @@ public void conectarControladorBuscar(CtlArticuloBuscar c){
 		 btnLimpiar.addActionListener(c);
 		 btnLimpiar.setActionCommand("LIMPIAR");
 		 btnLimpiar.addKeyListener(c);
+		 
+		
+		 
+		 
+		 
 		 
 		 txtBuscar.addActionListener(c);
 		 txtBuscar.setActionCommand("BUSCAR");

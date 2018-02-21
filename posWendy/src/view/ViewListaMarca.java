@@ -50,7 +50,7 @@ public class ViewListaMarca extends JDialog {
 	private JRadioButton rdbtnId;
 	private JRadioButton rdbtnObservacion;
 	private JRadioButton rdbtnMarca;
-	private ButtonGroup grupoOpciones; // grupo de botones que contiene los botones de opción
+	private ButtonGroup grupoOpciones; // grupo de botones que contiene los botones de opciï¿½n
 	private JRadioButton rdbtnTodos;
 	protected BotonBuscar btnBuscar;
 	protected JTextField txtBuscar;
@@ -62,14 +62,14 @@ public class ViewListaMarca extends JDialog {
 	 * @wbp.parser.constructor
 	 */
 	public ViewListaMarca(JDialog view){
-		super(view,"Buscar Marcas",Dialog.ModalityType.DOCUMENT_MODAL);
+		super(view,"Buscar Categorias",Dialog.ModalityType.DOCUMENT_MODAL);
 		Init();
 		btnAgregar.setEnabled(false);
 		btnLimpiar.setEnabled(false);
 		
 	}
 	public ViewListaMarca(JFrame view){
-		super(view,"Marcas",Dialog.ModalityType.DOCUMENT_MODAL);
+		super(view,"Categorias",Dialog.ModalityType.DOCUMENT_MODAL);
 		Init();
 		
 	}
@@ -112,7 +112,7 @@ public class ViewListaMarca extends JDialog {
 		panelBusqueda.add(rdbtnId);
 		grupoOpciones.add(rdbtnId);
 		
-		rdbtnMarca = new JRadioButton("Marca",false);
+		rdbtnMarca = new JRadioButton("Nombre",false);
 		panelBusqueda.add(rdbtnMarca);
 		grupoOpciones.add(rdbtnMarca);
 		
@@ -134,7 +134,7 @@ public class ViewListaMarca extends JDialog {
 		TablaRenderizadorProveedor renderizador = new TablaRenderizadorProveedor();
 		tablaMarca.setDefaultRenderer(String.class, renderizador);
 		
-		tablaMarca.getColumnModel().getColumn(0).setPreferredWidth(5);     //Tamaño de las columnas de las tablas
+		tablaMarca.getColumnModel().getColumn(0).setPreferredWidth(5);     //Tamaï¿½o de las columnas de las tablas
 		tablaMarca.getColumnModel().getColumn(1).setPreferredWidth(200);	//
 		tablaMarca.getColumnModel().getColumn(2).setPreferredWidth(100);	//
 		tablaMarca.setAutoCreateRowSorter(true);

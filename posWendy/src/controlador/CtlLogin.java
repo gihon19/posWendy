@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import modelo.Conexion;
 import modelo.Usuario;
 import modelo.dao.UsuarioDao;
+import view.BdConfig;
 import view.ViewLogin;
 
 public class CtlLogin implements ActionListener {
@@ -38,6 +39,14 @@ public class CtlLogin implements ActionListener {
 		case "SALIR":
 			System.exit(0);
 		break;
+		case "BD_CONFIG":
+			BdConfig viewBdConfig=new BdConfig(view);
+			CtlBdConfig ctlBdConfig=new CtlBdConfig(viewBdConfig);
+			
+			viewBdConfig.dispose();
+			viewBdConfig=null;
+			ctlBdConfig=null;
+			break;
 		
 		}
 		

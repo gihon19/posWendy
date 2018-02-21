@@ -14,9 +14,11 @@ import javax.swing.ListSelectionModel;
 import view.botones.BotonActualizar;
 import view.botones.BotonCancelar;
 import view.botones.BotonGuardar;
+import view.rendes.PanelPadre;
 import controlador.CtlProveedor;
 import controlador.CtlProveedorLista;
 import modelo.Proveedor;
+
 
 
 import java.awt.event.WindowAdapter;
@@ -51,58 +53,61 @@ public class ViewCrearProveedor extends JDialog {
 		
 		setResizable(false);
 		getContentPane().setLayout(null);
+		getContentPane().setBackground(PanelPadre.color1);
 		
 		JLabel lblNombre = new JLabel("Nombre");
-		lblNombre.setBounds(24, 21, 52, 25);
+		lblNombre.setBounds(24, 4, 52, 25);
 		getContentPane().add(lblNombre);
 		
 		JLabel lblTelefono = new JLabel("Telefono");
-		lblTelefono.setBounds(24, 75, 75, 14);
+		lblTelefono.setBounds(24, 73, 75, 14);
 		getContentPane().add(lblTelefono);
 		
 		txtNombre = new JTextField();
-		txtNombre.setBounds(97, 21, 314, 25);
+		txtNombre.setBounds(24, 33, 314, 36);
 		getContentPane().add(txtNombre);
 		txtNombre.setColumns(10);
 		
 		txtTelefono = new JTextField();
-		txtTelefono.setBounds(97, 70, 314, 25);
+		txtTelefono.setBounds(24, 91, 314, 39);
 		getContentPane().add(txtTelefono);
 		txtTelefono.setColumns(10);
 		
 		JLabel lblCelular = new JLabel("Celular");
-		lblCelular.setBounds(25, 122, 74, 25);
+		lblCelular.setBounds(24, 134, 74, 25);
 		getContentPane().add(lblCelular);
 		
 		txtCelular = new JTextField();
-		txtCelular.setBounds(97, 124, 314, 20);
+		txtCelular.setBounds(24, 163, 314, 36);
 		getContentPane().add(txtCelular);
 		txtCelular.setColumns(10);
 		
 		JLabel lblDireccion = new JLabel("Direccion");
-		lblDireccion.setBounds(24, 165, 75, 14);
+		lblDireccion.setBounds(24, 203, 75, 14);
 		getContentPane().add(lblDireccion);
 		
 		txtrDireccion = new JTextArea();
-		txtrDireccion.setBounds(97, 160, 314, 91);
+		txtrDireccion.setBounds(24, 221, 314, 91);
 		getContentPane().add(txtrDireccion);
 		
 		//botones
 		btnActualizar=new BotonActualizar();
-		btnActualizar.setLocation(24, 275);
+		//btnActualizar.setSize(128, 66);
+		btnActualizar.setLocation(29, 341);
 		getContentPane().add(btnActualizar);
 		btnActualizar.setVisible(false);
 		
 		btnGuardar = new BotonGuardar();
-		btnGuardar.setLocation(24, 275);
+		btnGuardar.setLocation(29, 341);
 		//tnCancelar.setLocation(42, 175);
 		getContentPane().add(btnGuardar);
 		
 		btnCancelar = new BotonCancelar();
-		btnCancelar.setLocation(283, 275);
+		//btnCancelar.setSize(128, 66);
+		btnCancelar.setLocation(194, 341);
 		getContentPane().add(btnCancelar);
 		
-		setSize(460,363);
+		setSize(367,456);
 		
 		//centrar la ventana en la pantalla
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();

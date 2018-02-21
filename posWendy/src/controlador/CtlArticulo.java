@@ -37,14 +37,21 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 	
 	public ViewCrearArticulo view;
 	private ArticuloDao myArticuloDao;
+	//private ArticuloDao myArticuloDaoRemote;
 	private Articulo myArticulo=new Articulo();
 	private boolean resultaOperacion=false;
 	private Conexion conexion;
 	private ImpuestoDao myImpuestoDao;
 	private PrecioArticuloDao precioDao=null;
+	//private Conexion conexionRemote;
 	
 	public CtlArticulo(ViewCrearArticulo view, ArticuloDao a,Conexion conn){
+		
+		//conexionRemote=new Conexion("remote");
 		conexion=conn;
+		
+		//myArticuloDaoRemote=new ArticuloDao(conexionRemote);
+		
 		this.view=view;
 		this.myArticuloDao=a;
 		precioDao= new PrecioArticuloDao(conexion);
@@ -87,7 +94,7 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 					view.getTxtMarca().setText(myMarca.getMarca());
 				
 				}else{
-					JOptionPane.showMessageDialog(this.view,"No seleciono una Marca");
+					JOptionPane.showMessageDialog(this.view,"No seleciono una Categoria");
 				}
 			break;
 		case "GUARDAR":
@@ -120,7 +127,7 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 				CodBarra cod= this.view.getModeloCodBarra().getCodBarra(indexCodigoSelecionado);
 				
 				//se pregunta si en verdad se quiere borrar el codigo de bgarra
-				int confirmacion=JOptionPane.showConfirmDialog(view, "¿Desea eliminar el codigo de barra "+cod+" ?");
+				int confirmacion=JOptionPane.showConfirmDialog(view, "ï¿½Desea eliminar el codigo de barra "+cod+" ?");
 				
 				// si se confirma la eliminacion se procede a eliminar
 				if(confirmacion==0){
@@ -163,24 +170,52 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 		
 		cargarDatosArticuloView();
 		
+		boolean existeCodigo=false;
 		
-		
-		//se ejecuta la accion de guardar
-		if(myArticuloDao.registrarArticulo(myArticulo)){
+		//se verificara que no exista otro articulo con el mismo codigo de barra
+		//se recorre la lista de codigo de barra en busqueda de duplicados
+		for(int x=0; x<view.getModeloCodBarra().getSize();x++){
 			
-			JOptionPane.showMessageDialog(this.view, "Se ha registrado Exitosamente","Información",JOptionPane.INFORMATION_MESSAGE);
-			myArticulo.setId(myArticuloDao.getIdArticuloRegistrado());//se completa el proveedor guardado con el ID asignado por la BD
-			resultaOperacion=true;
-			this.view.setVisible(false);
+			//se obtiene el primer codigo de barra del la lista
+			String codigo=view.getModeloCodBarra().getCodBarra(x).getCodigoBarra();
 			
+			//se busca en la base de datos por el codigo de barra
+			Articulo articuloBusqueda=myArticuloDao.buscarArticuloBarraCod(codigo);
+			
+			//si nos retorna un articulo significa que existe el codigo de barra
+			if(articuloBusqueda!=null){
+				
+				//se estable que si exite el codigo de barra
+				existeCodigo=true;
+				//JOptionPane.showMessageDialog(view, "El codigo de barra '"+codigo+"' ya esta asignado al articulo.\n"+articuloBusqueda.toString());
+				JOptionPane.showMessageDialog(view, "El codigo de barra '"+codigo+"' ya esta asignado al articulo.\n"+articuloBusqueda.toString(), "Error al guardar articulo", JOptionPane.ERROR_MESSAGE);
+			}
 			
 		}
+		
+		//se verifica que en la busqueda no se encontro un codigo de barra igual
+		if(existeCodigo==false){
+		
+			//se ejecuta la accion de guardar
+			if(myArticuloDao.registrarArticulo(myArticulo)){
+				
+				JOptionPane.showMessageDialog(this.view, "Se ha registrado Exitosamente","Informacion",JOptionPane.INFORMATION_MESSAGE);
+				myArticulo.setId(myArticuloDao.getIdArticuloRegistrado());//se completa el proveedor guardado con el ID asignado por la BD
+				resultaOperacion=true;
+				this.view.setVisible(false);
+				//this.myArticuloDaoRemote.registrarArticulo(getArticulo());
+				
+				
+			}
+			else{
+				JOptionPane.showMessageDialog(this.view, "No se Registro");
+				resultaOperacion=false;
+				this.view.setVisible(false);
+			}
+		}//fin verificacion de codigos de barras
 		else{
-			JOptionPane.showMessageDialog(this.view, "No se Registro");
-			resultaOperacion=false;
-			this.view.setVisible(false);
+			JOptionPane.showMessageDialog(view, "No se guardo el articulo, ","Error al guardar articulo", JOptionPane.ERROR_MESSAGE);
 		}
-		
 	}
 	
 	private void cargarDatosArticuloView(){
@@ -282,26 +317,26 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 		this.view.getCbxImpuesto().setSelectedIndex(1);
 	}
 	
-	 // maneja el evento de oprimir el botón del ratón
+	 // maneja el evento de oprimir el botï¿½n del ratï¿½n
 	public void mousePressed( MouseEvent evento )
 	{
 		check(evento);
 		checkForTriggerEvent( evento ); // comprueba el desencadenador
-	} // fin del método mousePressed
+	} // fin del mï¿½todo mousePressed
 	
-	// maneja el evento de liberación del botón del ratón
+	// maneja el evento de liberaciï¿½n del botï¿½n del ratï¿½n
 	public void mouseReleased( MouseEvent evento )
 	{
 		check(evento);
 		checkForTriggerEvent( evento ); // comprueba el desencadenador
-	} // fin del método mouseReleased
+	} // fin del mï¿½todo mouseReleased
 	
-	// determina si el evento debe desencadenar el menú contextual
+	// determina si el evento debe desencadenar el menï¿½ contextual
 	private void checkForTriggerEvent( MouseEvent evento )
 	{
 		if ( evento.isPopupTrigger() )
 			this.view.getMenuContextual().show(evento.getComponent(), evento.getX(), evento.getY() );
-	} // fin del método checkForTriggerEvent
+	} // fin del mï¿½todo checkForTriggerEvent
 	
 	public void check(MouseEvent e)
 	{ 

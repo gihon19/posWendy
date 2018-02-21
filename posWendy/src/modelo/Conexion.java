@@ -2,8 +2,11 @@
 
 package modelo;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.sql.*;
 import java.util.Properties;
@@ -34,16 +37,16 @@ public class Conexion {
 	   static String server = "192.168.1.10";
 	   
 	   
-	   /*private DataSource dataSource;
-	   static String bd = "admin_tools";
+	
+	   /*static String bd = "admin_tools";
 	   static String login = "root";
-	   static String password = "jdmm123";
+	   static String password = "jdmm123.";
 	   static String server = "localhost";*/
 	   
 	   /*static String bd = "miswendy_admin_tools";
 	   static String login = "miswendy_pos";
 	   static String password = "bTp.rxN-*~Z4";
-	   static String server = "108.167.189.55";*/
+	   static String server = "108.167.189.55";8*/
 	   
 	   static String url = "jdbc:mysql://"+server+":3306/"+bd;
 	   static String driver="com.mysql.jdbc.Driver";
@@ -94,7 +97,7 @@ public class Conexion {
            if(conn!=null){
 
                //JOptionPane.showMessageDialog(null, "Conectado");
-               System.out.println("Conección a base de datos "+bd+" OK");
+               System.out.println("Conecciï¿½n a base de datos "+bd+" OK");
 
            }
 
@@ -124,11 +127,11 @@ public class Conexion {
      /* try{
          //obtenemos el driver de para mysql
          Class.forName(driver);
-         //obtenemos la conexión
+         //obtenemos la conexiï¿½n
          conn = DriverManager.getConnection(url,login,password);
 
          if (conn!=null){
-            System.out.println("Conección a base de datos "+bd+" OK");
+            System.out.println("Conecciï¿½n a base de datos "+bd+" OK");
          }
       }
       catch(SQLException e){
@@ -158,43 +161,101 @@ public class Conexion {
        }*/
        if("mysql".equals(dbType)){
     	   
-    	   //miscelaneaswyc.com
     	   
-    	  /* ds.setDriverClassName(driver);
-           ds.setUrl("jdbc:mysql://localhost:3306/miswendy_admin_tools");
-           ds.setUsername("root");
-           ds.setPassword("jdmm123");*/
-           
-           ds.setDriverClassName(driver);
-           ds.setUrl("jdbc:mysql://108.167.189.55:3306/miswendy_admin_tools");
+    	  /*
+    	   ds.setDriverClassName(driver);
+           ds.setUrl("jdbc:mysql://108.167.189.55:3306/");
+           ds.setDefaultCatalog("miswendy_admin_tools");
            ds.setUsername("miswendy_pos");
            ds.setPassword("bTp.rxN-*~Z4");
-          // ds.setMinIdle(20);
+          
            ds.setMaxActive(5);
            ds.setMaxIdle(5);
+           ds.setMinIdle(3);
+           ds.setInitialSize(4);*/
+    	   
            
+           ds.setDriverClassName(driver);
+           ds.setUrl("jdbc:mysql://192.168.1.19:3306/");
+           ds.setDefaultCatalog("admin_tools");
+           ds.setUsername("miswc");
+           ds.setPassword("jdmm123.");
+           ds.setMaxActive(3);
+           //ds.setMaxIdle(5);
+           //ds.setMinIdle(3);
+           ds.setInitialSize(3);
+           //ds.default.maxIdleTime = 3600 ;
+          // ds.setMaxIdle(maxIdle);
+           
+           ds.setValidationQuery("select 1;");
+           //maxWait = 180000
+        		   
+        		   ds.setMaxWait(-1);
+	       // minEvictableIdleTimeMillis = 1000 * 60 * 15
+	        		
+	        	ds.setMinEvictableIdleTimeMillis( 1000 * 60 * 15);
+	     
+	       // timeBetweenEvictionRunsMillis = 1000 * 60 * 15
+	        		ds.setTimeBetweenEvictionRunsMillis(1000 * 60 * 15);
+	       // numTestsPerEvictionRun = 3
+	        		ds.setNumTestsPerEvictionRun(1);
+	       // testOnBorrow = true
+	        		ds.setTestOnBorrow(true);
+	       // testWhileIdle = true
+	        		ds.setTestWhileIdle(true);
+	       // testOnReturn = false
+	        		
+	        		ds.setTestOnReturn(true);
+           
+           
+         
+
+           //ds.setMaxWait(maxWait);
+           
+           
+           
+           /*ds.setUrl("jdbc:mysql://108.167.189.55:3306/");
+           ds.setDefaultCatalog("miswendy_admin_tools");
+           ds.setUsername("miswendy_pos");
+           ds.setPassword("bTp.rxN-*~Z4");
+           
+          // ds.setUsername("jdmayorg_datatec");
+           //ds.setPassword("uXn;eBtZ[#P{");
+           
+          // ds.setUrl("jdbc:mysql://108.167.189.55:3306/miswendy_admin_tools");
+          // ds.setUsername("miswendy_pos");
+          // ds.setPassword("bTp.rxN-*~Z4");
+          // ds.setMinIdle(20);
+           ds.setMaxActive(5);
+           ds.setMaxIdle(8);
            ds.setMinIdle(3);
            ds.setInitialSize(3);
            
-           
-           
-           
-           
-           /*ds.setDriverClassName(props.getProperty("MYSQL_DB_DRIVER_CLASS"));
-           ds.setUrl(props.getProperty("MYSQL_DB_URL"));
-           ds.setUsername(props.getProperty("MYSQL_DB_USERNAME"));
-           ds.setPassword(props.getProperty("MYSQL_DB_PASSWORD"));
-          // ds.setMinIdle(20);
-           ds.setMaxActive(10);
-           ds.setMaxIdle(5);
-           ds.setMinIdle(3);
-           ds.setInitialSize(2);*/
-       }/*else if("oracle".equals(dbType)){
-           ds.setDriverClassName(props.getProperty("ORACLE_DB_DRIVER_CLASS"));
-           ds.setUrl(props.getProperty("ORACLE_DB_URL"));
-           ds.setUsername(props.getProperty("ORACLE_DB_USERNAME"));
-           ds.setPassword(props.getProperty("ORACLE_DB_PASSWORD"));
-       }*/else{
+         
+           ds.setInitialSize(4);
+           ds.setValidationQuery("select 1;");
+           //maxWait = 180000
+        		   
+        		   ds.setMaxWait(-1);
+	       // minEvictableIdleTimeMillis = 1000 * 60 * 15
+	        		
+	        	ds.setMinEvictableIdleTimeMillis( 1000 * 60 * 15);
+	     
+	       // timeBetweenEvictionRunsMillis = 1000 * 60 * 15
+	        		ds.setTimeBetweenEvictionRunsMillis(1000 * 60 * 15);
+	       // numTestsPerEvictionRun = 3
+	        		ds.setNumTestsPerEvictionRun(1);
+	       // testOnBorrow = true
+	        		ds.setTestOnBorrow(true);
+	       // testWhileIdle = true
+	        		ds.setTestWhileIdle(true);
+	       // testOnReturn = false
+	        		
+	        		ds.setTestOnReturn(true);
+	       // validationQuery = "select 1"*/
+	        		
+          
+       }else{
            return null;
        }
         
@@ -212,7 +273,7 @@ public boolean getNivelFact(){
 	   
    }
   
-   /**Permite retornar la conexión*/
+   /**Permite retornar la conexiï¿½n*/
    public Connection getConnection(){
 	  
       return conn;
@@ -254,9 +315,21 @@ public boolean getNivelFact(){
    
    
    public static DataSource setDataSource(String dbType){
-       //Properties props = new Properties();
-       //FileInputStream fis = null;
+       Properties props = new Properties();
+      // File file = new File("/config/db.config");
+       InputStream file=null;
+       FileInputStream fis = null;
+       //InputStream fis=null;
        BasicDataSource ds = new BasicDataSource();
+       
+       //fis=new FileInputStream(file);
+       file=AbstractJasperReports.class.getResourceAsStream("/config/db.config"); 
+     try {
+		props.load(file);
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
         
        /*try {
           fis = new FileInputStream( "db.config");
@@ -269,15 +342,65 @@ public boolean getNivelFact(){
            return null;
        }*/
        if("mysql".equals(dbType)){
-           ds.setDriverClassName(driver);
+    	   
+    	   ds.setDriverClassName(props.getProperty("MYSQL_DB_DRIVER_CLASS"));
+           ds.setUrl("jdbc:mysql://"+props.getProperty("MYSQL_DB_URL")+":3306/");
+           ds.setDefaultCatalog(props.getProperty("MYSQL_DB"));
+           ds.setUsername(props.getProperty("MYSQL_DB_USERNAME"));
+           ds.setPassword(props.getProperty("MYSQL_DB_PASSWORD"));
+           
+           /*ds.setDriverClassName(driver);
            ds.setUrl(url);
            ds.setUsername(login);
-           ds.setPassword(password);
+           ds.setPassword(password);*/
           // ds.setMinIdle(20);
-           ds.setMaxActive(5);
-           ds.setMaxIdle(5);
+           ds.setMaxActive(3);
+           ds.setMaxIdle(3);
            ds.setMinIdle(3);
            ds.setInitialSize(3);
+           
+         
+           ds.setInitialSize(3);
+           ds.setValidationQuery("select 1;");
+           //maxWait = 180000
+        		   
+        		   ds.setMaxWait(-1);
+	       // minEvictableIdleTimeMillis = 1000 * 60 * 15
+	        		
+	        	ds.setMinEvictableIdleTimeMillis( 1000 * 60 * 15);
+	     
+	       // timeBetweenEvictionRunsMillis = 1000 * 60 * 15
+	        		ds.setTimeBetweenEvictionRunsMillis(1000 * 60 * 15);
+	       // numTestsPerEvictionRun = 3
+	        		ds.setNumTestsPerEvictionRun(1);
+	       // testOnBorrow = true
+	        		ds.setTestOnBorrow(true);
+	       // testWhileIdle = true
+	        		ds.setTestWhileIdle(true);
+	       // testOnReturn = false
+	        		
+	        		ds.setTestOnReturn(true);
+	       // validationQuery = "select 1"
+          /*
+           ds.setValidationQuery("select 1;");
+           //maxWait = 180000
+        		   
+        		   ds.setMaxWait(-1);
+	       // minEvictableIdleTimeMillis = 1000 * 60 * 15
+	        		
+	        		ds.setMinEvictableIdleTimeMillis( 1000 * 60 * 15);
+	       // timeBetweenEvictionRunsMillis = 1000 * 60 * 15
+	        		ds.setTimeBetweenEvictionRunsMillis(1000 * 60 * 15);
+	       // numTestsPerEvictionRun = 3
+	        		ds.setNumTestsPerEvictionRun(3);
+	       // testOnBorrow = true
+	        		ds.setTestOnBorrow(true);
+	       // testWhileIdle = true
+	        		ds.setTestWhileIdle(true);
+	       // testOnReturn = false
+	        		
+	        		ds.setTestOnReturn(true);
+	       // validationQuery = "select 1"*/
            
            
            
@@ -292,7 +415,10 @@ public boolean getNivelFact(){
            ds.setMaxIdle(5);
            ds.setMinIdle(3);
            ds.setInitialSize(2);*/
-       }/*else if("oracle".equals(dbType)){
+       }
+       
+       
+       /*else if("oracle".equals(dbType)){
            ds.setDriverClassName(props.getProperty("ORACLE_DB_DRIVER_CLASS"));
            ds.setUrl(props.getProperty("ORACLE_DB_URL"));
            ds.setUsername(props.getProperty("ORACLE_DB_USERNAME"));

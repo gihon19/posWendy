@@ -83,6 +83,53 @@ public class CodBarraDao {
 		}
 	
 	
+	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< selecciona de la Bd todas las MArcas>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+	public String getCodArticulo(int codArticulo){
+		
+		ResultSet res=null;
+		Connection conn=null;
+		String codigo="";
+		
+		boolean existe=false;
+		try {
+			conn=conexion.getPoolConexion().getConnection();
+			buscarCodigos=conn.prepareStatement("SELECT codigo_barra FROM codigos_articulos where codigo_articulo =  ?");
+			
+			buscarCodigos.setInt(1, codArticulo);
+			res = buscarCodigos.executeQuery();
+			while(res.next()){
+				
+				existe=true;
+				codigo=res.getString("codigo_barra");
+
+				
+			 }
+					
+					
+			} catch (SQLException e) {
+					JOptionPane.showMessageDialog(null, "Error, no se conecto");
+					System.out.println(e);
+			}
+		finally
+		{
+			try{
+					if(res != null) res.close();
+	                if(buscarCodigos != null)buscarCodigos.close();
+	                if(conn != null) conn.close();
+				} // fin de try
+				catch ( SQLException excepcionSql )
+				{
+					excepcionSql.printStackTrace();
+				} // fin de catch
+		} // fin de finally
+		
+			if (existe) {
+				return codigo;
+			}
+			else return null;
+			
+		}
+	
 	
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para eliminar de articulo>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 	public boolean eliminarCodigo(int idArticulo){

@@ -9,7 +9,7 @@ import modelo.Marca;
 
 public class TablaModeloMarca extends AbstractTableModel {
 	
-	private String []columnNames={"Id","Marca","Observacion"};
+	private String []columnNames={"Id","Descripcion","Observacion"};
 	private List<Marca> marcas = new ArrayList<Marca>();
 	
 	public void agregarMarca(Marca marca) {

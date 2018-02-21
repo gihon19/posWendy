@@ -29,6 +29,7 @@ public class CtlClienteBuscar implements ActionListener ,MouseListener, WindowLi
 	private Cliente myCliente=null;
 	//fila selecciona enla lista
 	private int filaPulsada;
+	private boolean resultado=false;
 	
 	public CtlClienteBuscar(ViewListaClientes v, Conexion conn){
 		conexion=conn;
@@ -48,7 +49,7 @@ public class CtlClienteBuscar implements ActionListener ,MouseListener, WindowLi
 		}
 	}
 	
-public Cliente buscarCliente(Window v){
+public boolean buscarCliente(Window v){
 		
 		//this.myArticuloDao.cargarInstrucciones();
 		cargarTabla(clienteDao.todoClientes());
@@ -57,9 +58,11 @@ public Cliente buscarCliente(Window v){
 		this.view.setLocationRelativeTo(v);
 		this.view.setModal(true);
 		this.view.setVisible(true);
+		return resultado;
+	}
+	public Cliente getCliente(){
 		return this.myCliente;
 	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -121,14 +124,16 @@ public Cliente buscarCliente(Window v){
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
-		//Recoger qué fila se ha pulsadao en la tabla
+		//Recoger quï¿½ fila se ha pulsadao en la tabla
         filaPulsada = this.view.getTablaClientes().getSelectedRow();
 		if (e.getClickCount() == 2){
 			myCliente=this.view.getModelo().getCliente(filaPulsada);
+			resultado=true;
 			//clienteDao.desconectarBD();
 			this.view.setVisible(false);
 			//JOptionPane.showMessageDialog(null,myMarca);
 			this.view.dispose();
+			
 		}
 		
 	}

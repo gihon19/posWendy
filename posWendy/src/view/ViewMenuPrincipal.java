@@ -50,6 +50,13 @@ public class ViewMenuPrincipal extends JFrame {
 	private JMenuItem mntmProgramarPrecios;
 	private JMenu mnReportes;
 	private JMenuItem mntmDeclaracionDei;
+
+	private JMenuItem mntmInventario;
+
+	private JMenuItem mntmCierresDeCaja;
+
+	private JMenuItem mntmEmpleados;
+	private JMenuItem mntmComisiones;
 	
 	public ViewMenuPrincipal() {
 		setTitle("AdminTools");
@@ -64,6 +71,9 @@ public class ViewMenuPrincipal extends JFrame {
 		mntmUsuarios = new JMenuItem("Usuarios");
 		mnArchivo.add(mntmUsuarios);
 		
+		mntmEmpleados = new JMenuItem("Empleados");
+		mnArchivo.add(mntmEmpleados);
+		
 		mntmSalir = new JMenuItem("Salir");
 		mnArchivo.add(mntmSalir);
 		
@@ -76,7 +86,7 @@ public class ViewMenuPrincipal extends JFrame {
 		mntmArticulos = new JMenuItem("Articulos");
 		mnInventario.add(mntmArticulos);
 		
-		mntmMarcas = new JMenuItem("Marcas");
+		mntmMarcas = new JMenuItem("Categorias");
 		mnInventario.add(mntmMarcas);
 		
 		mntmProgramarPrecios = new JMenuItem("Programar Precios");
@@ -130,6 +140,15 @@ public class ViewMenuPrincipal extends JFrame {
 		
 		mntmDeclaracionDei = new JMenuItem("Declaracion DEI");
 		mnReportes.add(mntmDeclaracionDei);
+		
+		mntmInventario = new JMenuItem("Inventario");
+		mnReportes.add(mntmInventario);
+		
+		mntmCierresDeCaja = new JMenuItem("Cierres de caja");
+		mnReportes.add(mntmCierresDeCaja);
+		
+		mntmComisiones = new JMenuItem("Comisiones");
+		mnReportes.add(mntmComisiones);
 		
 		JMenu mnCuentasPorPagar = new JMenu("Cuentas Por Pagar");
 		menuBar.add(mnCuentasPorPagar);
@@ -219,6 +238,19 @@ public class ViewMenuPrincipal extends JFrame {
 		
 		mntmDeclaracionDei.addActionListener(c);
 		mntmDeclaracionDei.setActionCommand("R_DEI");
+		
+		mntmInventario.addActionListener(c);
+		mntmInventario.setActionCommand("INVENTARIO");
+		
+		
+		mntmCierresDeCaja.addActionListener(c);
+		mntmCierresDeCaja.setActionCommand("CIERRES_CAJA");
+		
+		mntmEmpleados.addActionListener(c);
+		mntmEmpleados.setActionCommand("EMPLEADOS");
+		
+		mntmComisiones.addActionListener(c);
+		mntmComisiones.setActionCommand("COMISIONES");
 		
 	}
 	public JLabel getLblUserName(){

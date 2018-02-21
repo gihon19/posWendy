@@ -1,5 +1,6 @@
 package modelo.dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,6 +26,8 @@ public class ClienteDao {
 	private PreparedStatement buscarClienteNombre=null;
 	private PreparedStatement actualizarCliente=null;
 	private PreparedStatement eliminarCliente=null;
+
+	private PreparedStatement saldoCliente;
 	
 	
 	public ClienteDao(Conexion conn){
@@ -407,5 +410,62 @@ public class ClienteDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public BigDecimal getSaldoCliente(int idCliente) {
+		// TODO Auto-generated method stub
+
+		BigDecimal saldo=new BigDecimal(0);
+		//se crear un referencia al pool de conexiones
+		
+		//DataSource ds = DBCPDataSourceFactory.getDataSource("mysql");
+		
+		
+        Connection con = null;
+        
+       
+		
+		ResultSet res=null;
+		
+		boolean existe=false;
+		
+		
+		try {
+			con = conexion.getPoolConexion().getConnection();
+			
+			saldoCliente=con.prepareStatement("SELECT saldo FROM v_saldo_cliente where codigo_cliente=? ORDER BY codigo_reguistro DESC limit 1;");
+			
+			saldoCliente.setInt(1, idCliente);
+			res=saldoCliente.executeQuery();
+			while(res.next()){
+				saldo=res.getBigDecimal("saldo");
+				existe=true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try{
+			
+			if(res != null) res.close();
+            if(saldoCliente != null)saldoCliente.close();
+            if(con != null) con.close();
+            
+			
+			} // fin de try
+			catch ( SQLException excepcionSql )
+			{
+				excepcionSql.printStackTrace();
+
+			} // fin de catch
+		
+		if(existe){
+				return saldo;
+		}
+		else
+			return new BigDecimal(0);
+		
+	
+		
 	}
 }

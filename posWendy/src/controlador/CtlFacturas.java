@@ -65,7 +65,7 @@ public class CtlFacturas implements ActionListener, MouseListener, ChangeListene
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
-		//Recoger qué fila se ha pulsadao en la tabla
+		//Recoger quï¿½ fila se ha pulsadao en la tabla
         filaPulsada = this.view.getTablaFacturas().getSelectedRow();
         
         //si seleccion una fila
@@ -217,12 +217,12 @@ public class CtlFacturas implements ActionListener, MouseListener, ChangeListene
 			//se verifica si la factura ya esta agregada al kardex
 			if (myFactura.getAgregadoAkardex()==0){
 				
-					int resul=JOptionPane.showConfirmDialog(view, "¿Desea anular la factura no "+myFactura.getIdFactura()+"?");
+					int resul=JOptionPane.showConfirmDialog(view, "Desea anular la factura no "+myFactura.getIdFactura()+"?");
 					//sin confirmo la anulacion
 					if(resul==0){
 						JPasswordField pf = new JPasswordField();
-						int action = JOptionPane.showConfirmDialog(view, pf,"Escriba la contraseña admin",JOptionPane.OK_CANCEL_OPTION);
-						//String pwd=JOptionPane.showInputDialog(view, "Escriba la contraseña admin", "Seguridad", JOptionPane.INFORMATION_MESSAGE);
+						int action = JOptionPane.showConfirmDialog(view, pf,"Escriba el password de admin",JOptionPane.OK_CANCEL_OPTION);
+						//String pwd=JOptionPane.showInputDialog(view, "Escriba la contraseï¿½a admin", "Seguridad", JOptionPane.INFORMATION_MESSAGE);
 						if(action < 0){
 							
 							
@@ -262,7 +262,7 @@ public class CtlFacturas implements ActionListener, MouseListener, ChangeListene
 			break;
 			
 		case "INSERTAR":
-			if(this.filaPulsada>0){
+			if(this.filaPulsada>=0){
 				myFactura.setDetalles(detallesDao.getDetallesFactura(myFactura.getIdFactura()));
 				ViewFacturaDevolucion viewDevolucion=new ViewFacturaDevolucion(view);
 				CtlDevoluciones ctlDevolucion=new CtlDevoluciones(viewDevolucion,conexion);

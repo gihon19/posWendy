@@ -80,27 +80,6 @@ public class FacturaCompraDao {
 				//solo los articulos validos que no tengan id nulos
 				if(fac.getDetalles().get(x).getArticulo().getId()>0){
 					boolean resul=detallesDao.agregarDetalle(fac.getDetalles().get(x), idFactura);
-					
-					//si el detalle se agrego correctamente
-					if(resul){
-						//se comprueba que exista el kardex para el detalle
-						if(!kardexDao.comprobarKardex(fac.getDetalles().get(x).getArticulo().getId(), fac.getDepartamento().getId())){
-							
-							//se registra el nuevo kardex
-							int codigoKardex=kardexDao.registrarKardex(fac.getDetalles().get(x).getArticulo().getId(), fac.getDepartamento().getId());
-							
-							//comprabamos si se creo el kardex correctamente
-							if(codigoKardex>0){
-								//se agrega el movimiento
-								int idMov=kardexDao.agregarDetalle(codigoKardex,fac.getIdFactura());
-								
-								//comprobamos que se creo el detalle
-								if(idMov>0){
-									kardexDao.agregarMovimiento(idMov,fac.getDetalles().get(x).getCantidad(),fac.getDetalles().get(x).getPrecioCompra());
-								}
-							}
-						}
-					}
 				}
 			}
 			
@@ -226,7 +205,7 @@ public class FacturaCompraDao {
 				unaFactura.setTipoFactura(res.getInt("tipo_factura"));
 				unaFactura.setAgregadoAkardex(res.getInt("agrega_kardex"));
 				
-				unaFactura.setDetalles(detallesDao.getDetallesFactura(res.getInt("numero_compra")));
+				//unaFactura.setDetalles(detallesDao.getDetallesFactura(res.getInt("numero_compra"))); //para cargar en la view los detalles de la factura
 				
 				
 				facturas.add(unaFactura);

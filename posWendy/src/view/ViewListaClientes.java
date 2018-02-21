@@ -24,6 +24,8 @@ import view.botones.BotonAgregar;
 import view.botones.BotonBuscar;
 import view.botones.BotonEliminar;
 import view.botones.BotonLimpiar;
+import view.rendes.PanelPadre;
+import view.rendes.TablaRenderizadorProveedor;
 import view.tablemodel.TablaModeloCliente;
 import controlador.CtlClienteBuscar;
 import controlador.CtlClienteLista;
@@ -46,7 +48,7 @@ public class ViewListaClientes extends JDialog {
 	private JRadioButton rdbtnId;
 	private JRadioButton rdbtnNombre;
 	private JRadioButton rdbtnRtn;
-	private ButtonGroup grupoOpciones; // grupo de botones que contiene los botones de opción
+	private ButtonGroup grupoOpciones; // grupo de botones que contiene los botones de opciï¿½n
 	private JRadioButton rdbtnTodos;
 	protected BotonBuscar btnBuscar;
 	protected JTextField txtBuscar;
@@ -66,9 +68,9 @@ public class ViewListaClientes extends JDialog {
 		getContentPane().setLayout(miEsquema);
 		
 		//creacion de los paneles
-		panelAccion=new JPanel();
-		panelBusqueda=new JPanel();
-		panelSuperior=new JPanel();
+		panelAccion=new PanelPadre();
+		panelBusqueda=new PanelPadre();
+		panelSuperior=new PanelPadre();
 		
 		panelAccion.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Acciones de registro", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		panelBusqueda.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Busqueda de registros", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
@@ -117,16 +119,17 @@ public class ViewListaClientes extends JDialog {
 		modelo=new TablaModeloCliente();
 		tablaClientes=new JTable();
 		tablaClientes.setModel(modelo);
-		//TablaRenderizadorProveedor renderizador = new TablaRenderizadorProveedor();
-		//tablaClientes.setDefaultRenderer(String.class, renderizador);
+		TablaRenderizadorProveedor renderizador = new TablaRenderizadorProveedor();
+		tablaClientes.setDefaultRenderer(String.class, renderizador);
 		
-		tablaClientes.getColumnModel().getColumn(0).setPreferredWidth(5);     //Tamaño de las columnas de las tablas
+		tablaClientes.getColumnModel().getColumn(0).setPreferredWidth(5);     //Tamaï¿½o de las columnas de las tablas
 		tablaClientes.getColumnModel().getColumn(1).setPreferredWidth(200);	//
 		tablaClientes.getColumnModel().getColumn(2).setPreferredWidth(100);	//
 		tablaClientes.getColumnModel().getColumn(3).setPreferredWidth(10);	//
 		
 		JScrollPane scrollPane = new JScrollPane(tablaClientes);
 		scrollPane.setBounds(36, 97, 742, 136);
+		scrollPane.setBackground(PanelPadre.color1);
 		
 		//configuracion de los paneles
 		panelSuperior.add(panelAccion);

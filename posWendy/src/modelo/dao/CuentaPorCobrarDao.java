@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.swing.JOptionPane;
+
 import modelo.Cliente;
 import modelo.Conexion;
 import modelo.CuentaPorCobrar;
@@ -177,6 +179,7 @@ ResultSet res=null;
 					
 				} catch (SQLException e) {
 					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage());
 					//conexion.desconectar();
 		            return false;
 				}

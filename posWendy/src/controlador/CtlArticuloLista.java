@@ -16,6 +16,8 @@ import javax.swing.JOptionPane;
 import modelo.Articulo;
 import modelo.dao.ArticuloDao;
 import modelo.dao.CodBarraDao;
+import modelo.dao.DetalleFacturaDao;
+import modelo.dao.KardexDao;
 import modelo.AbstractJasperReports;
 import modelo.Conexion;
 import modelo.Marca;
@@ -124,20 +126,27 @@ public class CtlArticuloLista implements ActionListener,MouseListener, WindowLis
 			
 			break;
 		case "ELIMINAR":
-			//JOptionPane.showMessageDialog(view, myArticulo);
+			
 			int resul=JOptionPane.showConfirmDialog(view, "Desea eleminar el articulo \""+myArticulo.getArticulo()+"\"?");
-			//JOptionPane.showMessageDialog(view, c);
+			
 			if(resul==0){
-				//se elemina el articulo de la BD y se procesa el resultado
-				boolean resulEliminar=myArticuloDao.eliminarArticulo(myArticulo.getId());
-				if(resulEliminar){
-					this.view.getModelo().eliminarArticulos(filaPulsada);
-					this.view.getModelo().fireTableDataChanged();
-					this.view.getBtnEliminar().setEnabled(false);
-					this.view.getBtnLimpiar().setEnabled(false);
-					JOptionPane.showMessageDialog(view, "Se elimino el articulo");
-					
-				}
+				
+					//se comprueba que el artiulo no tenga registro en facturas
+					DetalleFacturaDao detalleFactura=new DetalleFacturaDao(conexion);
+					if(detalleFactura.verificarArticuloEnDetalle(myArticulo.getId())){
+						
+								//se elemina el articulo de la BD y se procesa el resultado
+							boolean resulEliminar=myArticuloDao.eliminarArticulo(myArticulo.getId());
+							if(resulEliminar){
+								this.view.getModelo().eliminarArticulos(filaPulsada);
+								this.view.getModelo().fireTableDataChanged();
+								this.view.getBtnEliminar().setEnabled(false);
+								this.view.getBtnLimpiar().setEnabled(false);
+								JOptionPane.showMessageDialog(view, "Se elimino el articulo");
+								
+							}
+					}else
+						JOptionPane.showMessageDialog(view, "El Articulo ya esta facturado no lo puede elimimnar!!!", "Error al eliminar articulo", JOptionPane.ERROR_MESSAGE);
 				
 			}
 			break;
@@ -168,8 +177,35 @@ public class CtlArticuloLista implements ActionListener,MouseListener, WindowLis
 			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
 			break;
 			
+		case "KARDEX":
+			if(this.filaPulsada>=0){
+				try {
+					AbstractJasperReports.createReportKardex(conexion.getPoolConexion().getConnection(), myArticulo.getId(), 1, conexion.getUsuarioLogin().getUser());
+					//AbstractJasperReports.ImprimirCodigo();
+					AbstractJasperReports.showViewer(view);
+					//AbstractJasperReports.showViewer(view);
+					//this.view.getBtnBarCode().setEnabled(false);
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			else{
+				JOptionPane.showMessageDialog(view, "Selecione un articulo!!!", "Informacion", JOptionPane.NO_OPTION);
+			}
+			break;
+			
+		case "INVENTARIO":
+				KardexDao kardexDao=new KardexDao(conexion);
+				if(this.filaPulsada>0)
+					if(kardexDao.buscarExistencia(myArticulo.getId(), 1)!=null)
+						JOptionPane.showMessageDialog(view, "La Existencia de "+myArticulo.getArticulo()+" es:"+kardexDao.buscarExistencia(myArticulo.getId(), 1));
+			break;
+			
 				
 			}
+		
 		
 	}
 
@@ -177,7 +213,7 @@ public class CtlArticuloLista implements ActionListener,MouseListener, WindowLis
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
-		//Recoger qué fila se ha pulsadao en la tabla
+		//Recoger quï¿½ fila se ha pulsadao en la tabla
         filaPulsada = this.view.getTablaArticulos().getSelectedRow();
         
         //si seleccion una fila
