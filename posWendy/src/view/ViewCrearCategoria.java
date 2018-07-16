@@ -17,10 +17,11 @@ import javax.swing.ImageIcon;
 import view.botones.BotonActualizar;
 import view.botones.BotonCancelar;
 import view.botones.BotonGuardar;
-import controlador.CtlMarca;
-import modelo.Marca;
+import view.rendes.PanelPadre;
+import controlador.CtlCategoria;
+import modelo.Categoria;
 
-public class ViewCrearMarca extends JDialog {
+public class ViewCrearCategoria extends JDialog {
 	private JTextField txtMarca;
 	private JLabel lblMarca;
 	
@@ -30,10 +31,10 @@ public class ViewCrearMarca extends JDialog {
 	private BotonCancelar btnCancelar;
 	private BotonActualizar btnActualizar;
 	private BotonGuardar btnGuardar;
-	private Marca myMarca;
+	private Categoria myMarca;
 	
 	
-	public ViewCrearMarca(Marca m,ViewListaMarca view){
+	public ViewCrearCategoria(Categoria m,ViewListaCategorias view){
 		this(view);
 		myMarca=m;
 		cargarDatos();
@@ -44,10 +45,11 @@ public class ViewCrearMarca extends JDialog {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public ViewCrearMarca(ViewListaMarca view) {
+	public ViewCrearCategoria(ViewListaCategorias view) {
 		super(view,"Agregar categoria",Dialog.ModalityType.DOCUMENT_MODAL);
 		setResizable(false);
 		getContentPane().setLayout(null);
+		getContentPane().setBackground(PanelPadre.color1);
 		this.setFont(new Font("Verdana", Font.PLAIN, 12));
 	
 		
@@ -99,7 +101,7 @@ public class ViewCrearMarca extends JDialog {
 			}
 		});
 	}
-	public Marca getMarca(){
+	public Categoria getMarca(){
 		myMarca.setMarca(txtMarca.getText());
 		myMarca.setObservacion(txtAreaObservacion.getText());
 		return myMarca;
@@ -114,7 +116,7 @@ public class ViewCrearMarca extends JDialog {
 		return txtAreaObservacion;
 	}
 	
-	public void conectarControlador(CtlMarca c){
+	public void conectarControlador(CtlCategoria c){
 		btnGuardar.addActionListener(c);
 		btnGuardar.setActionCommand("GUARDAR");
 		

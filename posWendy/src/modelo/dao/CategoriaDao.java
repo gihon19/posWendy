@@ -4,31 +4,26 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import modelo.Categoria;
 import modelo.Conexion;
-import modelo.Marca;
 
-public class MarcaDao {
+public class CategoriaDao {
 	
-	private int idMarcaRegistrada;
+	private int idCategoriaRegistrada;
 	private Conexion conexion;
 	
-	private PreparedStatement seleccionarTodasLasMarcas = null;
-	private PreparedStatement seleccionarPersonasPorApellido = null;
-	private PreparedStatement insertarNuevaMarca = null;
-	private PreparedStatement actualizarMarca = null;
-	private PreparedStatement eliminarMarca = null;
-	private PreparedStatement buscarMarca = null;
-	private PreparedStatement buscarMarcaObseracion=null;
-	private PreparedStatement buscarMarcaNombre=null;
+	private PreparedStatement buscar = null;
+	private PreparedStatement insertar = null;
+	private PreparedStatement actualizar = null;
+	private PreparedStatement eliminar = null;
 	
 	
-	public MarcaDao(Conexion conn){
+	public CategoriaDao(Conexion conn){
 		conexion=conn;
 		/*try{
 			
@@ -50,14 +45,18 @@ public class MarcaDao {
 	}
 	
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para eleminar marcas>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-	public boolean eliminarMarca(int id){
+	/**
+	 * @param id
+	 * @return true=se elemino correctamen o false=no se puedo eliminar
+	 */
+	public boolean eliminarCategoria(int id){
 		int resultado=0;
 		Connection conn=null;
 		try {
 			conn=conexion.getPoolConexion().getConnection();
-			eliminarMarca=conn.prepareStatement("DELETE FROM marcas WHERE codigo_marca = ?");
-			eliminarMarca.setInt( 1, id );
-			resultado=eliminarMarca.executeUpdate();
+			eliminar=conn.prepareStatement("DELETE FROM marcas WHERE codigo_marca = ?");
+			eliminar.setInt( 1, id );
+			resultado=eliminar.executeUpdate();
 			return true;
 			
 		} catch (SQLException e) {
@@ -69,7 +68,7 @@ public class MarcaDao {
 			try{
 				
 				//if(res != null) res.close();
-                if(eliminarMarca != null)eliminarMarca.close();
+                if(eliminar != null)eliminar.close();
                 if(conn != null) conn.close();
                 
 				
@@ -83,21 +82,25 @@ public class MarcaDao {
 	}
 	
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para Actualizar los marcas>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-	public boolean actualizarMarca(Marca myMarca){
+	/**
+	 * @param myCategoria
+	 * @return true o false
+	 */
+	public boolean actualizarCategoria(Categoria myCategoria){
 		
 		Connection conn=null;
 		
 		
 		try {
 				conn=conexion.getPoolConexion().getConnection();
-				actualizarMarca=conn.prepareStatement("UPDATE marcas SET descripcion = ?, observacion = ? WHERE codigo_marca = ?");
-				actualizarMarca.setString(1, myMarca.getMarca());
-				actualizarMarca.setString(2, myMarca.getObservacion());
+				actualizar=conn.prepareStatement("UPDATE marcas SET descripcion = ?, observacion = ? WHERE codigo_marca = ?");
+				actualizar.setString(1, myCategoria.getMarca());
+				actualizar.setString(2, myCategoria.getObservacion());
 				
-				actualizarMarca.setInt(3, myMarca.getId());
+				actualizar.setInt(3, myCategoria.getId());
 				
 				
-				actualizarMarca.executeUpdate();
+				actualizar.executeUpdate();
 				return true;
 			
 		} catch (SQLException e) {
@@ -111,7 +114,7 @@ public class MarcaDao {
 			try{
 				
 				//if(res != null) res.close();
-                if(actualizarMarca != null)actualizarMarca.close();
+                if(actualizar != null)actualizar.close();
                 if(conn != null) conn.close();
                 
 				
@@ -127,9 +130,14 @@ public class MarcaDao {
 	
 	
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< selecciona de la Bd todas las MArcas>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-	public List<Marca> todoMarcas(){
+	/**
+	 * @param limite inferior para la paginacion
+	 * @param limite superio para la paginacion
+	 * @return Lista de categorias
+	 */
+	public List<Categoria> todoCategorias(int limInf,int limSupe){
 		
-		List<Marca> marcas=new ArrayList<Marca>();
+		List<Categoria> categorias=new ArrayList<Categoria>();
 		
 		ResultSet res=null;
 		
@@ -141,15 +149,17 @@ public class MarcaDao {
 			
 			
 			conn=conexion.getPoolConexion().getConnection();
-			seleccionarTodasLasMarcas = conn.prepareStatement("SELECT * FROM marcas");
-			res = seleccionarTodasLasMarcas.executeQuery();
+			buscar = conn.prepareStatement("SELECT * FROM marcas ORDER BY codigo_marca DESC LIMIT ?,?;");
+			buscar.setInt(1, limInf);
+			buscar.setInt(2, limSupe);
+			res = buscar.executeQuery();
 			while(res.next()){
-				Marca unaMarca=new Marca();
+				Categoria unaCategoria=new Categoria();
 				existe=true;
-				unaMarca.setId(Integer.parseInt(res.getString("codigo_marca")));
-				unaMarca.setMarca(res.getString("descripcion"));
-				unaMarca.setObservacion(res.getString("observacion"));
-				marcas.add(unaMarca);
+				unaCategoria.setId(Integer.parseInt(res.getString("codigo_marca")));
+				unaCategoria.setMarca(res.getString("descripcion"));
+				unaCategoria.setObservacion(res.getString("observacion"));
+				categorias.add(unaCategoria);
 			 }
 			//res.close();
 			//conexion.desconectar();
@@ -163,7 +173,7 @@ public class MarcaDao {
 		{
 			try{
 				if(res != null) res.close();
-                if(seleccionarTodasLasMarcas != null)seleccionarTodasLasMarcas.close();
+                if(buscar != null)buscar.close();
                 if(conn != null) conn.close();
 				
 				} // fin de try
@@ -175,22 +185,32 @@ public class MarcaDao {
 		} // fin de finally
 		
 			if (existe) {
-				return marcas;
+				return categorias;
 			}
 			else return null;
 			
 		}
 	
 	
-	public void setIdMarcaRegistrada(int i){
-		idMarcaRegistrada=i;
+	/**
+	 * @param id de la categoria registrada
+	 */
+	public void setIdCategoriaRegistrada(int i){
+		idCategoriaRegistrada=i;
 	}
-	public int getIdMarcaRegistrada(){
-		return idMarcaRegistrada;
+	/**
+	 * @return id de la categoria registrada
+	 */
+	public int getIdCategoriaRegistrada(){
+		return idCategoriaRegistrada;
 	} 
 	
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para agreagar Marcas>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-	public boolean registrarMarca(Marca myMarca)
+	/**
+	 * @param myCategoria
+	 * @return true o false
+	 */
+	public boolean registrarCategoria(Categoria myCategoria)
 	{
 		
 		int resultado=0;
@@ -200,15 +220,15 @@ public class MarcaDao {
 		try 
 		{
 			conn=conexion.getPoolConexion().getConnection();
-			insertarNuevaMarca=conn.prepareStatement( "INSERT INTO marcas(descripcion,observacion) VALUES (?,?)");
-			insertarNuevaMarca.setString( 1, myMarca.getMarca() );
-			insertarNuevaMarca.setString( 2, myMarca.getObservacion() );
+			insertar=conn.prepareStatement( "INSERT INTO marcas(descripcion,observacion) VALUES (?,?)");
+			insertar.setString( 1, myCategoria.getMarca() );
+			insertar.setString( 2, myCategoria.getObservacion() );
 			
-			resultado=insertarNuevaMarca.executeUpdate();
+			resultado=insertar.executeUpdate();
 			
-			res=insertarNuevaMarca.getGeneratedKeys(); //obtengo las ultimas llaves generadas
+			res=insertar.getGeneratedKeys(); //obtengo las ultimas llaves generadas
 			while(res.next()){
-				this.setIdMarcaRegistrada(res.getInt(1));
+				this.setIdCategoriaRegistrada(res.getInt(1));
 			}
 			return true;
 			
@@ -221,7 +241,7 @@ public class MarcaDao {
 		{
 			try{
 				if(res != null) res.close();
-                if(insertarNuevaMarca != null)insertarNuevaMarca.close();
+                if(insertar != null)insertar.close();
                 if(conn != null) conn.close();
 			} // fin de try
 			catch ( SQLException excepcionSql )
@@ -234,9 +254,13 @@ public class MarcaDao {
 	
 	
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para buscar marca por ID>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-	public Marca buscarMarca(int i){
+	/**
+	 * @param id de la categoria
+	 * @return categoria entrada sino null
+	 */
+	public Categoria buscarCategoria(int i){
 		
-		Marca unaMarca=new Marca();
+		Categoria unaCategoria=new Categoria();
 		
 		ResultSet res=null;
 		
@@ -245,14 +269,14 @@ public class MarcaDao {
 		Connection conn=null;
 		try {
 			conn=conexion.getPoolConexion().getConnection();
-			buscarMarca=conn.prepareStatement("SELECT codigo_marca,descripcion,observacion FROM marcas where codigo_marca =  ?");
-			buscarMarca.setInt(1, i);
-			res = buscarMarca.executeQuery();
+			buscar=conn.prepareStatement("SELECT codigo_marca,descripcion,observacion FROM marcas where codigo_marca =  ?");
+			buscar.setInt(1, i);
+			res = buscar.executeQuery();
 			while(res.next()){
 				existe=true;
-				unaMarca.setId(Integer.parseInt(res.getString("codigo_marca")));
-				unaMarca.setMarca(res.getString("descripcion"));
-				unaMarca.setObservacion(res.getString("observacion"));
+				unaCategoria.setId(Integer.parseInt(res.getString("codigo_marca")));
+				unaCategoria.setMarca(res.getString("descripcion"));
+				unaCategoria.setObservacion(res.getString("observacion"));
 				
 			 }
 					
@@ -265,7 +289,7 @@ public class MarcaDao {
 			{
 				try{
 					if(res != null) res.close();
-	                if(buscarMarca != null)buscarMarca.close();
+	                if(buscar != null)buscar.close();
 	                if(conn != null) conn.close();
 				} // fin de try
 				catch ( SQLException excepcionSql )
@@ -276,7 +300,7 @@ public class MarcaDao {
 			} // fin de finally
 		
 			if (existe) {
-				return unaMarca;
+				return unaCategoria;
 			}
 			else return null;
 		
@@ -286,8 +310,12 @@ public class MarcaDao {
 	
 	
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para busca los marcas por observacion>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-	public List<Marca> buscarMarcasObservacion(String busqueda){
-		List<Marca> marcas=new ArrayList<Marca>();
+	/**
+	 * @param busqueda
+	 * @return lista de categorias encontradas sino null
+	 */
+	public List<Categoria> buscarCategoriasObservacion(String busqueda){
+		List<Categoria> categorias=new ArrayList<Categoria>();
 		ResultSet res=null;
 		 
 		boolean existe=false;
@@ -295,17 +323,17 @@ public class MarcaDao {
 		Connection conn=null;
 		try {
 			conn=conexion.getPoolConexion().getConnection();
-			buscarMarcaNombre=conn.prepareStatement("SELECT codigo_marca,descripcion,observacion FROM marcas where descripcion LIKE ? ;");
-			buscarMarcaNombre.setString(1, "%" + busqueda + "%");
-			res = buscarMarcaNombre.executeQuery();
+			buscar=conn.prepareStatement("SELECT codigo_marca,descripcion,observacion FROM marcas where descripcion LIKE ? ;");
+			buscar.setString(1, "%" + busqueda + "%");
+			res = buscar.executeQuery();
 			//System.out.println(buscarProveedorNombre);
 			while(res.next()){
-				Marca unaMarca=new Marca();
+				Categoria unaCategoria=new Categoria();
 				existe=true;
-				unaMarca.setId(Integer.parseInt(res.getString("codigo_marca")));
-				unaMarca.setMarca(res.getString("descripcion"));
-				unaMarca.setObservacion(res.getString("observacion"));
-				marcas.add(unaMarca);
+				unaCategoria.setId(Integer.parseInt(res.getString("codigo_marca")));
+				unaCategoria.setMarca(res.getString("descripcion"));
+				unaCategoria.setObservacion(res.getString("observacion"));
+				categorias.add(unaCategoria);
 			 }
 					
 					
@@ -316,7 +344,7 @@ public class MarcaDao {
 			{
 				try{
 					if(res != null) res.close();
-	                if(buscarMarcaNombre != null)buscarMarcaNombre.close();
+	                if(buscar != null)buscar.close();
 	                if(conn != null) conn.close();
 				} // fin de try
 				catch ( SQLException excepcionSql )
@@ -327,7 +355,7 @@ public class MarcaDao {
 			} // fin de finally
 		
 			if (existe) {
-				return marcas;
+				return categorias;
 			}
 			else return null;
 		
@@ -335,25 +363,29 @@ public class MarcaDao {
 	
 	
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para busca los marcas por observacion>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-	public List<Marca> buscarMarcas(String busqueda){
-		List<Marca> marcas=new ArrayList<Marca>();
+	/**
+	 * @param busqueda
+	 * @return lista de categorias encontradas sino null
+	 */
+	public List<Categoria> buscarCategorias(String busqueda){
+		List<Categoria> categorias=new ArrayList<Categoria>();
 		ResultSet res=null;
 		Connection conn=null;
 		boolean existe=false;
 		try {
 			
 			conn=conexion.getPoolConexion().getConnection();
-			buscarMarcaObseracion=conn.prepareStatement("SELECT codigo_marca,descripcion,observacion FROM marcas where observacion LIKE ? ;");
-			buscarMarcaObseracion.setString(1, "%" + busqueda + "%");
-			res = buscarMarcaObseracion.executeQuery();
+			buscar=conn.prepareStatement("SELECT codigo_marca,descripcion,observacion FROM marcas where observacion LIKE ? ;");
+			buscar.setString(1, "%" + busqueda + "%");
+			res = buscar.executeQuery();
 			//System.out.println(buscarProveedorNombre);
 			while(res.next()){
-				Marca unaMarca=new Marca();
+				Categoria unaCategoria=new Categoria();
 				existe=true;
-				unaMarca.setId(Integer.parseInt(res.getString("codigo_marca")));
-				unaMarca.setMarca(res.getString("descripcion"));
-				unaMarca.setObservacion(res.getString("observacion"));
-				marcas.add(unaMarca);
+				unaCategoria.setId(Integer.parseInt(res.getString("codigo_marca")));
+				unaCategoria.setMarca(res.getString("descripcion"));
+				unaCategoria.setObservacion(res.getString("observacion"));
+				categorias.add(unaCategoria);
 			 }
 					
 					
@@ -364,7 +396,7 @@ public class MarcaDao {
 			{
 				try{
 					if(res != null) res.close();
-	                if(buscarMarcaObseracion != null)buscarMarcaObseracion.close();
+	                if(buscar != null)buscar.close();
 	                if(conn != null) conn.close();
 				} // fin de try
 				catch ( SQLException excepcionSql )
@@ -375,25 +407,25 @@ public class MarcaDao {
 			} // fin de finally
 		
 			if (existe) {
-				return marcas;
+				return categorias;
 			}
 			else return null;
 		
 	}
 	
 	
-	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<cierra la conexión a la base de datos>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<cierra la conexiï¿½n a la base de datos>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 	public void close()
 		{
-			if(seleccionarTodasLasMarcas!=null)
+			if(buscar!=null)
 				try {
-					seleccionarTodasLasMarcas.close();
-					if(insertarNuevaMarca!=null)insertarNuevaMarca.close();
-					if(actualizarMarca!=null)actualizarMarca.close();
-					if(eliminarMarca!=null)eliminarMarca.close();
-					if(buscarMarca!=null)buscarMarca.close();
-					if(buscarMarcaObseracion!=null)buscarMarcaObseracion.close();
-					if(buscarMarcaNombre!=null)buscarMarcaNombre.close();
+					buscar.close();
+					if(insertar!=null)insertar.close();
+					if(actualizar!=null)actualizar.close();
+					if(eliminar!=null)eliminar.close();
+					if(buscar!=null)buscar.close();
+					if(buscar!=null)buscar.close();
+					if(buscar!=null)buscar.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -401,7 +433,7 @@ public class MarcaDao {
 			
 			
 			//conexion.desconectar();
-		} //// fin del método close
+		} //// fin del mï¿½todo close
 	
 
 }

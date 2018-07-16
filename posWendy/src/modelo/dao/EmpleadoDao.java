@@ -207,7 +207,7 @@ public class EmpleadoDao {
 		} // fin de finally
 	}//fin de registrar
 
-	public List<Empleado> todos() {
+	public List<Empleado> todos(int limInf,int limSupe) {
 		List<Empleado> empleados =new ArrayList<Empleado>();
 		
 		ResultSet res=null;
@@ -218,7 +218,9 @@ public class EmpleadoDao {
 		
 		try{
 			conn=conexion.getPoolConexion().getConnection();
-			accion=conn.prepareStatement("SELECT * FROM empleados");
+			accion=conn.prepareStatement("SELECT * FROM empleados ORDER BY codigo_empleado DESC LIMIT ?,?;");
+			accion.setInt(1, limInf);
+			accion.setInt(2, limSupe);
 			res = accion.executeQuery();
 			while(res.next()){
 				existe=true;
@@ -304,7 +306,7 @@ public class EmpleadoDao {
 		
 		try{
 			conn=conexion.getPoolConexion().getConnection();
-			accion=conn.prepareStatement("SELECT * FROM Empleados where nombre LIKE ? ;");
+			accion=conn.prepareStatement("SELECT * FROM empleados where nombre LIKE ? ;");
 			accion.setString(1, "%" + busqueda + "%");
 			res = accion.executeQuery();
 			while(res.next()){
@@ -356,7 +358,7 @@ public class EmpleadoDao {
 		
 		try{
 			conn=conexion.getPoolConexion().getConnection();
-			accion=conn.prepareStatement("SELECT * FROM Empleados where apellido LIKE ? ;");
+			accion=conn.prepareStatement("SELECT * FROM empleados where apellido LIKE ? ;");
 			accion.setString(1, "%" + busqueda + "%");
 			res = accion.executeQuery();
 			while(res.next()){

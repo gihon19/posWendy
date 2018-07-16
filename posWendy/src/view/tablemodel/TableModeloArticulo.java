@@ -9,39 +9,15 @@ import modelo.Articulo;
 
 
 
-public class TableModeloArticulo extends AbstractTableModel {
+public class TableModeloArticulo extends TablaModelo {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1222;
-	private String []columnNames={"Id","Nombre","Marca","Impuesto","Precio Venta"};
+	private String []columnNames={"Id","Nombre","Categoria","Impuesto","Precio Venta","Existencia"};
 	private List<Articulo> articulos = new ArrayList<Articulo>();
 	
-	private int limiteInferior=0;
-	private int limiteSuperior=30;
-	private int noPagina=1;
-	
-	public int getLimiteInferior(){
-		return limiteInferior;
-	}
-	public int getLimiteSuperior(){
-		return limiteSuperior;
-	}
-	public int getNoPagina(){
-		return noPagina;
-	}
-	
-	public void netPag(){
-		limiteInferior+=30;
-		//limiteSuperior+=30;
-		noPagina++;
-	}
-	public void lastPag(){
-		//limiteSuperior-=30;
-		limiteInferior-=30;
-		noPagina--;
-	}
 	
 	
 	public void agregarArticulo(Articulo articulo) {
@@ -83,7 +59,7 @@ public class TableModeloArticulo extends AbstractTableModel {
 	@Override
 	public int getColumnCount() {
 		// TODO Auto-generated method stub
-		return 5;
+		return 6;
 	}
 
 	@Override
@@ -100,6 +76,8 @@ public class TableModeloArticulo extends AbstractTableModel {
             return articulos.get(rowIndex).getImpuestoObj().getPorcentaje();
         case 4:
         	 return articulos.get(rowIndex).getPrecioVenta();
+        case 5:
+       	 return  articulos.get(rowIndex).getExistencia();//articulos.get(rowIndex).getPrecioVenta();
         default:
             return null;
 		}
@@ -122,7 +100,7 @@ public class TableModeloArticulo extends AbstractTableModel {
 	            case 4:
 	            	articulo.setPrecioVenta((Double)value);
 	            	//articulo.setImpuesto((Double) value);
-	   ///º	º	º	1º	º	º	º	1	q1	1	Q	11 codigo de mi  niño jajajaj
+	   ///ï¿½	ï¿½	ï¿½	1ï¿½	ï¿½	ï¿½	ï¿½	1	q1	1	Q	11 codigo de mi  niï¿½o jajajaj
 	        }
 	        fireTableCellUpdated(rowIndex, columnIndex);
 	    }

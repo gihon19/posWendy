@@ -8,7 +8,7 @@ import javax.swing.table.AbstractTableModel;
 import modelo.Factura;
 
 
-public class TablaModeloFacturas extends AbstractTableModel {
+public class TablaModeloFacturas extends TablaModelo {
 	final private String []columnNames= {
 			"Fecha","Cliente", "Telefono", "Total"
 		};

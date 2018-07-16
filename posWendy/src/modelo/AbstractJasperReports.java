@@ -7,6 +7,7 @@ import java.awt.event.WindowEvent;
 import java.awt.print.PageFormat;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.io.File;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.sql.Connection;
@@ -14,6 +15,7 @@ import java.util.Date;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
@@ -65,13 +67,19 @@ public abstract class AbstractJasperReports
 	private static InputStream comisiones;
 	private static InputStream salidaCaja=null;
 	private static InputStream cobroCaja=null;
+	private static InputStream salidasEmpleados=null;
+	private static InputStream cuentaCliente=null;
+	private static InputStream saldosClientes=null;
+	private static InputStream pagoCaja=null;
+	private static InputStream saldosProveedores=null;
+	private static InputStream cuentaProveedor=null;
+	private static InputStream alertaExistencia=null;
 
 	
 	
 	private static JasperReport	reportFactura;
 	private static JasperReport	reportCotizacion;
-	//private static JasperReport	reportFacturaCredito;
-	//private static JasperReport	reportFacturaCredito2;
+
 	private static JasperReport	reportFactura2;
 	private static JasperReport	reportFacturaCompra;
 	private static JasperReport	reportFacturaReimpresion;
@@ -86,7 +94,26 @@ public abstract class AbstractJasperReports
 	private static JasperReport reportComisiones;
 	private static JasperReport	reportSalidaCaja;
 	private static JasperReport	reportCobroCaja;
+	private static JasperReport	reportSalidasEmpleados;
+	private static JasperReport	reportCuentaCliente;
+	private static JasperReport	reportSaldosClientes;
+	private static JasperReport	reportPagoCaja;
+	private static JasperReport	reportSaldosProveedores;
+	private static JasperReport reportCuentaProveedor;
+	private static JasperReport	reportAlertaExistencia;
 	
+	
+	private static final Pattern numberPattern=Pattern.compile("-?\\d+");
+	private static final Pattern numberPatternReal=Pattern.compile("\\d+([.]\\d+)?");
+	
+	
+	public static boolean isNumber(String string){
+		return string !=null && numberPattern.matcher(string).matches();
+	}
+	
+	public static boolean isNumberReal(String string){
+		return string !=null && numberPatternReal.matcher(string).matches();
+	}
 	
 	
 	public static void loadFileReport(){
@@ -109,6 +136,13 @@ public abstract class AbstractJasperReports
 		comisiones=AbstractJasperReports.class.getResourceAsStream("/reportes/comisiones.jasper");
 		salidaCaja=AbstractJasperReports.class.getResourceAsStream("/reportes/salida_caja.jasper");
 		cobroCaja=AbstractJasperReports.class.getResourceAsStream("/reportes/cobro_caja.jasper");
+		salidasEmpleados=AbstractJasperReports.class.getResourceAsStream("/reportes/salidas_empleados.jasper");
+		cuentaCliente=AbstractJasperReports.class.getResourceAsStream("/reportes/cliente_cuenta.jasper");
+		saldosClientes=AbstractJasperReports.class.getResourceAsStream("/reportes/clientes_cuentas.jasper");
+		pagoCaja=AbstractJasperReports.class.getResourceAsStream("/reportes/pago_caja.jasper");
+		saldosProveedores=AbstractJasperReports.class.getResourceAsStream("/reportes/proveedores_cuentas.jasper");
+		cuentaProveedor=AbstractJasperReports.class.getResourceAsStream("/reportes/proveedor_cuenta.jasper");
+		alertaExistencia=AbstractJasperReports.class.getResourceAsStream("/reportes/ReporteAlertaExistencia.jasper");
 		
 		try {
 			reportFactura = (JasperReport) JRLoader.loadObject( factura );
@@ -128,9 +162,16 @@ public abstract class AbstractJasperReports
 			reportCotizacion= (JasperReport) JRLoader.loadObject( cotizacion );
 			reportComisiones= (JasperReport) JRLoader.loadObject( comisiones );
 			reportCobroCaja= (JasperReport) JRLoader.loadObject( cobroCaja );
+			reportSalidasEmpleados= (JasperReport) JRLoader.loadObject( salidasEmpleados );
 			//Dei=AbstractJasperReports.class.getResourceAsStream("/reportes/ReporteDEI.jasper");
 			
 			reportSalidaCaja= (JasperReport) JRLoader.loadObject( salidaCaja );
+			reportCuentaCliente= (JasperReport) JRLoader.loadObject( cuentaCliente );
+			reportSaldosClientes= (JasperReport) JRLoader.loadObject( saldosClientes );
+			reportPagoCaja= (JasperReport) JRLoader.loadObject( pagoCaja );
+			reportSaldosProveedores=(JasperReport) JRLoader.loadObject( saldosProveedores );
+			reportCuentaProveedor=(JasperReport) JRLoader.loadObject( cuentaProveedor );
+			reportAlertaExistencia= (JasperReport) JRLoader.loadObject( alertaExistencia );
 		} catch (JRException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -144,6 +185,24 @@ public abstract class AbstractJasperReports
 		 
 		 try {
 			reportFilled = JasperFillManager.fillReport( reportCodigoBarra, parametros, conn );
+		} catch (JRException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 try {
+				conn.close();
+			} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+			}
+	}
+	public static void createReportAlertaExistencia(Connection conn,int id){
+		 Map parametros = new HashMap();
+		 parametros.put("id_articulo",id);
+		 
+		 
+		 try {
+			reportFilled = JasperFillManager.fillReport( reportAlertaExistencia, parametros, conn );
 		} catch (JRException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -185,6 +244,26 @@ public abstract class AbstractJasperReports
 		 
 		 try {
 			reportFilled = JasperFillManager.fillReport( reportComisiones, parametros, conn );
+		} catch (JRException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 try {
+				conn.close();
+			} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+			}
+	}
+	public static void createReportSalidasEmpleado(Connection conn,Date fechaMin,Date fechaMax,int codigoEmpleado ){
+		 Map parametros = new HashMap();
+		 parametros.put("fecha_min",fechaMin);
+		 parametros.put("fecha_max", fechaMax);
+		 parametros.put("codigo_empleado", codigoEmpleado);
+		 
+		 
+		 try {
+			reportFilled = JasperFillManager.fillReport( reportSalidasEmpleados, parametros, conn );
 		} catch (JRException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -259,6 +338,26 @@ public abstract class AbstractJasperReports
 	}
 	
 	
+	public static void createReportReciboPagoCaja(Connection conn,int id){
+		 Map parametros = new HashMap();
+		 parametros.put("no_recibo",id);
+		 
+		 
+		 try {
+			reportFilled = JasperFillManager.fillReport( reportPagoCaja, parametros, conn );
+		} catch (JRException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 try {
+				conn.close();
+			} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+			}
+	}
+	
+	
 	public static void createReportReciboCobroCaja(Connection conn,int id){
 		 Map parametros = new HashMap();
 		 parametros.put("no_recibo",id);
@@ -266,6 +365,89 @@ public abstract class AbstractJasperReports
 		 
 		 try {
 			reportFilled = JasperFillManager.fillReport( reportCobroCaja, parametros, conn );
+		} catch (JRException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 try {
+				conn.close();
+			} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+			}
+	}
+	
+	
+	public static void createReportSaltosClientes(Connection conn){
+		
+		 Map parametros = new HashMap();
+		 parametros.put("codigo_cliente",1);//no se necesario por ahora
+		 
+		 
+		 
+		 try {
+			reportFilled = JasperFillManager.fillReport( reportSaldosClientes, parametros, conn );
+		} catch (JRException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 try {
+				conn.close();
+			} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+			}
+	}
+	public static void createReportSaltosProveedores(Connection conn){
+		
+		 Map parametros = new HashMap();
+		 parametros.put("codigo_cliente",1);//no se necesario por ahora
+		 
+		 
+		 
+		 try {
+			reportFilled = JasperFillManager.fillReport( reportSaldosProveedores, parametros, conn );
+		} catch (JRException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 try {
+				conn.close();
+			} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+			}
+	}
+	
+	public static void createReportCuentaCliente(Connection conn,int codigo){
+		
+		 Map parametros = new HashMap();
+		 parametros.put("codigo_cliente",codigo);
+		 
+		 
+		 
+		 try {
+			reportFilled = JasperFillManager.fillReport( reportCuentaCliente, parametros, conn );
+		} catch (JRException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 try {
+				conn.close();
+			} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+			}
+	}
+	public static void createReportCuentaProveedor(Connection conn,int codigo){
+		
+		 Map parametros = new HashMap();
+		 parametros.put("codigo_proveedor",codigo);
+		 
+		 
+		 
+		 try {
+			reportFilled = JasperFillManager.fillReport( reportCuentaProveedor, parametros, conn );
 		} catch (JRException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

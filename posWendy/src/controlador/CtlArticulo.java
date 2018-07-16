@@ -27,10 +27,10 @@ import modelo.Conexion;
 import modelo.Impuesto;
 import modelo.PrecioArticulo;
 import modelo.dao.ImpuestoDao;
-import modelo.Marca;
+import modelo.Categoria;
 import view.ViewCrearArticulo;
 import view.ViewListaArticulo;
-import view.ViewListaMarca;
+import view.ViewListaCategorias;
 
 public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListener,  WindowListener {
 	
@@ -79,11 +79,11 @@ public class CtlArticulo extends MouseAdapter implements ActionListener,KeyListe
 		switch (comando){
 		
 		case "BUSCAR":
-				ViewListaMarca viewListaM=new ViewListaMarca(view);
-				CtlMarcaBuscar ctl=new CtlMarcaBuscar(viewListaM,conexion);
+				ViewListaCategorias viewListaM=new ViewListaCategorias(view);
+				CtlCategoriaBuscar ctl=new CtlCategoriaBuscar(viewListaM,conexion);
 				viewListaM.conectarControladorBusqueda(ctl);
 				//se crea una marca y se llena con la busqueda que selecciona el usuario
-				Marca myMarca=ctl.buscarMarca();
+				Categoria myMarca=ctl.buscarMarca();
 				
 			//se compara si el usuario selecciono un marca
 				if(myMarca.getMarca()!=null && myMarca.getId()!=0){

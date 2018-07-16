@@ -1,6 +1,7 @@
 package modelo.dao;
 
 import java.math.BigDecimal;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -142,6 +143,31 @@ public class DetalleFacturaDao {
 					//conexion.desconectar();
 				} // fin de catch
 		} // fin de finally
+		return resultado;
+	}
+	public boolean registraDevulicion(DetalleFactura detalle,int idFactura,int codigoKardex) {
+		boolean resultado=false;
+		
+		Connection conn=null;
+		
+		
+		try {
+			conn=conexion.getPoolConexion().getConnection();
+			
+			CallableStatement procedimiento=conn.prepareCall("{call crear_dev_venta_kardex(?,?,?,?,?)}");
+			
+			procedimiento.setInt(1, codigoKardex);
+			procedimiento.setInt(2, idFactura);
+			procedimiento.setBigDecimal(3, detalle.getCantidad());
+			procedimiento.setDouble(4, detalle.getArticulo().getPrecioVenta());
+			procedimiento.setInt(5,detalle.getId());
+			
+			procedimiento.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return resultado;
 	}
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para agreagar detalles de facturas>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
@@ -396,6 +422,7 @@ public class DetalleFacturaDao {
 			while(res.next()){
 				DetalleFactura unDetalle=new DetalleFactura();
 				existe=true;
+				unDetalle.setId(res.getInt("id"));
 				//se consigue el articulo del detalle
 				Articulo articuloDetalle= new Articulo();//articuloDao.buscarArticulo(res.getInt("codigo_articulo"));
 				articuloDetalle.setId(res.getInt("codigo_articulo"));

@@ -37,8 +37,10 @@ public class CtlCobro implements ActionListener, KeyListener {
 	public CtlCobro(ViewCobro v,Conexion conn) {
 		view=v;
 		conexion=conn;
+		
 		view.conectarContralador(this);
 		clienteDao=new ClienteDao(conexion);
+		
 		myFacturaDao=new FacturaDao(conexion);
 		myReciboDao=new ReciboPagoDao(conexion);
 		myRecibo=new ReciboPago();

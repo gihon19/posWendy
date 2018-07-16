@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -16,6 +17,7 @@ import modelo.Conexion;
 import modelo.FacturaCompra;
 import modelo.dao.FacturaCompraDao;
 import modelo.dao.UsuarioDao;
+import view.ViewAgregarCompras;
 import view.ViewListaFacturasCompra;
 
 public class CtlFacturasCompra implements ActionListener, MouseListener, ChangeListener {
@@ -41,7 +43,7 @@ public class CtlFacturasCompra implements ActionListener, MouseListener, ChangeL
 		
 		myFacturaCompra=new FacturaCompra();
 		
-		cargarTabla(facturaCompraDao.todasfacturas());
+		cargarTabla(facturaCompraDao.todasfacturas(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 		view.setVisible(true);
 		
 	}
@@ -68,8 +70,8 @@ public class CtlFacturasCompra implements ActionListener, MouseListener, ChangeL
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
-		//Recoger qué fila se ha pulsadao en la tabla
-        filaPulsada = this.view.getTablaFacturas().getSelectedRow();
+		//Recoger quï¿½ fila se ha pulsadao en la tabla
+        filaPulsada = this.view.getTabla().getSelectedRow();
         
         //si seleccion una fila
         if(filaPulsada>=0){
@@ -143,28 +145,14 @@ public class CtlFacturasCompra implements ActionListener, MouseListener, ChangeL
 		String comando=e.getActionCommand();
 		
 		switch (comando){
-		case "FECHA":
-			this.view.getTxtBuscar2().setEditable(true);
-			//JOptionPane.showMessageDialog(view, "Clip en fecha");
-			break;
-			
-		case "TODAS":
-			this.view.getTxtBuscar2().setEditable(false);
-			this.view.getTxtBuscar2().setText("");
-			this.view.getTxtBuscar1().setText("");
-			
-			break;
-		case "ID":
-			this.view.getTxtBuscar2().setEditable(false);
-			this.view.getTxtBuscar2().setText("");
-			this.view.getTxtBuscar1().setText("");
-			
+		case "ESCRIBIR":
+			view.setTamanioVentana(1);
 			break;
 		case "BUSCAR":
 			
 			//si la busqueda es por id
 			if(this.view.getRdbtnId().isSelected()){
-				myFacturaCompra=facturaCompraDao.facturasPorId(Integer.parseInt(this.view.getTxtBuscar1().getText()));
+				myFacturaCompra=facturaCompraDao.facturasPorId(Integer.parseInt(this.view.getTxtBuscar().getText()));
 				if(myFacturaCompra!=null){												
 					this.view.getModelo().limpiarFacturas();
 					this.view.getModelo().agregarFactura(myFacturaCompra); 
@@ -175,9 +163,11 @@ public class CtlFacturasCompra implements ActionListener, MouseListener, ChangeL
 			}
 			//si la busqueda es por fecha
 			if(this.view.getRdbtnFecha().isSelected()){  
-				String fecha1=this.view.getTxtBuscar1().getText();
-				String fecha2=this.view.getTxtBuscar2().getText();
-				cargarTabla(facturaCompraDao.facturasPorFechas(fecha1,fecha2));
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				String date1 = sdf.format(this.view.getDcFecha1().getDate());
+				String date2 = sdf.format(this.view.getDcFecha2().getDate());
+				
+				cargarTabla(facturaCompraDao.facturasPorFechas(date1,date2));
 				//this.view.getTxtBuscar1().setText("");
 				//this.view.getTxtBuscar2().setText("");
 				}
@@ -185,17 +175,27 @@ public class CtlFacturasCompra implements ActionListener, MouseListener, ChangeL
 			
 			//si la busqueda son tadas
 			if(this.view.getRdbtnTodos().isSelected()){  
-				cargarTabla(facturaCompraDao.todasfacturas());
-				this.view.getTxtBuscar1().setText("");
+				cargarTabla(facturaCompraDao.todasfacturas(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+				this.view.getTxtBuscar().setText("");
 				}
+			
+			if(view.getRdbtnProveedor().isSelected()){
+				
+				if(view.getTxtBuscar().getText().length()!=0)
+					cargarTabla(facturaCompraDao.porProveedor(view.getTxtBuscar().getText()));
+				else{
+					JOptionPane.showMessageDialog(view, "Debe escribir algo en la busqueda","Error en busqueda",JOptionPane.ERROR_MESSAGE);
+					view.getTxtBuscar().requestFocusInWindow();
+				}
+			}
 			break;
 		case "ANULARFACTURA":
 			//se verifica si la factura ya esta agregada al kardex
 			if (myFacturaCompra.getAgregadoAkardex()==0){
-					int resul=JOptionPane.showConfirmDialog(view, "¿Desea anular la factura no "+myFacturaCompra.getIdFactura()+"?");
+					int resul=JOptionPane.showConfirmDialog(view, "Desea anular la factura no "+myFacturaCompra.getIdFactura()+"?");
 					//sin confirmo la anulacion
 					if(resul==0){
-						String pwd=JOptionPane.showInputDialog(view, "Escriba la contraseña admin", "Seguridad", JOptionPane.INFORMATION_MESSAGE);
+						String pwd=JOptionPane.showInputDialog(view, "Escriba la contraseÃ±a admin", "Seguridad", JOptionPane.INFORMATION_MESSAGE);
 						
 						//comprabacion del permiso administrativo
 						if(this.myUsuarioDao.comprobarAdmin(pwd)){
@@ -214,6 +214,36 @@ public class CtlFacturasCompra implements ActionListener, MouseListener, ChangeL
 				JOptionPane.showMessageDialog(view, "No se puede anular la compra porque ya esta en el Kardex!!!");
 				this.view.getBtnEliminar().setEnabled(false);
 			}
+			
+			break;
+			
+		case "NEXT":
+			view.getModelo().netPag();
+			cargarTabla(facturaCompraDao.todasfacturas(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
+			break;
+		case "LAST":
+			view.getModelo().lastPag();
+			cargarTabla(facturaCompraDao.todasfacturas(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
+			break;
+			
+		case "INSERTAR":
+			
+			ViewAgregarCompras viewAgregarCompras= new ViewAgregarCompras(this.view);
+			CtlAgregarCompras ctlAgregarCompra=new CtlAgregarCompras(viewAgregarCompras,conexion);
+			
+			
+			viewAgregarCompras.dispose();
+			viewAgregarCompras=null;
+			ctlAgregarCompra=null;
+			
+			view.getModelo().setPaginacion();
+			
+			cargarTabla(facturaCompraDao.todasfacturas(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
 			
 			break;
 			

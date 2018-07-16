@@ -51,19 +51,19 @@ public class ViewCrearUsuario extends JDialog {
 		getContentPane().setBackground(PanelPadre.color1);
 		
 		JLabel lblUsuario = new JLabel("Usuario");
-		lblUsuario.setBounds(20, 9, 43, 15);
+		lblUsuario.setBounds(20, 9, 60, 15);
 		getContentPane().add(lblUsuario);
 		
 		JLabel lblPassword = new JLabel("Password");
-		lblPassword.setBounds(20, 234, 55, 15);
+		lblPassword.setBounds(20, 234, 101, 15);
 		getContentPane().add(lblPassword);
 		
 		JLabel lblRepetirPassword = new JLabel("Repetir Password");
-		lblRepetirPassword.setBounds(20, 309, 101, 15);
+		lblRepetirPassword.setBounds(20, 309, 172, 15);
 		getContentPane().add(lblRepetirPassword);
 		
 		JLabel lblNombres = new JLabel("Nombre");
-		lblNombres.setBounds(20, 84, 47, 15);
+		lblNombres.setBounds(20, 84, 88, 15);
 		getContentPane().add(lblNombres);
 		
 		txtNombre = new JTextField();
@@ -72,7 +72,7 @@ public class ViewCrearUsuario extends JDialog {
 		txtNombre.setColumns(10);
 		
 		JLabel lblApellido = new JLabel("Apellido");
-		lblApellido.setBounds(20, 159, 47, 15);
+		lblApellido.setBounds(20, 159, 88, 15);
 		getContentPane().add(lblApellido);
 		
 		txtApellido = new JTextField();
@@ -89,14 +89,14 @@ public class ViewCrearUsuario extends JDialog {
 		getContentPane().add(pwdRePwd);
 		
 		rdbtnAdministrador = new JRadioButton("Administrador");
-		rdbtnAdministrador.setBounds(155, 384, 104, 18);
+		rdbtnAdministrador.setBounds(155, 384, 149, 18);
 		grupoOpciones.add(rdbtnAdministrador);
 		getContentPane().add(rdbtnAdministrador);
 		
 		rdbtnCajero = new JRadioButton("Cajero");
 		rdbtnCajero.setSelected(true);
 		this.grupoOpciones.add(rdbtnCajero);
-		rdbtnCajero.setBounds(20, 384, 60, 18);
+		rdbtnCajero.setBounds(20, 384, 111, 18);
 		getContentPane().add(rdbtnCajero);
 		
 		btnGuardar = new BotonGuardar();

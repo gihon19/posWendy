@@ -5,25 +5,25 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import modelo.Marca;
+import modelo.Categoria;
 
-public class TablaModeloMarca extends AbstractTableModel {
+public class TmCategorias extends TablaModelo {
 	
 	private String []columnNames={"Id","Descripcion","Observacion"};
-	private List<Marca> marcas = new ArrayList<Marca>();
+	private List<Categoria> marcas = new ArrayList<Categoria>();
 	
-	public void agregarMarca(Marca marca) {
+	public void agregarMarca(Categoria marca) {
 		marcas.add(marca);
         fireTableDataChanged();
     }
 	
-	public Marca getMarca(int index){
+	public Categoria getMarca(int index){
 		
 		return marcas.get(index);
 		
 	}
 	
-	public void cambiarMarca(int index,Marca marca){
+	public void cambiarMarca(int index,Categoria marca){
 		marcas.set(index, marca);
 	}
  
@@ -96,7 +96,7 @@ public class TablaModeloMarca extends AbstractTableModel {
 	
 	 @Override
 	    public void setValueAt(Object value, int rowIndex, int columnIndex) {
-	        Marca marca = marcas.get(rowIndex);
+	        Categoria marca = marcas.get(rowIndex);
 	        switch (columnIndex) {
 	            case 0:
 	            	marca.setId((Integer) value);

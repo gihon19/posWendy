@@ -7,7 +7,7 @@ import javax.swing.table.AbstractTableModel;
 
 import modelo.Empleado;
 
-public class TmEmpleados extends AbstractTableModel {
+public class TmEmpleados extends TablaModelo {
 	private String []columnNames={"Codigo","Nombre","Apellido","Telefono","Correo"};
 	private List<Empleado> empleados = new ArrayList<Empleado>();
 	

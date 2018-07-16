@@ -1,5 +1,6 @@
 package modelo.dao;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
@@ -338,7 +339,7 @@ public class ProveedorDao {
 	}
 	
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para busca todos los proveedores>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/	
-	public List<Proveedor> todoProveedor(){
+	public List<Proveedor> todoProveedor(int limInf,int limSupe){
 		List<Proveedor> proveedores=new ArrayList<Proveedor>();
 		
 		ResultSet res=null;
@@ -348,7 +349,9 @@ public class ProveedorDao {
 		try {
 			
 			conn=conexion.getPoolConexion().getConnection();
-			seleccionarTodasLosProveedores = conn.prepareStatement( "SELECT * FROM proveedor;");
+			seleccionarTodasLosProveedores = conn.prepareStatement( "SELECT *,f_saldo_proveedor(codigo_proveedor) as saldo FROM proveedor ORDER BY codigo_proveedor DESC LIMIT ?,?;");
+			seleccionarTodasLosProveedores.setInt(1, limInf);
+			seleccionarTodasLosProveedores.setInt(2, limSupe);
 			res = seleccionarTodasLosProveedores.executeQuery();
 			while(res.next()){
 				Proveedor unoPro=new Proveedor();
@@ -358,6 +361,7 @@ public class ProveedorDao {
 				unoPro.setTelefono(res.getString("telefono"));
 				unoPro.setCelular(res.getString("celular"));
 				unoPro.setDireccion(res.getString("direccion"));
+				unoPro.setSaldo(res.getBigDecimal("saldo"));
 				proveedores.add(unoPro);
 			 }					
 					
@@ -391,10 +395,61 @@ public class ProveedorDao {
 		return this;
 	}
 	
-/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<cierra la conexión a la base de datos>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-	/*public void close()
-		{
-			conexion.desconectar();
-		} //// fin del método close*/
+	public BigDecimal getSaldoProveedor(int idProveedor) {
+		// TODO Auto-generated method stub
+
+		BigDecimal saldo=new BigDecimal(0);
+		//se crear un referencia al pool de conexiones
+		
+		//DataSource ds = DBCPDataSourceFactory.getDataSource("mysql");
+		
+		
+        Connection con = null;
+        
+       
+		
+		ResultSet res=null;
+		
+		boolean existe=false;
+		
+		
+		try {
+			con = conexion.getPoolConexion().getConnection();
+			
+			seleccionarTodasLosProveedores=con.prepareStatement("select f_saldo_proveedor(?) as saldo;");
+			
+			seleccionarTodasLosProveedores.setInt(1, idProveedor);
+			res=seleccionarTodasLosProveedores.executeQuery();
+			while(res.next()){
+				saldo=res.getBigDecimal("saldo");
+				existe=true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try{
+			
+			if(res != null) res.close();
+            if(seleccionarTodasLosProveedores != null)seleccionarTodasLosProveedores.close();
+            if(con != null) con.close();
+            
+			
+			} // fin de try
+			catch ( SQLException excepcionSql )
+			{
+				excepcionSql.printStackTrace();
+
+			} // fin de catch
+		
+		if(existe){
+				return saldo;
+		}
+		else
+			return new BigDecimal(0);
+		
+	
+		
+	}
 
 }

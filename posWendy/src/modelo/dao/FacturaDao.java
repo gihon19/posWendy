@@ -122,7 +122,9 @@ public class FacturaDao {
 			if(myFactura.getCliente().getId()<0){
 				myClienteDao.registrarCliente(myFactura.getCliente());
 				myFactura.getCliente().setId(myClienteDao.getIdClienteRegistrado());
+				//JOptionPane.showMessageDialog(null,myClienteDao.getIdClienteRegistrado());
 			}
+			
 			conn=conexion.getPoolConexion().getConnection();
 			agregarFactura=conn.prepareStatement(sql);
 			agregarFactura.setBigDecimal(1,myFactura.getSubTotal() );
@@ -212,8 +214,10 @@ public class FacturaDao {
 				+ "subtotal15,"
 				+ "subtotal18,"
 				+ "isvOtros,"
-				+ "cod_rango)"
-				+ " VALUES (now(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				+ "cod_rango,"
+				+ "cobro_tarjeta,"
+				+ "cobro_efectivo)"
+				+ " VALUES (now(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		
 		try 
 		{
@@ -222,7 +226,7 @@ public class FacturaDao {
 			
 			//si el cliente en escrito por el usuario
 			if(myFactura.getCliente().getId()<0){
-				myClienteDao.registrarCliente(myFactura.getCliente());
+				myClienteDao.registrarClienteContado(myFactura.getCliente());
 				myFactura.getCliente().setId(myClienteDao.getIdClienteRegistrado());
 			}
 			conn=conexion.getPoolConexion().getConnection();
@@ -253,6 +257,9 @@ public class FacturaDao {
 			EmpresaDao empresa=new EmpresaDao(conexion);
 			agregarFactura.setInt(21, empresa.getIdCaiAct());
 			
+			agregarFactura.setBigDecimal(22, myFactura.getCobroTarjeta());
+			agregarFactura.setBigDecimal(23, myFactura.getCobroEfectivo());
+			
 			
 			
 			
@@ -273,6 +280,7 @@ public class FacturaDao {
 			}
 			
 			
+			//si la factura es al credito se guarda el credito del cliente
 			if(myFactura.getTipoFactura()==2){
 				boolean resultado2=this.myCuentaCobrarDao.reguistrarCredito(myFactura);
 			}
@@ -314,23 +322,8 @@ public class FacturaDao {
 		
         Connection con = null;
         
-    	String sql="SELECT "
-				+ "encabezado_factura.numero_factura, "
-				+ "DATE_FORMAT(encabezado_factura.fecha, '%d/%m/%Y') as fecha,"
-				+ " encabezado_factura.subtotal, "
-				+ "encabezado_factura.impuesto, "
-				+ "encabezado_factura.total, "
-				+ "encabezado_factura.codigo_cliente,"
-				+ "encabezado_factura.codigo, "
-				+ "encabezado_factura.estado_factura, "
-				+ "encabezado_factura.isv18, "
-				+ "encabezado_factura.tipo_factura, "
-				+ "encabezado_factura.descuento,"
-				+ "encabezado_factura.pago, "
-				+ "encabezado_factura.usuario,"
-				+ "encabezado_factura.estado_factura, "
-				+ "encabezado_factura.agrega_kardex "
-				+ "FROM encabezado_factura where numero_factura=?";
+    	String sql="SELECT *, cliente.nombre_cliente FROM encabezado_factura INNER JOIN cliente ON encabezado_factura.codigo_cliente = cliente.codigo_cliente where numero_factura=?";
+			
         //Statement stmt = null;
     	Factura unaFactura=new Factura();
 		
@@ -348,7 +341,13 @@ public class FacturaDao {
 				
 				existe=true;
 				unaFactura.setIdFactura(res.getInt("numero_factura"));
-				Cliente unCliente=myClienteDao.buscarCliente(res.getInt("codigo_cliente"));
+				
+				
+				Cliente unCliente= new Cliente();//myClienteDao.buscarCliente(res.getInt("codigo_cliente"));
+				
+				unCliente.setId(res.getInt("codigo_cliente"));
+				unCliente.setNombre(res.getString("nombre_cliente"));
+				unCliente.setTelefono(res.getString("telefono"));
 				
 				unaFactura.setCliente(unCliente);
 				
@@ -363,7 +362,7 @@ public class FacturaDao {
 				unaFactura.setTipoFactura(res.getInt("tipo_factura"));
 				unaFactura.setAgregadoAkardex(res.getInt("agrega_kardex"));
 				
-				unaFactura.setDetalles(detallesDao.getDetallesFactura(res.getInt("numero_factura")));
+				//unaFactura.setDetalles(detallesDao.getDetallesFactura(res.getInt("numero_factura")));
 				
 				
 			
@@ -400,34 +399,11 @@ public class FacturaDao {
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para seleccionar todos los articulos>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 	public List<Factura> todasfacturas(int limInf,int limSupe){
 		
-		//se crear un referencia al pool de conexiones
-		//DataSource ds = DBCPDataSourceFactory.getDataSource("mysql");
-		String hola="";
 		
         Connection con = null;
         
-    	/*String sql="SELECT "
-				+ "encabezado_factura.numero_factura, "
-				+ "DATE_FORMAT(encabezado_factura.fecha, '%d/%m/%Y') as fecha,"
-				+ " encabezado_factura.subtotal, "
-				+ "encabezado_factura.impuesto, "
-				+ "encabezado_factura.total, "
-				+ "encabezado_factura.codigo_cliente,"
-				+ "encabezado_factura.codigo, "
-				+ "encabezado_factura.estado_factura, "
-				+ "encabezado_factura.isv18, "
-				+ "encabezado_factura.tipo_factura, "
-				+ "encabezado_factura.descuento,"
-				+ "encabezado_factura.pago, "
-				+ "encabezado_factura.usuario,"
-				+ "encabezado_factura.estado_factura, "
-				+ "encabezado_factura.agrega_kardex "
-				+ " FROM encabezado_factura "
-				+ " ORDER BY encabezado_factura.numero_factura DESC "
-				+ " LIMIT ?,?";*/
-        //Statement stmt = null;
-       // fdsfasfas
-        String sql="select * from v_encabezado_factura ORDER BY numero_factura DESC LIMIT ?,?";
+    	
+        String sql="SELECT *, cliente.nombre_cliente FROM encabezado_factura INNER JOIN cliente ON encabezado_factura.codigo_cliente = cliente.codigo_cliente order by numero_factura desc LIMIT ?,?";
        	List<Factura> facturas=new ArrayList<Factura>();
 		
 		ResultSet res=null;
@@ -443,12 +419,12 @@ public class FacturaDao {
 			seleccionarFacturas.setInt(2, limSupe);
 			
 			res = seleccionarFacturas.executeQuery();
-			//JOptionPane.showMessageDialog(null, "Ya Ejecuto la consulta");
+		
 			while(res.next()){
 				Factura unaFactura=new Factura();
 				existe=true;
 				unaFactura.setIdFactura(res.getInt("numero_factura"));
-				//Cliente unCliente=myClienteDao.buscarCliente(res.getInt("codigo_cliente"));
+				
 				Cliente unCliente=new Cliente();
 				unCliente.setNombre(res.getString("nombre_cliente"));
 				unCliente.setId(res.getInt("codigo_cliente"));
@@ -462,7 +438,7 @@ public class FacturaDao {
 				unaFactura.setTotalDescuento(res.getBigDecimal("descuento"));
 				
 				unaFactura.setEstado(res.getString("estado_factura"));
-				unaFactura.setTipoFactura(res.getInt("id_tipo_factura"));
+				unaFactura.setTipoFactura(res.getInt("tipo_factura"));
 				unaFactura.setAgregadoAkardex(res.getInt("agrega_kardex"));
 				
 				//unaFactura.setDetalles(detallesDao.getDetallesFactura(res.getInt("numero_factura")));
@@ -561,7 +537,7 @@ public class FacturaDao {
 				unaFactura.setSubTotal18(res.getBigDecimal("subtotal18"));
 				unaFactura.setTotalOtrosImpuesto(res.getBigDecimal("isvOtros"));
 				
-				unaFactura.setDetalles(detallesDao.detallesFacturaPendiente(unaFactura.getIdFactura()));
+				//unaFactura.setDetalles(detallesDao.detallesFacturaPendiente(unaFactura.getIdFactura()));
 				
 				
 				facturas.add(unaFactura);
@@ -721,23 +697,7 @@ public class FacturaDao {
 		
         Connection con = null;
         
-    	String sql="SELECT "
-				+ "encabezado_factura.numero_factura, "
-				+ "DATE_FORMAT(encabezado_factura.fecha, '%d/%m/%Y') as fecha,"
-				+ " encabezado_factura.subtotal, "
-				+ "encabezado_factura.impuesto, "
-				+ "encabezado_factura.total, "
-				+ "encabezado_factura.codigo_cliente,"
-				+ "encabezado_factura.codigo, "
-				+ "encabezado_factura.estado_factura, "
-				+ "encabezado_factura.isv18, "
-				+ "encabezado_factura.tipo_factura, "
-				+ "encabezado_factura.descuento,"
-				+ "encabezado_factura.pago, "
-				+ "encabezado_factura.usuario,"
-				+ "encabezado_factura.estado_factura, "
-				+ "encabezado_factura.agrega_kardex "
-				+ "FROM encabezado_factura where DATE_FORMAT(encabezado_factura.fecha, '%d/%m/%Y')>=? and DATE_FORMAT(encabezado_factura.fecha, '%d/%m/%Y')<=?";
+    	String sql="SELECT *, cliente.nombre_cliente FROM encabezado_factura INNER JOIN cliente ON encabezado_factura.codigo_cliente = cliente.codigo_cliente where fecha BETWEEN ? and ?";
         //Statement stmt = null;
        	List<Factura> facturas=new ArrayList<Factura>();
 		
@@ -757,8 +717,9 @@ public class FacturaDao {
 				Factura unaFactura=new Factura();
 				existe=true;
 				unaFactura.setIdFactura(res.getInt("numero_factura"));
-				Cliente unCliente=myClienteDao.buscarCliente(res.getInt("codigo_cliente"));
-				
+				Cliente unCliente=new Cliente();
+				unCliente.setNombre(res.getString("nombre_cliente"));
+				unCliente.setId(res.getInt("codigo_cliente"));
 				unaFactura.setCliente(unCliente);
 				
 				unaFactura.setFecha(res.getString("fecha"));
@@ -772,7 +733,7 @@ public class FacturaDao {
 				unaFactura.setTipoFactura(res.getInt("tipo_factura"));
 				unaFactura.setAgregadoAkardex(res.getInt("agrega_kardex"));
 				
-				unaFactura.setDetalles(detallesDao.getDetallesFactura(res.getInt("numero_factura")));
+				//unaFactura.setDetalles(detallesDao.getDetallesFactura(res.getInt("numero_factura")));
 				
 				
 				facturas.add(unaFactura);
@@ -810,6 +771,7 @@ public class FacturaDao {
 		// TODO Auto-generated method stub
 		boolean resultado=false;
 		Connection conn=null;
+		
 		String sql="UPDATE encabezado_factura SET "
 				
 				
@@ -826,6 +788,8 @@ public class FacturaDao {
 			
 			actualizarFactura.setInt(2, f.getIdFactura());
 			actualizarFactura.executeUpdate();
+			
+			
 						
 			
 			resultado= true;
@@ -1068,6 +1032,88 @@ public class FacturaDao {
 					}
 					else return null;
 		//return ultimaFacturaUser;
+	}
+	
+	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para seleccionar todos los articulos>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
+	public List<Factura> porNombreCliente(String nombre){
+		
+		//se crear un referencia al pool de conexiones
+		//DataSource ds = DBCPDataSourceFactory.getDataSource("mysql");
+		String hola="";
+		
+        Connection con = null;
+        
+    	
+       // fdsfasfas
+        String sql="SELECT *, cliente.nombre_cliente FROM encabezado_factura INNER JOIN cliente ON encabezado_factura.codigo_cliente = cliente.codigo_cliente where nombre_cliente LIKE ?;";
+       	List<Factura> facturas=new ArrayList<Factura>();
+		
+		ResultSet res=null;
+		
+		boolean existe=false;
+		try {
+			con = conexion.getPoolConexion().getConnection();
+			
+			
+			seleccionarFacturas = con.prepareStatement(sql);
+			
+			seleccionarFacturas.setString(1, "%" + nombre + "%");
+			
+			res = seleccionarFacturas.executeQuery();
+			//JOptionPane.showMessageDialog(null, "Ya Ejecuto la consulta");
+			while(res.next()){
+				Factura unaFactura=new Factura();
+				existe=true;
+				unaFactura.setIdFactura(res.getInt("numero_factura"));
+				//Cliente unCliente=myClienteDao.buscarCliente(res.getInt("codigo_cliente"));
+				Cliente unCliente=new Cliente();
+				unCliente.setNombre(res.getString("nombre_cliente"));
+				unCliente.setId(res.getInt("codigo_cliente"));
+				unaFactura.setCliente(unCliente);
+				
+				unaFactura.setFecha(res.getString("fecha"));
+				unaFactura.setSubTotal(res.getBigDecimal("subtotal"));
+				unaFactura.setTotalImpuesto(res.getBigDecimal("impuesto"));
+				unaFactura.setTotal(res.getBigDecimal("total"));
+				//unaFactura.setEstado(res.getInt("estado_factura"));
+				unaFactura.setTotalDescuento(res.getBigDecimal("descuento"));
+				
+				unaFactura.setEstado(res.getString("estado_factura"));
+				unaFactura.setTipoFactura(res.getInt("tipo_factura"));
+				unaFactura.setAgregadoAkardex(res.getInt("agrega_kardex"));
+				
+				//unaFactura.setDetalles(detallesDao.getDetallesFactura(res.getInt("numero_factura")));
+				
+				
+				facturas.add(unaFactura);
+			 }
+					
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		finally
+		{
+			try{
+				
+				if(res != null) res.close();
+                if(seleccionarFacturas != null)seleccionarFacturas.close();
+                if(con != null) con.close();
+                
+				
+				} // fin de try
+				catch ( SQLException excepcionSql )
+				{
+					excepcionSql.printStackTrace();
+					//conexion.desconectar();
+				} // fin de catch
+		} // fin de finally
+		
+		
+			if (existe) {
+				return facturas;
+			}
+			else return null;
+		
 	}
 
 	

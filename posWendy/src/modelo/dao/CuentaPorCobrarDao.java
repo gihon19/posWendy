@@ -35,7 +35,7 @@ public class CuentaPorCobrarDao {
     	//String sql="select * from cierre where usuario = ?";
     	
     	String sql2="SELECT * FROM cuentas_por_cobrar WHERE cuentas_por_cobrar.codigo_cliente = ? ORDER BY cuentas_por_cobrar.codigo_reguistro DESC LIMIT 1";
-ResultSet res=null;
+    	ResultSet res=null;
 		
 		boolean existe=false;
 		try {

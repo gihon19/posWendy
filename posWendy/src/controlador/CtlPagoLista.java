@@ -7,6 +7,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -18,6 +19,7 @@ import modelo.AbstractJasperReports;
 import modelo.Conexion;
 import modelo.ReciboPago;
 import modelo.dao.ReciboPagoDao;
+import view.ViewCobro;
 import view.ViewListaPagos;
 
 public class CtlPagoLista implements ActionListener, MouseListener, ChangeListener, WindowListener  {
@@ -37,8 +39,9 @@ public class CtlPagoLista implements ActionListener, MouseListener, ChangeListen
 		conexion=conn;
 		view.conectarControlador(this);
 		reciboDao=new ReciboPagoDao(conexion);
-		cargarTabla(reciboDao.todosRecibo());
+
 		myRecibo=new ReciboPago();
+		cargarTabla(reciboDao.todosRecibo(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 		view.setVisible(true);
 	}
 	public void cargarTabla(List<ReciboPago> pagos){
@@ -63,8 +66,8 @@ public class CtlPagoLista implements ActionListener, MouseListener, ChangeListen
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
-		//Recoger qué fila se ha pulsadao en la tabla
-        filaPulsada = this.view.getTablaPagos().getSelectedRow();
+		//Recoger quï¿½ fila se ha pulsadao en la tabla
+        filaPulsada = this.view.getTabla().getSelectedRow();
         
         //si seleccion una fila
         if(filaPulsada>=0){
@@ -86,9 +89,15 @@ public class CtlPagoLista implements ActionListener, MouseListener, ChangeListen
         		
         		try {
     				
-    				//AbstractJasperReports.createReportFactura( conexion.getPoolConexion().getConnection(), "Factura_Saint_Paul_Reimpresion.jasper",myFactura.getIdFactura() );
-        			AbstractJasperReports.createReport(conexion.getPoolConexion().getConnection(), 5, myRecibo.getNoRecibo());
-        			AbstractJasperReports.showViewer(this.view);
+    				
+        			
+        			
+        			//AbstractJasperReports.createReport(conexion.getPoolConexion().getConnection(), 5, myRecibo.getNoRecibo());
+					AbstractJasperReports.createReportReciboCobroCaja(conexion.getPoolConexion().getConnection(), myRecibo.getNoRecibo());
+					//AbstractJasperReports.showViewer(view);
+					//AbstractJasperReports.imprimierFactura();
+					AbstractJasperReports.showViewer(view);
+					
     				//AbstractJasperReports.imprimierFactura();
     				this.view.getBtnImprimir().setEnabled(false);
     				myRecibo=null;
@@ -163,28 +172,33 @@ public class CtlPagoLista implements ActionListener, MouseListener, ChangeListen
 		String comando=e.getActionCommand();
 		
 		switch (comando){
+		
+		case "INSERTAR":
+			ViewCobro viewCobro=new ViewCobro(view);
+			CtlCobro ctlCobro=new CtlCobro(viewCobro,conexion);
+			
+			viewCobro.dispose();
+			viewCobro=null;
+			ctlCobro=null;
+			view.getModelo().setPaginacion();
+			cargarTabla(reciboDao.todosRecibo(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			break;
 		case "FECHA":
-			this.view.getTxtBuscar2().setEditable(true);
-			//JOptionPane.showMessageDialog(view, "Clip en fecha");
+			
 			break;
 			
 		case "TODAS":
-			this.view.getTxtBuscar2().setEditable(false);
-			this.view.getTxtBuscar2().setText("");
-			this.view.getTxtBuscar1().setText("");
+			
 			
 			break;
 		case "ID":
-			this.view.getTxtBuscar2().setEditable(false);
-			this.view.getTxtBuscar2().setText("");
-			this.view.getTxtBuscar1().setText("");
 			
 			break;
 		case "BUSCAR":
 			
 			//si la busqueda es por id
 			if(this.view.getRdbtnId().isSelected()){
-				myRecibo=reciboDao.reciboPorNo(Integer.parseInt(this.view.getTxtBuscar1().getText()));
+				myRecibo=reciboDao.reciboPorNo(Integer.parseInt(this.view.getTxtBuscar().getText()));
 				if(myRecibo!=null){												
 					this.view.getModelo().limpiar();
 					this.view.getModelo().agregarPago(myRecibo); 
@@ -195,9 +209,11 @@ public class CtlPagoLista implements ActionListener, MouseListener, ChangeListen
 			}
 			//si la busqueda es por fecha
 			if(this.view.getRdbtnFecha().isSelected()){  
-				String fecha1=this.view.getTxtBuscar1().getText();
-				String fecha2=this.view.getTxtBuscar2().getText();
-				cargarTabla(reciboDao.reciboPorFecha(fecha1,fecha2));
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				String date1 = sdf.format(this.view.getDcFecha1().getDate());
+				String date2 = sdf.format(this.view.getDcFecha2().getDate());
+				
+				cargarTabla(reciboDao.reciboPorFecha(date1,date2));
 				//this.view.getTxtBuscar1().setText("");
 				//this.view.getTxtBuscar2().setText("");
 				}
@@ -205,8 +221,8 @@ public class CtlPagoLista implements ActionListener, MouseListener, ChangeListen
 			
 			//si la busqueda son tadas
 			if(this.view.getRdbtnTodos().isSelected()){  
-				cargarTabla(reciboDao.todosRecibo());
-				this.view.getTxtBuscar1().setText("");
+				cargarTabla(reciboDao.todosRecibo(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+				this.view.getTxtBuscar().setText("");
 				}
 			break;
 		/*case "ANULARFACTURA":
@@ -214,12 +230,12 @@ public class CtlPagoLista implements ActionListener, MouseListener, ChangeListen
 			//se verifica si la factura ya esta agregada al kardex
 			if (myFactura.getAgregadoAkardex()==0){
 				
-					int resul=JOptionPane.showConfirmDialog(view, "¿Desea anular la factura no "+myFactura.getIdFactura()+"?");
+					int resul=JOptionPane.showConfirmDialog(view, "ï¿½Desea anular la factura no "+myFactura.getIdFactura()+"?");
 					//sin confirmo la anulacion
 					if(resul==0){
 						JPasswordField pf = new JPasswordField();
-						int action = JOptionPane.showConfirmDialog(view, pf,"Escriba la contraseña admin",JOptionPane.OK_CANCEL_OPTION);
-						//String pwd=JOptionPane.showInputDialog(view, "Escriba la contraseña admin", "Seguridad", JOptionPane.INFORMATION_MESSAGE);
+						int action = JOptionPane.showConfirmDialog(view, pf,"Escriba la contraseï¿½a admin",JOptionPane.OK_CANCEL_OPTION);
+						//String pwd=JOptionPane.showInputDialog(view, "Escriba la contraseï¿½a admin", "Seguridad", JOptionPane.INFORMATION_MESSAGE);
 						if(action < 0){
 							
 							
@@ -257,6 +273,19 @@ public class CtlPagoLista implements ActionListener, MouseListener, ChangeListen
 				ee.printStackTrace();
 			}
 			break;*/
+			
+		case "NEXT":
+			view.getModelo().netPag();
+			cargarTabla(reciboDao.todosRecibo(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
+			break;
+		case "LAST":
+			view.getModelo().lastPag();
+			cargarTabla(reciboDao.todosRecibo(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
+			break;
 		}
 
 	}

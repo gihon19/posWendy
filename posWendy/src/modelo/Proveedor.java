@@ -1,5 +1,6 @@
 package modelo;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,6 +12,7 @@ import javax.swing.JOptionPane;
 public class Proveedor extends Persona {
 	private int id;
 	private String celular;
+	private BigDecimal saldo=new BigDecimal(0);
 	//Conexion conex= new Conexion();
 	
 	//contructor vacio
@@ -44,9 +46,26 @@ public class Proveedor extends Persona {
 	}
 	
 		
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
-	public String toString(){
-		return "Id:"+id+", Nombre:"+nombre+", Telefono:"+telefono+", Celular:"+celular+"\n Direccion:"+direccion;
+	public String toString() {
+		return "Proveedor [id=" + id+super.toString() + ", celular=" + celular + ", saldo=" + saldo + "]";
+	}
+
+	/**
+	 * @return the saldo
+	 */
+	public BigDecimal getSaldo() {
+		return saldo;
+	}
+
+	/**
+	 * @param saldo the saldo to set
+	 */
+	public void setSaldo(BigDecimal saldo) {
+		this.saldo = saldo;
 	}
 	
 	

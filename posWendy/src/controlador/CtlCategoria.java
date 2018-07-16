@@ -5,25 +5,25 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
-import modelo.Marca;
-import modelo.dao.MarcaDao;
-import view.ViewCrearMarca;
+import modelo.Categoria;
+import modelo.dao.CategoriaDao;
+import view.ViewCrearCategoria;
 
-public class CtlMarca implements ActionListener {
+public class CtlCategoria implements ActionListener {
 	
-	private ViewCrearMarca viewMarca;
-	private MarcaDao myMarcaDao;
-	private Marca myMarca;
+	private ViewCrearCategoria viewMarca;
+	private CategoriaDao myMarcaDao;
+	private Categoria myMarca;
 	
 	boolean resultaOperacion=false;
 	
 	
-	public CtlMarca(ViewCrearMarca view,MarcaDao m){
+	public CtlCategoria(ViewCrearCategoria view,CategoriaDao m){
 		this.viewMarca=view;
 		this.myMarcaDao=m;
 		
 	}
-	public void setMyMarcaDao(MarcaDao m){
+	public void setMyMarcaDao(CategoriaDao m){
 		myMarcaDao=m;
 		
 	}
@@ -33,7 +33,7 @@ public class CtlMarca implements ActionListener {
 		// TODO Auto-generated method stub
 		String comando=e.getActionCommand();
 		
-		myMarca=new Marca();
+		myMarca=new Categoria();
 		myMarca.setMarca(viewMarca.getTxtMarca().getText());
 		myMarca.setObservacion(viewMarca.getTxtObservacion().getText());
 		
@@ -42,9 +42,9 @@ public class CtlMarca implements ActionListener {
 		
 			case "GUARDAR":
 				
-				if(myMarcaDao.registrarMarca(myMarca)){//se ejecuta la accion de guardar
-					JOptionPane.showMessageDialog(null, "Se ha registrado Exitosamente","Información",JOptionPane.INFORMATION_MESSAGE);
-					myMarca.setId(myMarcaDao.getIdMarcaRegistrada());//se completa el proveedor guardado con el ID asignado por la BD
+				if(myMarcaDao.registrarCategoria(myMarca)){//se ejecuta la accion de guardar
+					JOptionPane.showMessageDialog(null, "Se ha registrado Exitosamente","Informaciï¿½n",JOptionPane.INFORMATION_MESSAGE);
+					myMarca.setId(myMarcaDao.getIdCategoriaRegistrada());//se completa el proveedor guardado con el ID asignado por la BD
 					resultaOperacion=true;
 					viewMarca.setVisible(false);
 					this.viewMarca.dispose(); 
@@ -60,8 +60,8 @@ public class CtlMarca implements ActionListener {
 				
 			case "ACTUALIZAR":
 				
-				if(myMarcaDao.actualizarMarca(this.viewMarca.getMarca())){//ejecuta el metodo actualize en el Dao y espera que devuelva true o false
-					JOptionPane.showMessageDialog(null, "Se ha registrado Exitosamente","Información",JOptionPane.INFORMATION_MESSAGE);
+				if(myMarcaDao.actualizarCategoria(this.viewMarca.getMarca())){//ejecuta el metodo actualize en el Dao y espera que devuelva true o false
+					JOptionPane.showMessageDialog(null, "Se ha registrado Exitosamente","Informaciï¿½n",JOptionPane.INFORMATION_MESSAGE);
 					viewMarca.setVisible(false);
 					resultaOperacion=true;
 				}
@@ -73,7 +73,7 @@ public class CtlMarca implements ActionListener {
 		}
 		
 	}
-	public Marca getMarca(){
+	public Categoria getMarca(){
 		
 		myMarca.setMarca(this.viewMarca.getTxtMarca().getText());
 		myMarca.setObservacion(this.viewMarca.getTxtObservacion().getText());

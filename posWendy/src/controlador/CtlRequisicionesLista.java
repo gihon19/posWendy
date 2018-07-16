@@ -1,10 +1,12 @@
 package controlador;
 
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -19,6 +21,8 @@ import modelo.Requisicion;
 import modelo.dao.RequisicionDao;
 import modelo.dao.UsuarioDao;
 import view.ViewListaRequisiciones;
+import view.ViewRequisicion;
+import view.tablemodel.TableModeloArticulo;
 
 public class CtlRequisicionesLista implements ActionListener, MouseListener, ChangeListener {
 	
@@ -38,18 +42,19 @@ public class CtlRequisicionesLista implements ActionListener, MouseListener, Cha
 		myRequi=new Requisicion();
 		myUsuarioDao=new UsuarioDao(conexion);
 		
-		cargarTabla(myRequiDao.todas());
+		cargarTabla(myRequiDao.todas(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 		view.conectarCtl(this);
 		view.setVisible(true);
 	}
 	
 	public void cargarTabla(List<Requisicion> requisiciones){
 		//JOptionPane.showMessageDialog(view, articulos);
+		this.view.getModelo().limpiarArticulos();
 		
 		if(requisiciones!=null){
-			this.view.getModelo().limpiarArticulos();
+			
 			for(int c=0;c<requisiciones.size();c++){
-				this.view.getModelo().setRequisicion(requisiciones.get(c));
+				this.view.getModelo().addRequisicion(requisiciones.get(c));
 			}
 		}
 	}
@@ -64,7 +69,7 @@ public class CtlRequisicionesLista implements ActionListener, MouseListener, Cha
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
-		//Recoger qué fila se ha pulsadao en la tabla
+		//Recoger quï¿½ fila se ha pulsadao en la tabla
         filaPulsada = this.view.getTabla().getSelectedRow();
         
         //si seleccion una fila
@@ -164,31 +169,51 @@ public class CtlRequisicionesLista implements ActionListener, MouseListener, Cha
 		String comando=e.getActionCommand();
 		
 		switch (comando){
+		
+		case "INSERTAR":
+			ViewRequisicion viewRequi=new ViewRequisicion(view);
+			CtlRequisicion ctlRequi=new CtlRequisicion(viewRequi,conexion);
+			
+			
+			boolean resuldoGuarda=ctlRequi.agregarRequisicion();
+			
+			if(resuldoGuarda){
+				view.getModelo().setPaginacion();
+				
+				cargarTabla(myRequiDao.todas(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+				/*
+				this.view.getModelo().addRequisicion(ctlRequi.getRequisicionGuardado());
+				
+				/*<<<<<<<<<<<<<<<selecionar la ultima fila creada>>>>>>>>>>>>>>>
+				int row =  this.view.getTabla().getRowCount () - 1;
+				Rectangle rect = this.view.getTabla().getCellRect(row, 0, true);
+				this.view.getTabla().scrollRectToVisible(rect);
+				this.view.getTabla().clearSelection();
+				this.view.getTabla().setRowSelectionInterval(row, row);
+				TableModeloArticulo modelo = (TableModeloArticulo)this.view.getTabla().getModel();
+				modelo.fireTableDataChanged();*/
+			}
+			break;
 		case "FECHA":
-			this.view.getTxtBuscar2().setEditable(true);
-			//JOptionPane.showMessageDialog(view, "Clip en fecha");
+			
 			break;
 			
 		case "TODAS":
-			this.view.getTxtBuscar2().setEditable(false);
-			this.view.getTxtBuscar2().setText("");
-			this.view.getTxtBuscar1().setText("");
+			
 			
 			break;
 		case "ID":
-			this.view.getTxtBuscar2().setEditable(false);
-			this.view.getTxtBuscar2().setText("");
-			this.view.getTxtBuscar1().setText("");
+			
 			
 			break;
 		case "BUSCAR":
 			//JOptionPane.showMessageDialog(view, "Click en buscar");
 			//si la busqueda es por id
 			if(this.view.getRdbtnId().isSelected()){
-				myRequi=myRequiDao.requiPorId(Integer.parseInt(this.view.getTxtBuscar1().getText()));
+				myRequi=myRequiDao.requiPorId(Integer.parseInt(this.view.getTxtBuscar().getText()));
 				if(myRequi!=null){												
 					this.view.getModelo().limpiarArticulos();
-					this.view.getModelo().setRequisicion(myRequi);
+					this.view.getModelo().addRequisicion(myRequi);
 				}else{
 					JOptionPane.showMessageDialog(view, "No se encuentro la factura");
 				}
@@ -196,9 +221,10 @@ public class CtlRequisicionesLista implements ActionListener, MouseListener, Cha
 			}
 			//si la busqueda es por fecha
 			if(this.view.getRdbtnFecha().isSelected()){  
-				String fecha1=this.view.getTxtBuscar1().getText();
-				String fecha2=this.view.getTxtBuscar2().getText();
-				cargarTabla(myRequiDao.requiPorFechas(fecha1,fecha2));
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				String date1 = sdf.format(this.view.getDcFecha1().getDate());
+				String date2 = sdf.format(this.view.getDcFecha2().getDate());
+				cargarTabla(myRequiDao.requiPorFechas(date1,date2));
 				//this.view.getTxtBuscar1().setText("");
 				//this.view.getTxtBuscar2().setText("");
 				}
@@ -206,8 +232,8 @@ public class CtlRequisicionesLista implements ActionListener, MouseListener, Cha
 			
 			//si la busqueda son tadas
 			if(this.view.getRdbtnTodos().isSelected()){  
-				cargarTabla(myRequiDao.todas());
-				this.view.getTxtBuscar1().setText("");
+				cargarTabla(myRequiDao.todas(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+				this.view.getTxtBuscar().setText("");
 				}
 			break;
 		case "ANULARFACTURA":
@@ -215,12 +241,12 @@ public class CtlRequisicionesLista implements ActionListener, MouseListener, Cha
 			//se verifica si la factura ya esta agregada al kardex
 			if (myRequi.getAgregadoAkardex()==0){
 				
-					int resul=JOptionPane.showConfirmDialog(view, "¿Desea anular la requisicion no. "+myRequi.getNoRequisicion()+"?");
+					int resul=JOptionPane.showConfirmDialog(view, "ï¿½Desea anular la requisicion no. "+myRequi.getNoRequisicion()+"?");
 					//sin confirmo la anulacion
 					if(resul==0){
 						JPasswordField pf = new JPasswordField();
-						int action = JOptionPane.showConfirmDialog(view, pf,"Escriba la contraseña admin",JOptionPane.OK_CANCEL_OPTION);
-						//String pwd=JOptionPane.showInputDialog(view, "Escriba la contraseña admin", "Seguridad", JOptionPane.INFORMATION_MESSAGE);
+						int action = JOptionPane.showConfirmDialog(view, pf,"Escriba la contraseï¿½a admin",JOptionPane.OK_CANCEL_OPTION);
+						//String pwd=JOptionPane.showInputDialog(view, "Escriba la contraseï¿½a admin", "Seguridad", JOptionPane.INFORMATION_MESSAGE);
 						if(action < 0){
 							
 							
@@ -257,6 +283,19 @@ public class CtlRequisicionesLista implements ActionListener, MouseListener, Cha
 				// TODO Auto-generated catch block
 				ee.printStackTrace();
 			}
+			break;
+			
+		case "NEXT":
+			view.getModelo().netPag();
+			cargarTabla(myRequiDao.todas(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
+			break;
+		case "LAST":
+			view.getModelo().lastPag();
+			cargarTabla(myRequiDao.todas(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
 			break;
 		}
 

@@ -26,6 +26,8 @@ public class Factura {
 	private int tipoPago;
 	private BigDecimal pago=new BigDecimal(0.0);
 	private BigDecimal cambio=new BigDecimal(0.0);
+	private BigDecimal cobroEfectivo=new BigDecimal(0.0);
+	private BigDecimal cobroTarjeta=new BigDecimal(0.0);
 	private String observacion="";
 	private Empleado vendedor=new Empleado();
 	private boolean deseaPagar=false;
@@ -218,6 +220,11 @@ public class Factura {
 		totalDescuento=BigDecimal.ZERO;
 		totalImpuesto18=BigDecimal.ZERO;
 		totalOtrosImpuesto=BigDecimal.ZERO;
+		cobroEfectivo=BigDecimal.ZERO;
+		cobroTarjeta=BigDecimal.ZERO;
+		pago=BigDecimal.ZERO;
+		cambio=BigDecimal.ZERO;
+	
 	}
 	@Override
 	public String toString(){
@@ -229,6 +236,30 @@ public class Factura {
 				+", Impuesto:"+totalImpuesto
 				+", descuento:"+totalDescuento
 				+", total:"+total;
+	}
+	/**
+	 * @return the cobroEfectivo
+	 */
+	public BigDecimal getCobroEfectivo() {
+		return cobroEfectivo;
+	}
+	/**
+	 * @param cobroEfectivo the cobroEfectivo to set
+	 */
+	public void setCobroEfectivo(BigDecimal cobroEfectivo) {
+		this.cobroEfectivo = cobroEfectivo;
+	}
+	/**
+	 * @return the cobroTarjeta
+	 */
+	public BigDecimal getCobroTarjeta() {
+		return cobroTarjeta;
+	}
+	/**
+	 * @param cobroTarjeta the cobroTarjeta to set
+	 */
+	public void setCobroTarjeta(BigDecimal cobroTarjeta) {
+		this.cobroTarjeta = cobroTarjeta;
 	}
 
 }

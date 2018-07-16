@@ -36,6 +36,7 @@ import view.botones.BotonActualizar;
 import view.botones.BotonBuscar1;
 import view.botones.BotonBuscarClientes;
 import view.botones.BotonCancelar;
+import view.botones.BotonCierreCaja;
 import view.botones.BotonCobrar;
 import view.botones.BotonGuardar;
 import view.rendes.RenderizadorTablaFactura;
@@ -103,15 +104,23 @@ public class ViewFacturaDevolucion extends JDialog {
 
 	public ViewFacturaDevolucion(Window view) {
 		
-		super(view,"Facturar",Dialog.ModalityType.DOCUMENT_MODAL);
+		super(view,"Devoluciones",Dialog.ModalityType.DOCUMENT_MODAL);
+		
+		
+		Color color1 =new Color(60, 179, 113);
+		Color color2 =Color.decode("#33cccc");
+		Color color3 =Color.decode("#d4f4ff");
+		Color color4 =Color.decode("#f4fbfe");
+		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ViewFacturar.class.getResource("/view/recursos/logo-admin-tool1.png")));
 		panelAcciones=new JPanel();
+		panelAcciones.setBackground(color3);
 		panelAcciones.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Opciones", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panelAcciones.setBounds(20, 11, 178, 459);
+		panelAcciones.setBounds(6, 11, 178, 459);
 		panelAcciones.setLayout(null);
 		//panelAcciones.setVisible(false);
 		
-		
+		this.getContentPane().setBackground(color3);
 		//this.setTitle("Facturar");
 		getContentPane().add(panelAcciones);
 		
@@ -146,6 +155,8 @@ public class ViewFacturaDevolucion extends JDialog {
 		panelAcciones.add(btnActualizar);
 		btnActualizar.setVisible(false);
 		
+	
+		
 		btnGuardar = new BotonGuardar();
 		btnGuardar.setHorizontalAlignment(SwingConstants.LEFT);
 		btnGuardar.setText("F4 Guardar");
@@ -158,15 +169,17 @@ public class ViewFacturaDevolucion extends JDialog {
 		btnCerrar.setBounds(10, 393, 158, 66);
 		panelAcciones.add(btnCerrar);
 		
-		btnCierreCaja = new JButton("F6 Cierre");
+		btnCierreCaja = new BotonCierreCaja();
 		btnCierreCaja.setEnabled(false);
 		btnCierreCaja.setHorizontalAlignment(SwingConstants.LEFT);
-		btnCierreCaja.setIcon(new ImageIcon(ViewFacturar.class.getResource("/view/recursos/caja.png")));
+		btnCierreCaja.setText("F6 Cierre");
+		btnCierreCaja.setBackground(color1);
 		btnCierreCaja.setBounds(10, 334, 158, 60);
 		panelAcciones.add(btnCierreCaja);
 		
 		btnPendientes = new JButton("F5 Pendientes");
 		btnPendientes.setEnabled(false);
+		btnPendientes.setVisible(false);
 		btnPendientes.setIcon(new ImageIcon(ViewFacturar.class.getResource("/view/recursos/lista.png")));
 		btnPendientes.setHorizontalAlignment(SwingConstants.LEFT);
 		btnPendientes.setBounds(10, 272, 158, 67);
@@ -176,14 +189,15 @@ public class ViewFacturaDevolucion extends JDialog {
 		panelDatosFactura=new JPanel();
 		//panelDatosFactura.setBackground(Color.WHITE);
 		panelDatosFactura.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Datos Generales", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panelDatosFactura.setBounds(196, 11, 802, 84);
+		panelDatosFactura.setBounds(186, 11, 832, 88);
 		panelDatosFactura.setLayout(null);
 		
 		getContentPane().add(panelDatosFactura);
 		
 		panelBuscar= new JPanel();
+		panelBuscar.setVisible(false);
 		panelBuscar.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Buscar Articulo", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panelBuscar.setBounds(196, 94, 802, 50);
+		panelBuscar.setBounds(196, 94, 822, 50);
 		panelBuscar.setLayout(null);
 		//getContentPane().geti
 		getContentPane().add(panelBuscar);
@@ -219,74 +233,75 @@ public class ViewFacturaDevolucion extends JDialog {
 		panelBuscar.add(lblPrecio);
 		
 		lblFecha = new JLabel("Fecha");
-		lblFecha.setBounds(10, 23, 40, 14);
+		lblFecha.setBounds(6, 23, 40, 14);
 		panelDatosFactura.add(lblFecha);
 		
-		txtFechafactura = new JTextField();
+		txtFechafactura = new JTextField(25);
+		txtFechafactura.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 		txtFechafactura.setEditable(false);
-		txtFechafactura.setBounds(10, 44, 71, 29);
+		txtFechafactura.setBounds(6, 44, 102, 29);
 		panelDatosFactura.add(txtFechafactura);
-		txtFechafactura.setColumns(10);
+		txtFechafactura.setColumns(25);
 		
 		lblCodigoCliente = new JLabel("Id Cliente");
-		lblCodigoCliente.setBounds(91, 23, 61, 14);
+		lblCodigoCliente.setBounds(106, 23, 61, 14);
 		panelDatosFactura.add(lblCodigoCliente);
 		
 		txtIdcliente = new JTextField();
-		txtIdcliente.setBounds(91, 44, 49, 29);
+		txtIdcliente.setBounds(106, 44, 61, 29);
 		panelDatosFactura.add(txtIdcliente);
 		txtIdcliente.setColumns(10);
 		
 		txtNombrecliente = new JTextField();
 		txtNombrecliente.setToolTipText("Nombre Cliente");
-		txtNombrecliente.setBounds(150, 44, 160, 29);
+		txtNombrecliente.setBounds(179, 44, 205, 29);
 		panelDatosFactura.add(txtNombrecliente);
 		txtNombrecliente.setColumns(10);
 		
 		
 		JLabel lblRtn = new JLabel("R:T:N");
-		lblRtn.setBounds(320, 23, 112, 14);
+		lblRtn.setBounds(389, 23, 74, 14);
 		panelDatosFactura.add(lblRtn);
 		
 		txtRtn = new JTextField();
-		txtRtn.setBounds(320, 44, 127, 29);
+		txtRtn.setBounds(389, 44, 112, 29);
 		panelDatosFactura.add(txtRtn);
 		txtRtn.setColumns(10);
 		
 		grupoOpciones = new ButtonGroup();
 		rdbtnCredito = new JRadioButton("");
 		//rdbtnCredito.setEnabled(false);// para descativar los creditos
-		rdbtnCredito.setBounds(526, 47, 21, 23);
+		rdbtnCredito.setBounds(567, 50, 36, 23);
 		grupoOpciones.add(rdbtnCredito);
 		panelDatosFactura.add(rdbtnCredito);
 		
 		rdbtnContado = new JRadioButton("");
 		rdbtnContado.setVerticalAlignment(SwingConstants.TOP);
 		rdbtnContado.setSelected(true);
-		rdbtnContado.setBounds(468, 47, 21, 23);
+		rdbtnContado.setBounds(511, 50, 28, 23);
 		grupoOpciones.add(rdbtnContado);
 		panelDatosFactura.add(rdbtnContado);
 		
 		lblNombreCliente = new JLabel("Nombre Cliente");
-		lblNombreCliente.setBounds(150, 23, 160, 14);
+		lblNombreCliente.setBounds(179, 23, 146, 14);
 		panelDatosFactura.add(lblNombreCliente);
 		
 		lblContado = new JLabel("Contado");
-		lblContado.setBounds(454, 23, 49, 14);
+		lblContado.setBounds(495, 23, 61, 14);
 		panelDatosFactura.add(lblContado);
 		
 		lblCredito = new JLabel("Credito");
-		lblCredito.setBounds(513, 23, 46, 14);
+		lblCredito.setBounds(562, 23, 46, 14);
 		panelDatosFactura.add(lblCredito);
 		
 		JLabel lblVendedor = new JLabel("Vendedor");
-		lblVendedor.setBounds(581, 23, 61, 14);
+		lblVendedor.setBounds(632, 23, 61, 14);
 		panelDatosFactura.add(lblVendedor);
 		
 		cbxEmpleados = new JComboBox();
 		this.modeloEmpleado=new CbxTmEmpleado();
 		//cbxEmpleados.setModel(modeloEmpleado);//comentar para moder ver la vista de dise�o
-		cbxEmpleados.setBounds(581, 48, 199, 20);
+		cbxEmpleados.setBounds(632, 53, 199, 20);
 		panelDatosFactura.add(cbxEmpleados);
 		
 		
@@ -298,21 +313,21 @@ public class ViewFacturaDevolucion extends JDialog {
 		tableDetalle.setDefaultRenderer(String.class, renderizador);
 		//tableDetalle.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		tableDetalle.getColumnModel().getColumn(0).setPreferredWidth(50);     //Tama�o de las columnas de las tablas
-		tableDetalle.getColumnModel().getColumn(1).setPreferredWidth(200);	//
+		tableDetalle.getColumnModel().getColumn(0).setPreferredWidth(200);     //Tama�o de las columnas de las tablas
+		tableDetalle.getColumnModel().getColumn(1).setPreferredWidth(80);	//
 		tableDetalle.getColumnModel().getColumn(2).setPreferredWidth(80);	//
 		tableDetalle.getColumnModel().getColumn(3).setPreferredWidth(80);	//
 		tableDetalle.getColumnModel().getColumn(4).setPreferredWidth(80);	//
 		tableDetalle.getColumnModel().getColumn(5).setPreferredWidth(80);	//
 		tableDetalle.getColumnModel().getColumn(6).setPreferredWidth(80);	//
 		tableDetalle.getColumnModel().getColumn(7).setPreferredWidth(100);	//
-		tableDetalle.getColumnModel().getColumn(8).setPreferredWidth(150);	//
+		//tableDetalle.getColumnModel().getColumn(8).setPreferredWidth(150);	//
 		
 		tableDetalle.setRowHeight(30);
 		//registerEnterKey( );
 		
 		JScrollPane scrollPane = new JScrollPane(tableDetalle);
-		scrollPane.setBounds(196, 144, 802, 326);
+		scrollPane.setBounds(186, 111, 832, 359);
 		getContentPane().add(scrollPane);
 		
 		
@@ -392,6 +407,13 @@ public class ViewFacturaDevolucion extends JDialog {
 		//centrar la ventana en la pantalla
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+		
+		//panelNorte.setBackground(color1);
+		scrollPane.setBackground(color3);
+		scrollPane.getViewport().setBackground(color3);
+		panelDatosFactura.setBackground(color3);
+		panelBuscar.setBackground(color3);
+		//panel.setBackground(color3);
 		this.pack();
 		
 	}

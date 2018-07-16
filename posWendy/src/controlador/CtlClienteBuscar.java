@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 import modelo.Cliente;
 import modelo.dao.ClienteDao;
 import modelo.Conexion;
-import view.tablemodel.TablaModeloMarca;
+import view.tablemodel.TmCategorias;
 import view.ViewCrearCliente;
 import view.ViewFacturar;
 import view.ViewListaClientes;
@@ -36,23 +36,25 @@ public class CtlClienteBuscar implements ActionListener ,MouseListener, WindowLi
 		view=v;
 		view.conectarControladorBuscar(this);
 		clienteDao=new ClienteDao(conexion);
-		cargarTabla(clienteDao.todoClientes());
+		cargarTabla(clienteDao.todoClientes(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 		//view.setVisible(true);
 	}
 	
 	
 	public void cargarTabla(List<Cliente> clientes){
-		//JOptionPane.showMessageDialog(view, articulos);
+	
 		this.view.getModelo().limpiarClientes();
-		for(int c=0;c<clientes.size();c++){
-			this.view.getModelo().agregarCliente(clientes.get(c));
+		if(clientes!=null){
+			for(int c=0;c<clientes.size();c++){
+				this.view.getModelo().agregarCliente(clientes.get(c));
+			}
 		}
 	}
 	
 public boolean buscarCliente(Window v){
 		
 		//this.myArticuloDao.cargarInstrucciones();
-		cargarTabla(clienteDao.todoClientes());
+	cargarTabla(clienteDao.todoClientes(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 		//this.view.getBtnEliminar().setEnabled(false);
 		//this.view.getBtnAgregar().setEnabled(false);
 		this.view.setLocationRelativeTo(v);
@@ -69,6 +71,10 @@ public boolean buscarCliente(Window v){
 		String comando=e.getActionCommand();
 		switch (comando){
 		
+		case "ESCRIBIR":
+			view.setTamanioVentana(1);
+			break;
+			
 		case "BUSCAR":
 			//si se seleciono el boton ID
 			if(this.view.getRdbtnId().isSelected()){  
@@ -91,30 +97,45 @@ public boolean buscarCliente(Window v){
 				}
 			
 			if(this.view.getRdbtnTodos().isSelected()){  
-				cargarTabla(clienteDao.todoClientes());
+				cargarTabla(clienteDao.todoClientes(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 				this.view.getTxtBuscar().setText("");
 				}
 			break;
 			
 		case "NUEVO":
-			ViewCrearCliente view=new ViewCrearCliente();
-			CtlCliente ctlCliente=new CtlCliente(view,conexion);
+			ViewCrearCliente viewNewCliente=new ViewCrearCliente();
+			CtlCliente ctlCliente=new CtlCliente(viewNewCliente,conexion);
 			
 			boolean resuldoGuarda=ctlCliente.agregarCliente();
 			if(resuldoGuarda){
+				view.getModelo().setPaginacion();
+				cargarTabla(clienteDao.todoClientes(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+				/*
 				this.view.getModelo().agregarCliente(ctlCliente.getClienteGuardado());
 				
-				/*<<<<<<<<<<<<<<<selecionar la ultima fila creada>>>>>>>>>>>>>>>*/
-				int row =  this.view.getTablaClientes().getRowCount () - 1;
-				Rectangle rect = this.view.getTablaClientes().getCellRect(row, 0, true);
-				this.view.getTablaClientes().scrollRectToVisible(rect);
-				this.view.getTablaClientes().clearSelection();
-				this.view.getTablaClientes().setRowSelectionInterval(row, row);
-				TablaModeloMarca modelo = (TablaModeloMarca)this.view.getTablaClientes().getModel();
-				modelo.fireTableDataChanged();
+				/*<<<<<<<<<<<<<<<selecionar la ultima fila creada>>>>>>>>>>>>>>>
+				int row =  this.view.getTabla().getRowCount () - 1;
+				Rectangle rect = this.view.getTabla().getCellRect(row, 0, true);
+				this.view.getTabla().scrollRectToVisible(rect);
+				this.view.getTabla().clearSelection();
+				this.view.getTabla().setRowSelectionInterval(row, row);
+				TablaModeloMarca modelo = (TablaModeloMarca)this.view.getTabla().getModel();
+				modelo.fireTableDataChanged();*/
 			}
-			view=null;
+			viewNewCliente=null;
 			ctlCliente=null;
+			break;
+		case "NEXT":
+			view.getModelo().netPag();
+			cargarTabla(clienteDao.todoClientes(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
+			break;
+		case "LAST":
+			view.getModelo().lastPag();
+			cargarTabla(clienteDao.todoClientes(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
 			break;
 		}
 		
@@ -125,7 +146,7 @@ public boolean buscarCliente(Window v){
 		// TODO Auto-generated method stub
 		
 		//Recoger qu� fila se ha pulsadao en la tabla
-        filaPulsada = this.view.getTablaClientes().getSelectedRow();
+        filaPulsada = this.view.getTabla().getSelectedRow();
 		if (e.getClickCount() == 2){
 			myCliente=this.view.getModelo().getCliente(filaPulsada);
 			resultado=true;

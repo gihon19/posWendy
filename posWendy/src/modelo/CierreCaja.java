@@ -22,6 +22,7 @@ public class CierreCaja {
 	private BigDecimal totalIsv18=new BigDecimal(0.0);
 	private BigDecimal totalSalida=new BigDecimal(0.0);
 	private BigDecimal totalCobro=new BigDecimal(0.0);
+	private BigDecimal totalPago=new BigDecimal(0.0);
 	private BigDecimal totalEfectivoCaja=new BigDecimal(0.0);
 	
 	private int noSalidaInicial=0;
@@ -29,6 +30,9 @@ public class CierreCaja {
 	
 	private int noCobroInicial=0;
 	private int noCobroFinal=0;
+	
+	private int noPagoInicial=0;
+	private int noPagoFinal=0;
 
 	
 	private boolean estado=false;
@@ -210,6 +214,57 @@ public class CierreCaja {
 	}
 	public String getFecha(){
 		return fecha;
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "CierreCaja [id=" + id + ", fecha=" + fecha + ", noFacturaInicio=" + noFacturaInicio
+				+ ", noFacturaFinal=" + noFacturaFinal + ", total=" + total + ", totalEfectivo=" + totalEfectivo
+				+ ", efectivoInicial=" + efectivoInicial + ", efectivo=" + efectivo + ", tarjeta=" + tarjeta
+				+ ", credito=" + credito + ", isv15=" + isv15 + ", totalIsv15=" + totalIsv15 + ", totalExcento="
+				+ totalExcento + ", apertura=" + apertura + ", isv18=" + isv18 + ", totalIsv18=" + totalIsv18
+				+ ", totalSalida=" + totalSalida + ", totalCobro=" + totalCobro + ", totalEfectivoCaja="
+				+ totalEfectivoCaja + ", noSalidaInicial=" + noSalidaInicial + ", noSalidaFinal=" + noSalidaFinal
+				+ ", noCobroInicial=" + noCobroInicial + ", noCobroFinal=" + noCobroFinal + ", estado=" + estado
+				+ ", usuario=" + usuario + "]";
+	}
+	/**
+	 * @return the noPagoInicial
+	 */
+	public int getNoPagoInicial() {
+		return noPagoInicial;
+	}
+	/**
+	 * @param noPagoInicial the noPagoInicial to set
+	 */
+	public void setNoPagoInicial(int noPagoInicial) {
+		this.noPagoInicial = noPagoInicial;
+	}
+	/**
+	 * @return the noPagoFinal
+	 */
+	public int getNoPagoFinal() {
+		return noPagoFinal;
+	}
+	/**
+	 * @param noPagoFinal the noPagoFinal to set
+	 */
+	public void setNoPagoFinal(int noPagoFinal) {
+		this.noPagoFinal = noPagoFinal;
+	}
+	/**
+	 * @return the totalPago
+	 */
+	public BigDecimal getTotalPago() {
+		return totalPago;
+	}
+	/**
+	 * @param totalPago the totalPago to set
+	 */
+	public void setTotalPago(BigDecimal totalPago) {
+		this.totalPago = totalPago;
 	}
 	
 

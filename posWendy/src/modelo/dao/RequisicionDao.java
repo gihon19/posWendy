@@ -146,12 +146,8 @@ public List<Requisicion> requiPorFechas(String fecha1, String fecha2) {
 		
 		
         Connection con = null;
-        
-    	String sql="SELECT *"
-			   + "FROM v_requisiciones where "
-			   + "DATE_FORMAT(v_requisiciones.fecha2, '%d/%m/%Y')>=? "
-			   + "and "
-			   + "DATE_FORMAT(v_requisiciones.fecha2, '%d/%m/%Y')<=?";
+        //JOptionPane.showMessageDialog(null, fecha1+"   |    "+fecha2);
+    	String sql="SELECT * FROM v_requisiciones where fecha2 BETWEEN ? and ?; ";
         //Statement stmt = null;
     	List<Requisicion> requisiciones=new ArrayList<Requisicion>();
 		
@@ -211,7 +207,7 @@ public List<Requisicion> requiPorFechas(String fecha1, String fecha2) {
 		
 	}
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para extraer todas las requisiciones>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-	public List<Requisicion> todas() {
+	public List<Requisicion> todas(int limInf,int limSupe) {
 		Connection con = null;
         
         
@@ -226,7 +222,9 @@ public List<Requisicion> requiPorFechas(String fecha1, String fecha2) {
 		try {
 			con = conexion.getPoolConexion().getConnection();
 			
-			selectTodas = con.prepareStatement("SELECT * FROM v_requisiciones;");
+			selectTodas = con.prepareStatement("SELECT * FROM v_requisiciones ORDER BY codigo_requisicion DESC LIMIT ?,?;");
+			selectTodas.setInt(1, limInf);
+			selectTodas.setInt(2, limSupe);
 			
 			res = selectTodas.executeQuery();
 			while(res.next()){

@@ -7,37 +7,13 @@ import javax.swing.table.AbstractTableModel;
 
 import modelo.Factura;
 
-public class TablaModeloFacturados  extends AbstractTableModel {
+public class TablaModeloFacturados  extends TablaModelo {
 	final private String []columnNames= {
-			"No Factura","Fecha","Cliente", "Telefono", "Total","Estado"
+			"No","Fecha","Tipo","Cliente", "Telefono", "Total","Estado"
 		};
 	private List<Factura> facturas=new ArrayList<Factura>();
 	
 	
-	private int limiteInferior=0;
-	private int limiteSuperior=30;
-	private int noPagina=1;
-	
-	public int getLimiteInferior(){
-		return limiteInferior;
-	}
-	public int getLimiteSuperior(){
-		return limiteSuperior;
-	}
-	public int getNoPagina(){
-		return noPagina;
-	}
-	
-	public void netPag(){
-		limiteInferior+=30;
-		//limiteSuperior+=30;
-		noPagina++;
-	}
-	public void lastPag(){
-		//limiteSuperior-=30;
-		limiteInferior-=30;
-		noPagina--;
-	}
 	
 	public Factura getFactura(int row){
 		return facturas.get(row);
@@ -73,12 +49,20 @@ public class TablaModeloFacturados  extends AbstractTableModel {
 		case 1:
 			return facturas.get(rowIndex).getFecha();
 		case 2:
-			return facturas.get(rowIndex).getCliente().getNombre();
+				if(facturas.get(rowIndex).getTipoFactura()==1){
+					return "Contado";
+				}else{
+					return "Credito";
+				}
+					
+			//return facturas.get(rowIndex).getTipoFactura();
 		case 3:
-			return facturas.get(rowIndex).getCliente().getTelefono();
+			return facturas.get(rowIndex).getCliente().getNombre();
 		case 4:
-			return facturas.get(rowIndex).getTotal();
+			return facturas.get(rowIndex).getCliente().getTelefono();
 		case 5:
+			return facturas.get(rowIndex).getTotal();
+		case 6:
 			return facturas.get(rowIndex).getEstado();
 		
 		default:

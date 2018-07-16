@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -17,28 +18,28 @@ import modelo.Factura;
 import modelo.dao.CotizacionDao;
 import modelo.dao.FacturaDao;
 import view.ViewFacturar;
-import view.ViewListaFactura;
+import view.ViewListaCotizacion;
 
-public class CtlFacturaLista implements ActionListener, MouseListener {
+public class CtlCotizacionLista implements ActionListener, MouseListener {
 	
 	private Conexion conexion=null;
-	private ViewListaFactura view=null;
+	private ViewListaCotizacion view=null;
 	private CotizacionDao myFacturaDao=null;
 	private int filaPulsada;
 	private Factura myFactura;
 	private boolean resultado;
 	
-	public CtlFacturaLista(){
+	public CtlCotizacionLista(){
 		
 	}
 
-	public CtlFacturaLista(ViewListaFactura v, Conexion conn) {
+	public CtlCotizacionLista(ViewListaCotizacion v, Conexion conn) {
 		// TODO Auto-generated constructor stub
 		view=v;
 		view.conectarControlador(this);
 		conexion=conn;
 		myFacturaDao=new CotizacionDao(conexion);
-		cargarTabla(myFacturaDao.getCotizaciones());
+		cargarTabla(myFacturaDao.getCotizaciones(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 		//setMyFactura(new Factura());
 		
 		//view.setVisible(true);
@@ -62,7 +63,7 @@ public class CtlFacturaLista implements ActionListener, MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		filaPulsada=this.view.getTablaFacturas().getSelectedRow();
+		filaPulsada=this.view.getTabla().getSelectedRow();
 		
 		 //si seleccion una fila
         if(filaPulsada>=0){
@@ -81,38 +82,11 @@ public class CtlFacturaLista implements ActionListener, MouseListener {
     			//JOptionPane.showMessageDialog(null,myMarca);
     			this.view.dispose();
         		
-        		/*	ViewFacturar viewFacturar=new ViewFacturar(this.view);
-        		CtlFacturar ctlFacturar=new CtlFacturar(viewFacturar,conexion);
-        		
-        		//viewFacturar.get.getBtnPendientes().setEnabled(false);
-        		
-        		//viewFacturar.getBtnCobrar()
-        		
-        		//si se cobro la factura se debe eleminiar el temp por eso se guarda el id
-        		int idFactura=myFactura.getIdFactura();
-        		
-        		//se llama al controlador de la factura para que la muestre 
-        		myFactura=ctlFacturar.actualizarFactura(myFactura);
-        		
-        		
-        	//si la factura se cobro se regresara null sino modificamos la factura en la lista
-        		if(myFactura==null){
-        			this.view.getModelo().eliminarFactura(filaPulsada);
-        			myFacturaDao.EliminarTemp(idFactura);
-        		}else{
-        			this.view.getModelo().cambiarArticulo(filaPulsada, myFactura);
-        			this.view.getTablaFacturas().getSelectionModel().setSelectionInterval(filaPulsada,filaPulsada);//se seleciona lo cambiado
-        		}
-        		viewFacturar.dispose();
-        		ctlFacturar=null;
-        		*/
         	}//fin del if del doble click
         	else{//si solo seleccion la fila se guarda el id de proveedor para accion de eliminar
         		
         		this.view.getBtnEliminar().setEnabled(true);
-        		//this.view.getBtnCobrar().setEnabled(true);
-        		/*idProveedor=identificador;
-        		filaTabla=filaPulsada;*/
+        		
         		
         	}
         	
@@ -190,7 +164,10 @@ private void cobrar(){
 		
 		switch(comando){
 		
-		
+		case "ESCRIBIR":
+			view.setTamanioVentana(1);
+			break;
+			
 		case "BUSCAR":
 			//si se seleciono el boton ID
 			if(this.view.getRdbtnId().isSelected()){ 
@@ -221,9 +198,11 @@ private void cobrar(){
 				}
 			if(this.view.getRdbtnFecha().isSelected()){ 
 				
-				//JOptionPane.showMessageDialog(view, view.getTxtBuscarFecha().getText());
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				String date1 = sdf.format(this.view.getDcFecha1().getDate());
+				String date2 = sdf.format(this.view.getDcFecha2().getDate());
 				
-				cargarTabla(myFacturaDao.cotizacionesPorFecha(view.getTxtBuscarFecha().getText()));
+				cargarTabla(myFacturaDao.cotizacionesPorFecha(date1,date2));
 				
 				/*cargarTabla(myArticuloDao.buscarArticuloMarca(this.view.getTxtBuscar().getText()));
 					if(myArticulo!=null){
@@ -234,7 +213,7 @@ private void cobrar(){
 				}
 			
 			if(this.view.getRdbtnTodos().isSelected()){  
-				cargarTabla(myFacturaDao.getCotizaciones());
+				cargarTabla(myFacturaDao.getCotizaciones(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 				/*cargarTabla(myArticuloDao.todoArticulos());
 				this.view.getTxtBuscar().setText("");*/
 				}
@@ -273,6 +252,19 @@ private void cobrar(){
 			this.view.getBtnCobrar().setEnabled(false);
     		this.view.getBtnEliminar().setEnabled(false);*/
 		break;
+		
+		case "NEXT":
+			view.getModelo().netPag();
+			cargarTabla(myFacturaDao.getCotizaciones(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
+			break;
+		case "LAST":
+			view.getModelo().lastPag();
+			cargarTabla(myFacturaDao.getCotizaciones(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
+			break;
 		}
 
 	}

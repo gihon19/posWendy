@@ -25,7 +25,7 @@ public class RenderizadorTablaFacturas implements TableCellRenderer {
         	editor.setBackground(Color.white);
         }
 		
-		 if(column==3)
+		 if(column==5)
 			   editor.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		 

@@ -29,7 +29,7 @@ import modelo.Empleado;
 import modelo.Factura;
 import modelo.dao.KardexDao;
 import modelo.Requisicion;
-import view.tablemodel.TablaModeloMarca;
+import view.tablemodel.TmCategorias;
 import view.tablemodel.TabloModeloRequisicion;
 import view.ViewListaArticulo;
 import view.ViewRequisicion;
@@ -65,7 +65,7 @@ public class CtlRequisicion implements ActionListener, MouseListener, TableModel
 
 
 		
-		view.setVisible(true);
+		
 	}
 
 	@Override
@@ -568,6 +568,17 @@ public void calcularTotales(){
 			
 			
 	       }
+	}
+
+	public boolean agregarRequisicion() {
+		// TODO Auto-generated method stub
+		view.setVisible(true);
+		return false;
+	}
+
+	public Requisicion getRequisicionGuardado() {
+		// TODO Auto-generated method stub
+		return this.myRequisicion;
 	}
 
 }

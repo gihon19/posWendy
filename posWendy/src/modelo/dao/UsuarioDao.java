@@ -120,7 +120,7 @@ public class UsuarioDao {
 
      */
 	
-	public List<Usuario> todos(){
+	public List<Usuario> todos(int limInf,int limSupe){
 		
 		List<Usuario> usuarios =new ArrayList<Usuario>();
 		
@@ -132,7 +132,9 @@ public class UsuarioDao {
 		
 		try{
 			conn=conexion.getPoolConexion().getConnection();
-			consulta=conn.prepareStatement("SELECT * FROM usuario");
+			consulta=conn.prepareStatement("SELECT * FROM usuario LIMIT ?,?;");
+			consulta.setInt(1, limInf);
+			consulta.setInt(2, limSupe);
 			res = consulta.executeQuery();
 			while(res.next()){
 				existe=true;

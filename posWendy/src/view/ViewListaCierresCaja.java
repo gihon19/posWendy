@@ -34,120 +34,51 @@ import view.tablemodel.TmCierres;
 import javax.swing.JLabel;
 import com.toedter.calendar.JDateChooser;
 
-public class ViewListaCierresCaja extends JDialog {
-	
-	protected BorderLayout miEsquema;
-	protected GridLayout miEsquemaTabla;
-	
-	protected JPanel panelAccion;
-	protected JPanel panelSuperior;
-	protected JPanel panelBusqueda;
+public class ViewListaCierresCaja extends ViewTabla {
 	
 	
-	protected BotonAgregar btnAgregar;
-	protected BotonEliminar btnEliminar;
 	protected JButton btnLimpiar;
-	private ButtonGroup grupoOpciones; // grupo de botones que contiene los botones de opci�n
-	private JRadioButton rdbtnTodos;
-	protected BotonBuscar btnBuscar;
 	
 	
-	private JTable tablaCierres;
+	
 	private TmCierres modelo;
 	private JLabel lblA;
-	private JDateChooser dCBuscar1;
-	private JDateChooser dCBuscar2;
-	private JRadioButton rdbtnFechas;
+	
 
 	public ViewListaCierresCaja(Window view) {
 		// TODO Auto-generated constructor stub
-		super(view,"Cierres de caja",Dialog.ModalityType.DOCUMENT_MODAL);
+		super(view,"Cierres de caja");
 		Init();
 	}
 	public void Init() {
 		
-		//super("Marcas");
-		//super(null,"Marcas",Dialog.ModalityType.DOCUMENT_MODAL);
-		miEsquema=new BorderLayout();
-		getContentPane().setLayout(miEsquema);
-		
-		//creacion de los paneles
-		panelAccion=new PanelPadre();
-		panelBusqueda=new PanelPadre();
-		panelSuperior=new PanelPadre();
-		
-		panelAccion.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Acciones de registro", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panelBusqueda.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Busqueda de registros", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		
-		//agregar componentes al panel acciones
-		btnAgregar = new BotonAgregar();
-		btnAgregar.setEnabled(false);
-		panelAccion.add(btnAgregar);
-       
-		btnEliminar = new BotonEliminar();
-        btnEliminar.setEnabled(false);
-        panelAccion.add(btnEliminar);
+	
         
         btnLimpiar = new BotonImprimirSmall();
         //btnLimpiar.setIcon(new ImageIcon(ViewListaMarca.class.getResource("/View/imagen/clear.png"))); // NOI18N
         panelAccion.add(btnLimpiar);
         
-      //configuracion del panel busqueda
-        grupoOpciones = new ButtonGroup(); // crea ButtonGroup
-        rdbtnTodos = new JRadioButton("Todos");
-		rdbtnTodos.setSelected(true);
-		panelBusqueda.add(rdbtnTodos);
-		grupoOpciones.add(rdbtnTodos);
-		
-		rdbtnFechas = new JRadioButton("Por fecha");
-		panelBusqueda.add(rdbtnFechas);
-		grupoOpciones.add(rdbtnFechas);
-		
-		dCBuscar1 = new JDateChooser();
-		dCBuscar1.setSize(new Dimension (100,20));
-		dCBuscar1.setPreferredSize(new Dimension (160,27));
-		panelBusqueda.add(dCBuscar1);
-		
-		lblA = new JLabel("A");
-		panelBusqueda.add(lblA);
-		
-		dCBuscar2 = new JDateChooser();
-		dCBuscar2.setPreferredSize(new Dimension (160,27));
-		panelBusqueda.add(dCBuscar2);
-				
-		btnBuscar=new BotonBuscar();
-		panelBusqueda.add(btnBuscar);
+        rdbtnFecha.setVisible(true);
 		
 		//tabla y sus componentes
 		modelo=new TmCierres();
-		tablaCierres=new JTable();
-		tablaCierres.setModel(modelo);
+		
+		tabla.setModel(modelo);
 		RenderizadorTablaFacturaCompra renderizador = new RenderizadorTablaFacturaCompra();
-		tablaCierres.setDefaultRenderer(String.class, renderizador);
+		tabla.setDefaultRenderer(String.class, renderizador);
 		
 		
-		tablaCierres.getColumnModel().getColumn(0).setPreferredWidth(100);     //Tama�o de las columnas de las tablas
-		tablaCierres.getColumnModel().getColumn(1).setPreferredWidth(100);	//
-		tablaCierres.getColumnModel().getColumn(2).setPreferredWidth(100);	//
-		tablaCierres.setAutoCreateRowSorter(true);
-		JScrollPane scrollPane = new JScrollPane(tablaCierres);
-		
-		scrollPane.setBackground(PanelPadre.color1);
-		//scrollPane.setBounds(36, 97, 742, 136);
-		
-		//configuracion de los paneles
-		panelSuperior.add(panelAccion);
-		panelSuperior.add(panelBusqueda);
-		getContentPane().add(panelSuperior, BorderLayout.NORTH);
-		getContentPane().add(scrollPane, BorderLayout.CENTER);
-		setSize(900,591);
+		tabla.getColumnModel().getColumn(0).setPreferredWidth(100);     //Tama�o de las columnas de las tablas
+		tabla.getColumnModel().getColumn(1).setPreferredWidth(100);	//
+		tabla.getColumnModel().getColumn(2).setPreferredWidth(100);	//
+		tabla.setAutoCreateRowSorter(true);
+		//setSize(900,591);
 		
 		this.btnEliminar.setEnabled(false);
 		//se hace visible
 		//setVisible(true);
 		
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+		
 		
 		this.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
 	
@@ -156,22 +87,7 @@ public class ViewListaCierresCaja extends JDialog {
 	public TmCierres getModelo(){
 		return this.modelo;
 	}
-	public JTable getTabla(){
-		return this.tablaCierres;
-	}
-	public JDateChooser getBuscar1(){
-		return this.dCBuscar1;
-	}
-	public JDateChooser getBuscar2(){
-		return this.dCBuscar2;
-	}
 	
-	public JRadioButton getRdbtnFechas(){
-		return this.rdbtnFechas;
-	}
-	public JRadioButton getRdbtnTodos(){
-		return this.rdbtnTodos;
-	}
 	
 	public void conectarCtl(CtlCierresCajaLista c){
 		btnAgregar.addActionListener(c);
@@ -186,10 +102,16 @@ public class ViewListaCierresCaja extends JDialog {
 		btnBuscar.addActionListener(c);
 		btnBuscar.setActionCommand("BUSCAR");
 		
+		 btnSiguiente.addActionListener(c);
+		 btnSiguiente.setActionCommand("NEXT");
+		 
+		 btnAnterior.addActionListener(c);
+		 btnAnterior.setActionCommand("LAST");
 		
 		
-		tablaCierres.addMouseListener(c);
-		tablaCierres.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		tabla.addMouseListener(c);
+		tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 	}
 

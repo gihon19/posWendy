@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.4.0.final using JasperReports Library version 6.4.1  -->
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="factura_carta" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="df013db5-f76e-44d3-b0df-bcbc46d93160">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -69,7 +69,7 @@ WHERE
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="77" splitType="Stretch">
+		<band height="119" splitType="Stretch">
 			<subreport>
 				<reportElement x="-20" y="0" width="612" height="40" uuid="ff686fc7-3923-4b44-a267-c867a516a422"/>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
@@ -82,82 +82,78 @@ WHERE
 				</textElement>
 				<text><![CDATA[COTIZACION]]></text>
 			</staticText>
-		</band>
-	</title>
-	<pageHeader>
-		<band height="47">
 			<staticText>
-				<reportElement x="7" y="15" width="83" height="13" uuid="6df3e918-e6bc-479a-8617-b8f92af3092f"/>
+				<reportElement x="7" y="105" width="83" height="13" uuid="6df3e918-e6bc-479a-8617-b8f92af3092f"/>
 				<textElement>
 					<font fontName="Lucida Sans" size="10"/>
 				</textElement>
 				<text><![CDATA[Nombre Cliente:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="90" y="15" width="172" height="13" uuid="40c40b92-4084-479c-8897-0a3c56a34b27"/>
+				<reportElement x="90" y="105" width="172" height="13" uuid="40c40b92-4084-479c-8897-0a3c56a34b27"/>
 				<textElement>
 					<font fontName="Lucida Sans"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombre_cliente}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="7" y="1" width="73" height="13" uuid="7df0c824-2272-422f-be32-0bf6d685fb4c"/>
+				<reportElement x="7" y="91" width="73" height="13" uuid="7df0c824-2272-422f-be32-0bf6d685fb4c"/>
 				<textElement>
 					<font fontName="Lucida Sans"/>
 				</textElement>
 				<text><![CDATA[No Cotizacion:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="80" y="1" width="182" height="13" uuid="a96c5764-304b-421e-89fa-6d5deb067890"/>
+				<reportElement x="80" y="91" width="182" height="13" uuid="a96c5764-304b-421e-89fa-6d5deb067890"/>
 				<textElement>
 					<font fontName="Lucida Sans"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{numero_cotizacion}]]></textFieldExpression>
 			</textField>
 			<textField pattern="d/M/yy">
-				<reportElement x="352" y="1" width="79" height="13" uuid="9728e7a6-4f41-4354-a5e8-0e638e21fa3d"/>
+				<reportElement x="352" y="91" width="79" height="13" uuid="9728e7a6-4f41-4354-a5e8-0e638e21fa3d"/>
 				<textElement>
 					<font fontName="Lucida Sans"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="263" y="1" width="89" height="13" uuid="3a90ba1f-70be-49e8-9bf0-037953222adb"/>
+				<reportElement x="263" y="91" width="89" height="13" uuid="3a90ba1f-70be-49e8-9bf0-037953222adb"/>
 				<textElement>
 					<font fontName="Lucida Sans"/>
 				</textElement>
 				<text><![CDATA[Fecha Cotizacion:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="307" y="14" width="100" height="13" uuid="a1ac6d91-bd72-444d-b3df-dbb96107fef3"/>
+				<reportElement x="307" y="104" width="100" height="13" uuid="a1ac6d91-bd72-444d-b3df-dbb96107fef3"/>
 				<textElement>
 					<font fontName="Lucida Sans"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{rtn}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="263" y="14" width="44" height="13" uuid="20562201-9bdc-43fb-98cc-a8ab02fff026"/>
+				<reportElement x="263" y="104" width="44" height="13" uuid="20562201-9bdc-43fb-98cc-a8ab02fff026"/>
 				<textElement>
 					<font fontName="Lucida Sans"/>
 				</textElement>
 				<text><![CDATA[RTN:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="431" y="-1" width="46" height="13" uuid="2eed5900-bdfd-49d0-8a8a-0c45f86e59fd"/>
+				<reportElement x="431" y="89" width="46" height="13" uuid="2eed5900-bdfd-49d0-8a8a-0c45f86e59fd"/>
 				<textElement>
 					<font fontName="Lucida Sans" size="10"/>
 				</textElement>
 				<text><![CDATA[Estado:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="479" y="-1" width="86" height="13" uuid="0b1be6a3-ff21-4bbb-84c1-038ecc23cde1"/>
+				<reportElement x="479" y="89" width="86" height="13" uuid="0b1be6a3-ff21-4bbb-84c1-038ecc23cde1"/>
 				<textElement>
 					<font fontName="Lucida Sans"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
 			</textField>
 		</band>
-	</pageHeader>
+	</title>
 	<columnHeader>
 		<band height="16" splitType="Stretch">
 			<line>
@@ -333,8 +329,20 @@ WHERE
 			</frame>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="142">
+	<pageFooter>
+		<band height="25">
+			<textField>
+				<reportElement x="0" y="6" width="50" height="14" uuid="3e9bc0db-8659-41e0-b6d7-25ac0e9f153a"/>
+				<textFieldExpression><![CDATA["pag. "+$V{PAGE_NUMBER}+ " de "]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="48" y="6" width="90" height="14" uuid="0a2b16a9-dd47-4355-86de-dcc2994d51b3"/>
+				<textFieldExpression><![CDATA[" "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="146">
 			<frame>
 				<reportElement mode="Opaque" x="0" y="0" width="570" height="129" forecolor="#D0B48E" backcolor="#FFFFFF" uuid="5d8169bd-4a75-48c8-8a68-6d3ad5ba9402"/>
 				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
@@ -475,5 +483,5 @@ WHERE
 				</staticText>
 			</frame>
 		</band>
-	</columnFooter>
+	</summary>
 </jasperReport>

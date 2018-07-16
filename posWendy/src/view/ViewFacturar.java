@@ -509,9 +509,7 @@ public class ViewFacturar extends JDialog {
 	}
 	private void actualizarView(CtlFacturar c) {
 		// TODO Auto-generated method stub
-		panelGuardados.removeAll();
-		panelGuardados.revalidate();
-		panelGuardados.repaint();
+		eliminarBotones();
 		//btnGuardados.deleteAll();
 		
 		for(int x=0;x<btnGuardados.getSize();x++){
@@ -523,6 +521,11 @@ public class ViewFacturar extends JDialog {
 			
 		}
 		panelGuardados.updateUI();
+	}
+	public void eliminarBotones(){
+		panelGuardados.removeAll();
+		panelGuardados.revalidate();
+		panelGuardados.repaint();
 	}
 	public ListaBotonesFacturas getBtnsGuardador(){
 		return btnGuardados;

@@ -51,8 +51,7 @@ public class PrincipalWendy {
 		CtlLogin ctlLogin=new CtlLogin(viewLogin,conexion);
 		
 		boolean login=ctlLogin.login();
-		//JDialog.setDefaultLookAndFeelDecorated(true);
-		//JFrame.setDefaultLookAndFeelDecorated(true);
+		
 		if(login){
 			
 			if(conexion.getUsuarioLogin().getTipoPermiso()==1){

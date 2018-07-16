@@ -5,10 +5,10 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import modelo.Marca;
+import modelo.Categoria;
 import modelo.Usuario;
 
-public class TmUsuarios extends AbstractTableModel {
+public class TmUsuarios extends TablaModelo {
 	private String []columnNames={"Usuario","Nombre","Tipo Usuario"};
 	private List<Usuario> usuarios = new ArrayList<Usuario>();
 	

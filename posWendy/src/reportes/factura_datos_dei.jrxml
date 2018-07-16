@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2016-03-24T17:06:24 -->
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="datos_dei" pageWidth="208" pageHeight="720" whenNoDataType="NoDataSection" columnWidth="183" leftMargin="18" rightMargin="7" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="df013db5-f76e-44d3-b0df-bcbc46d93160">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -21,13 +20,34 @@
 	datos_factura.fecha_limite_emision
 FROM datos_factura where codigo_rango= $P{cod_rango}]]>
 	</queryString>
-	<field name="codigo_rango" class="java.lang.String"/>
-	<field name="CAI" class="java.lang.String"/>
-	<field name="factura_inicial" class="java.lang.String"/>
-	<field name="factura_final" class="java.lang.String"/>
-	<field name="codigo_tipo_facturacion" class="java.lang.String"/>
-	<field name="cantida_solicitada" class="java.lang.String"/>
-	<field name="fecha_limite_emision" class="java.lang.String"/>
+	<field name="codigo_rango" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="codigo_rango"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="datos_factura"/>
+	</field>
+	<field name="CAI" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="CAI"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="datos_factura"/>
+	</field>
+	<field name="factura_inicial" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="factura_inicial"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="datos_factura"/>
+	</field>
+	<field name="factura_final" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="factura_final"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="datos_factura"/>
+	</field>
+	<field name="codigo_tipo_facturacion" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="codigo_tipo_facturacion"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="datos_factura"/>
+	</field>
+	<field name="cantida_solicitada" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="cantida_solicitada"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="datos_factura"/>
+	</field>
+	<field name="fecha_limite_emision" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="fecha_limite_emision"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="datos_factura"/>
+	</field>
 	<variable name="dato1" class="java.lang.String">
 		<variableExpression><![CDATA[$F{codigo_tipo_facturacion}]]></variableExpression>
 	</variable>
@@ -85,7 +105,7 @@ FROM datos_factura where codigo_rango= $P{cod_rango}]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{codigo_tipo_facturacion}+"-"+$F{factura_inicial}+" al "+$F{codigo_tipo_facturacion}+"-"+$F{factura_final}]]></textFieldExpression>
 			</textField>
-			<textField pattern="d/M/yy">
+			<textField pattern="d/M/yyy">
 				<reportElement x="1" y="10" width="69" height="12" uuid="bb8bb172-8083-4b62-b109-1c1167766460">
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 				</reportElement>

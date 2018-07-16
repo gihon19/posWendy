@@ -37,7 +37,7 @@ public abstract  class Persona {
 	
 	/**
 
-     * Método que devuelve el nombre del la persona
+     * Mï¿½todo que devuelve el nombre del la persona
      * @return el nombre de la persona
 
      */
@@ -59,7 +59,7 @@ public abstract  class Persona {
 	
 	/**
 
-     * Método que devuelve el apellido del la persona
+     * Mï¿½todo que devuelve el apellido del la persona
      * @return el apellido de la persona
 
      */
@@ -81,7 +81,7 @@ public abstract  class Persona {
 	
 	/**
 
-     * Método que devuelve el telefono del la persona
+     * Mï¿½todo que devuelve el telefono del la persona
      * @return el telefono de la persona
 
      */
@@ -103,7 +103,7 @@ public abstract  class Persona {
 	
 	/**
 
-     * Método que devuelve el correo electronico del la persona
+     * Mï¿½todo que devuelve el correo electronico del la persona
      * @return el correo electronico de la persona
 
      */
@@ -126,7 +126,7 @@ public abstract  class Persona {
 	
 	/**
 
-     * Método que devuelve la direccion del la persona
+     * Mï¿½todo que devuelve la direccion del la persona
      * @return la direccion electronico de la persona
 
      */
@@ -134,25 +134,13 @@ public abstract  class Persona {
 		return direccion;
 	}
 	
-	/**
-
-     * Método que devuelve la informacion basica de la persona
-     * @return informacion de persona
-
-     */
-	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
-	public String toString(){
-		return "Nombre: "
-				+this.nombre+", "
-						+ "Apellido: "
-						+ this.apellido+ ", "
-								+ "Telefono: "
-								+ this.telefono+", "
-										+ "Correo: "
-										+this.correo+ ", "
-												+ "Direccion: "
-												+this.direccion;
+	public String toString() {
+		return "Persona [nombre=" + nombre + ", apellido=" + apellido + ", telefono=" + telefono + ", correo=" + correo
+				+ ", direccion=" + direccion + "]";
 	}
 
 }

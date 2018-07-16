@@ -20,13 +20,13 @@ import modelo.dao.DetalleFacturaDao;
 import modelo.dao.KardexDao;
 import modelo.AbstractJasperReports;
 import modelo.Conexion;
-import modelo.Marca;
+import modelo.Categoria;
 import modelo.Proveedor;
 import modelo.dao.ProveedorDao;
-import view.tablemodel.TablaModeloMarca;
+import view.tablemodel.TmCategorias;
 import view.tablemodel.TableModeloArticulo;
 import view.ViewCrearArticulo;
-import view.ViewCrearMarca;
+import view.ViewCrearCategoria;
 import view.ViewCrearProveedor;
 import view.ViewListaArticulo;
 
@@ -70,6 +70,9 @@ public class CtlArticuloLista implements ActionListener,MouseListener, WindowLis
 		
 		
 		switch(comando){
+		case "ESCRIBIR":
+			view.setTamanioVentana(1);
+			break;
 		case "BUSCAR":
 			//si se seleciono el boton ID
 			if(this.view.getRdbtnId().isSelected()){  
@@ -110,16 +113,19 @@ public class CtlArticuloLista implements ActionListener,MouseListener, WindowLis
 			
 			boolean resuldoGuarda=ctl.agregarArticulo();
 			if(resuldoGuarda){
-				this.view.getModelo().agregarArticulo(ctl.getArticuloGuardado());
 				
-				/*<<<<<<<<<<<<<<<selecionar la ultima fila creada>>>>>>>>>>>>>>>*/
-				int row =  this.view.getTablaArticulos().getRowCount () - 1;
-				Rectangle rect = this.view.getTablaArticulos().getCellRect(row, 0, true);
-				this.view.getTablaArticulos().scrollRectToVisible(rect);
-				this.view.getTablaArticulos().clearSelection();
-				this.view.getTablaArticulos().setRowSelectionInterval(row, row);
-				TableModeloArticulo modelo = (TableModeloArticulo)this.view.getTablaArticulos().getModel();
-				modelo.fireTableDataChanged();
+				view.getModelo().setPaginacion();
+				this.cargarTabla(myArticuloDao.todoArticulos(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+				/*this.view.getModelo().agregarArticulo(ctl.getArticuloGuardado());
+				
+				/*<<<<<<<<<<<<<<<selecionar la ultima fila creada>>>>>>>>>>>>>>>
+				int row =  this.view.getTabla().getRowCount () - 1;
+				Rectangle rect = this.view.getTabla().getCellRect(row, 0, true);
+				this.view.getTabla().scrollRectToVisible(rect);
+				this.view.getTabla().clearSelection();
+				this.view.getTabla().setRowSelectionInterval(row, row);
+				TableModeloArticulo modelo = (TableModeloArticulo)this.view.getTabla().getModel();
+				modelo.fireTableDataChanged();*/
 			}
 			//this.view.modelo.agregarProveedor(ctl.myProveedor);//se agrega el nuevo proveedor registrado a la tabla de la vista
 			
@@ -214,7 +220,7 @@ public class CtlArticuloLista implements ActionListener,MouseListener, WindowLis
 		// TODO Auto-generated method stub
 		
 		//Recoger qu� fila se ha pulsadao en la tabla
-        filaPulsada = this.view.getTablaArticulos().getSelectedRow();
+        filaPulsada = this.view.getTabla().getSelectedRow();
         
         //si seleccion una fila
         if(filaPulsada>=0){
@@ -253,7 +259,7 @@ public class CtlArticuloLista implements ActionListener,MouseListener, WindowLis
 				if(resultado){
 					this.view.getModelo().cambiarArticulo(filaPulsada, ctlActulizarArticulo.getArticulo());//se cambia en la vista
 					this.view.getModelo().fireTableDataChanged();//se refrescan los cambios
-					this.view.getTablaArticulos().getSelectionModel().setSelectionInterval(filaPulsada,filaPulsada);//se seleciona lo cambiado
+					this.view.getTabla().getSelectionModel().setSelectionInterval(filaPulsada,filaPulsada);//se seleciona lo cambiado
 				}	
 			
 				

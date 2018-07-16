@@ -52,14 +52,6 @@ public class KardexDao {
 	
 	public KardexDao(Conexion conn){
 		conexion=conn;
-		
-		/*try {
-			//buscarArticulo=conexion.getConnection().prepareStatement("SELECT * FROM kardex where codigo_articulo=? and codigo_bodega=? LIMIT 1,1");
-			//insertarNuevoMovimiento=conexion.getConnection().prepareStatement( "INSERT INTO kardex(no_documento,codigo_articulo,codigo_bodega,entrada,fecha) VALUES (?,?,?,?,now())");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
 	}
 	
 	public boolean agregarEntrada(Kardex kar){

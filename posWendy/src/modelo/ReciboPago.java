@@ -88,5 +88,10 @@ public class ReciboPago {
 		saldo=BigDecimal.ZERO;
 		saldoAnterior=BigDecimal.ZERO;
 	}
+	public Proveedor getProveedor() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

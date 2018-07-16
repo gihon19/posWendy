@@ -12,7 +12,7 @@ public class Articulo {
 	
 	//private String marca;
 	//private double impuesto;
-	private Marca mar=new Marca();
+	private Categoria mar=new Categoria();
 	private Impuesto imp=new Impuesto();
 	private List<CodBarra> codigos=new ArrayList<CodBarra>();
 	private double precioVenta=0;
@@ -21,6 +21,7 @@ public class Articulo {
 	private List<PrecioArticulo> preciosVenta=new ArrayList<PrecioArticulo>();
 	private int  posicionPrecio=0;
 	private String codigoBarra="";
+	private double existencia;
 	public Articulo(){
 		
 	}
@@ -107,10 +108,10 @@ public class Articulo {
 		return codigo;
 	}
 	
-	public Marca getMarcaObj(){
+	public Categoria getMarcaObj(){
 		return mar;
 	}
-	public void setMarcaObj(Marca m){
+	public void setMarcaObj(Categoria m){
 		mar=m;
 		
 	}
@@ -144,5 +145,20 @@ public class Articulo {
 		return "Id Articulo:"+codigo+", Articulo:"+articulo+", Precio Venta:"+ this.precioVenta+"Marca["+mar.toString()+"]"+", Impueso:"+imp.getPorcentaje()+"%"+
 	", Codigos Barra["+codigos+"] , Tipo Articulo:"+tipoArticulo;
 	}
+	
+	/**
+	 * @return the existencia
+	 */
+	public double getExistencia() {
+		return existencia;
+	}
+
+	/**
+	 * @param existencia the existencia to set
+	 */
+	public void setExistencia(double existencia) {
+		this.existencia = existencia;
+	}
+
 
 }

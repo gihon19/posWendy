@@ -13,7 +13,7 @@ import modelo.DetalleFactura;
 public class TmDevoluciones extends AbstractTableModel {
 
 	final private String []columnNames= {
-			"Codigo", "Articulo", "Precio Unidad", "Cantidad","SubTotal","Impuesto","Descuento", "Total","Devolucion?"
+			 "Articulo", "Precio Unidad", "Cantidad","SubTotal","Impuesto","Descuento", "Total","Devolucion?"
 		};
 	private List<DetalleFactura> detallesFactura=new ArrayList<DetalleFactura>();
 	
@@ -135,34 +135,32 @@ public class TmDevoluciones extends AbstractTableModel {
 		}
 		else{
 		switch (columnIndex) {
+		
 		case 0:
-				
-			return detallesFactura.get(rowIndex).getArticulo().getId();
-		case 1:
 			return detallesFactura.get(rowIndex).getArticulo().getArticulo();
-		case 2:
+		case 1:
 		 return detallesFactura.get(rowIndex).getArticulo().getPrecioVenta();
-		case 3:
+		case 2:
 			if(detallesFactura.get(rowIndex).getCantidad().doubleValue()!=0){
 				return detallesFactura.get(rowIndex).getCantidad().setScale(2, BigDecimal.ROUND_HALF_EVEN);
 			}else
 				return null;
 		
-		case 4:
+		case 3:
 			//salida=detallesFactura.get(rowIndex).getSubTotal().setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
 			return  detallesFactura.get(rowIndex).getSubTotal().setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-		case 5:
+		case 4:
 			//salida=detallesFactura.get(rowIndex).getImpuesto().setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
 			return  detallesFactura.get(rowIndex).getImpuesto().setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-		case 6:
+		case 5:
 			if(detallesFactura.get(rowIndex).getDescuentoItem().doubleValue()!=0)
 				return detallesFactura.get(rowIndex).getDescuentoItem().setScale(0, BigDecimal.ROUND_HALF_EVEN).doubleValue();
 			else
 				return null;
-		case 7:
+		case 6:
 			//salida=detallesFactura.get(rowIndex).getTotal().setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
 			return  detallesFactura.get(rowIndex).getTotal().setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-		case 8:
+		case 7:
 			return detallesFactura.get(rowIndex).getAccion();
 		 default:
 	            return null;
@@ -176,7 +174,7 @@ public class TmDevoluciones extends AbstractTableModel {
 		boolean v=(boolean) value;
 		switch(columnIndex){
 		
-		case 8:
+		case 7:
 			
 			detallesFactura.get(rowIndex).setAccion(v);// Double.parseDouble(v));
 			fireTableCellUpdated(rowIndex, columnIndex);
@@ -203,8 +201,6 @@ public class TmDevoluciones extends AbstractTableModel {
             return String.class;
         case 6:
             return String.class;
-        case 7:
-            return String.class;
         default:
             return Boolean.class;
 		}
@@ -215,7 +211,7 @@ public class TmDevoluciones extends AbstractTableModel {
 		boolean resul=false;
 		
 		
-		if(columnIndex==8)
+		if(columnIndex==7)
 			resul=true;
 		
 		

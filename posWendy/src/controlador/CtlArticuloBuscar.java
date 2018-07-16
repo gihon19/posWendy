@@ -109,7 +109,7 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		//Recoger qu� fila se ha pulsadao en la tabla
-        filaPulsada = this.view.getTablaArticulos().getSelectedRow();
+        filaPulsada = this.view.getTabla().getSelectedRow();
         //JOptionPane.showMessageDialog(view, filaPulsada);
 		if (e.getClickCount() == 2){
 			
@@ -157,6 +157,9 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 				
 				
 				switch(comando){
+				case "ESCRIBIR":
+					view.setTamanioVentana(1);
+					break;
 				
 				case "BUSCAR":
 					//si se seleciono el boton ID
@@ -234,21 +237,21 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 			//si esta activado la busqueda por articulo
 			if(this.view.getRdbtnArticulo().isSelected()){
 				
-				this.filaPulsada=this.view.getTablaArticulos().getSelectedRow();
+				this.filaPulsada=this.view.getTabla().getSelectedRow();
 				
 				if(e.getKeyCode()==KeyEvent.VK_DOWN){
 					filaPulsada++;
-					this.view.getTablaArticulos().setRowSelectionInterval(0	,filaPulsada);
+					this.view.getTabla().setRowSelectionInterval(0	,filaPulsada);
 					
-					myArticulo=myArticulo=view.getModelo().getArticulo(filaPulsada);
+					myArticulo=view.getModelo().getArticulo(filaPulsada);
 					
 					
 				}else
 					if(e.getKeyCode()==KeyEvent.VK_UP){
 						
 						filaPulsada--;
-						this.view.getTablaArticulos().setRowSelectionInterval(0	, filaPulsada);
-						myArticulo=myArticulo=view.getModelo().getArticulo(filaPulsada);
+						this.view.getTabla().setRowSelectionInterval(0	, filaPulsada);
+						myArticulo=view.getModelo().getArticulo(filaPulsada);
 					}
 				
 				
@@ -297,7 +300,7 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 				
 				cargarTabla(myArticuloDao.buscarArticulo(this.view.getTxtBuscar().getText()));
 				
-				this.view.getTablaArticulos().setRowSelectionInterval(0	, 0);
+				this.view.getTabla().setRowSelectionInterval(0	, 0);
 				filaPulsada=1;
 				
 				myArticulo=view.getModelo().getArticulo(0);
@@ -306,7 +309,7 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 			//si esta activado las busqueda por Marca
 			if(this.view.getRdbtnMarca().isSelected()){  
 				cargarTabla(myArticuloDao.buscarArticuloMarca(this.view.getTxtBuscar().getText()));
-				this.view.getTablaArticulos().setRowSelectionInterval(0	, 0);
+				this.view.getTabla().setRowSelectionInterval(0	, 0);
 				filaPulsada=1;
 				
 				
@@ -319,7 +322,7 @@ public class CtlArticuloBuscar implements ActionListener,MouseListener, WindowLi
 				if(myArticulo!=null){												
 					this.view.getModelo().limpiarArticulos();
 					this.view.getModelo().agregarArticulo(myArticulo);
-					this.view.getTablaArticulos().setRowSelectionInterval(0	, 0);
+					this.view.getTabla().setRowSelectionInterval(0	, 0);
 					filaPulsada=1;
 					
 					myArticulo=view.getModelo().getArticulo(0);

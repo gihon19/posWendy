@@ -151,12 +151,12 @@ public class CotizacionDao {
 	}
 
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para seleccionar todos los articulos>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-	public List<Factura> getCotizaciones(){
+	public List<Factura> getCotizaciones(int limInf,int limSupe){
 		
 		
 	    Connection con = null;
 		
-		String sql="select * from v_encabezado_cotizacion";
+		String sql="select * from v_encabezado_cotizacion ORDER BY numero_cotizacion DESC LIMIT ?,?;";
 	    //Statement stmt = null;
 	   	List<Factura> facturas=new ArrayList<Factura>();
 		
@@ -168,6 +168,8 @@ public class CotizacionDao {
 			
 			seleccionarFacturasPendientes = con.prepareStatement(sql);
 			//seleccionarFacturasPendientes.setString(1, conexion.getUsuarioLogin().getUser());
+			seleccionarFacturasPendientes.setInt(1, limInf);
+			seleccionarFacturasPendientes.setInt(2, limSupe);
 			res = seleccionarFacturasPendientes.executeQuery();
 			
 			while(res.next()){
@@ -228,14 +230,14 @@ public class CotizacionDao {
 		
 	}
 
-	public List<Factura> cotizacionesPorFecha(String fecha) {
+	public List<Factura> cotizacionesPorFecha(String fecha1,String fecha2) {
 		
 		//se crear un referencia al pool de conexiones
 		//DataSource ds = DBCPDataSourceFactory.getDataSource("mysql");
 		
 		
 	    Connection con = null;
-	    String sql="select * from v_encabezado_cotizacion where DATE_FORMAT(fecha1, '%d/%m/%Y')=?";
+	    String sql="select * from v_encabezado_cotizacion where fecha1 BETWEEN ? and ?;";
 		/*String sql="SELECT "
 				+ "encabezado_factura.numero_factura, "
 				+ "DATE_FORMAT(encabezado_factura.fecha, '%d/%m/%Y') as fecha,"
@@ -264,8 +266,8 @@ public class CotizacionDao {
 			
 			seleccionarFacturas = con.prepareStatement(sql);
 			
-			seleccionarFacturas.setString(1, fecha);
-			//seleccionarFacturas.setString(2, fecha2);
+			seleccionarFacturas.setString(1, fecha1);
+			seleccionarFacturas.setString(2, fecha2);
 			
 			res = seleccionarFacturas.executeQuery();
 			while(res.next()){

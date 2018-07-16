@@ -16,36 +16,36 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 import modelo.Conexion;
-import modelo.Marca;
-import modelo.dao.MarcaDao;
-import view.tablemodel.TablaModeloMarca;
-import view.ViewCrearMarca;
-import view.ViewListaMarca;
+import modelo.Categoria;
+import modelo.dao.CategoriaDao;
+import view.tablemodel.TmCategorias;
+import view.ViewCrearCategoria;
+import view.ViewListaCategorias;
 
-public class CtlMarcaLista implements ActionListener, MouseListener,WindowListener, ItemListener {
+public class CtlCategoriaLista implements ActionListener, MouseListener,WindowListener, ItemListener {
 	
 	//formulario para Modificar, insertar marcas
-	public ViewCrearMarca viewMarca;
+	//public ViewCrearCategoria viewCategoria;
 	//lista de marcas
-	public ViewListaMarca view;
+	public ViewListaCategorias view;
 	
 	//modelo para consultar la base de datos
-	public MarcaDao myMarcaDao;
+	public CategoriaDao myCategoriaDao;
 	
 	//modelo de datos
-	public Marca myMarca;
+	public Categoria myCategoria;
 	
 	//fila selecciona enla lista
 	private int filaPulsada;
 	
 	private Conexion conexion=null;
 	
-	public CtlMarcaLista(ViewListaMarca v,Conexion conn){
+	public CtlCategoriaLista(ViewListaCategorias v,Conexion conn){
 		conexion=conn;
 		this.view=v;
-		myMarca=new Marca();
-		myMarcaDao=new MarcaDao(conexion);
-		cargarTabla(myMarcaDao.todoMarcas());
+		myCategoria=new Categoria();
+		myCategoriaDao=new CategoriaDao(conexion);
+		cargarTabla(myCategoriaDao.todoCategorias(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 		
 		//conectar los controles al objeto que ctlMarca
 		view.conectarControlador(this);
@@ -62,31 +62,42 @@ public class CtlMarcaLista implements ActionListener, MouseListener,WindowListen
 		String comando=e.getActionCommand();
 		
 		switch(comando){
+		case "ESCRIBIR":
+			view.setTamanioVentana(1);
+			break;
+			
 		case "INSERTAR":
-				viewMarca=new ViewCrearMarca(this.view);
-				CtlMarca ctlMarca=new CtlMarca(viewMarca,myMarcaDao);
-				viewMarca.conectarControlador(ctlMarca);
+				ViewCrearCategoria viewCategoria=new ViewCrearCategoria(this.view);
+				CtlCategoria ctlMarca=new CtlCategoria(viewCategoria,myCategoriaDao);
+				viewCategoria.conectarControlador(ctlMarca);
 				//ctlMarca.setMyMarcaDao(myMarcaDao);
 				
 				boolean resul=ctlMarca.agregarMarca();//se llama el metodo agregar proveedor que devuelve un resultado
 				
 				if(resul){//se procesa el resultado de agregar proveeros
+					
+					view.getModelo().setPaginacion();
+					cargarTabla(myCategoriaDao.todoCategorias(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+					/*
 					this.view.getModelo().agregarMarca(ctlMarca.getMarca());//si el proveedor fue agregado a la bd, se agrega el nuevo proveedor registrado a la tabla de la vista
 					
 					
-					/*<<<<<<<<<<<<<<<selecionar la ultima fila creada>>>>>>>>>>>>>>>*/
-					int row =  this.view.getTablaMarca().getRowCount () - 1;
-					Rectangle rect = this.view.getTablaMarca().getCellRect(row, 0, true);
-					this.view.getTablaMarca().scrollRectToVisible(rect);
-					this.view.getTablaMarca().clearSelection();
-					this.view.getTablaMarca().setRowSelectionInterval(row, row);
-					TablaModeloMarca modelo = (TablaModeloMarca)this.view.getTablaMarca().getModel();
-					modelo.fireTableDataChanged();
+					/*<<<<<<<<<<<<<<<selecionar la ultima fila creada>>>>>>>>>>>>>>>
+					int row =  this.view.getTabla().getRowCount () - 1;
+					Rectangle rect = this.view.getTabla().getCellRect(row, 0, true);
+					this.view.getTabla().scrollRectToVisible(rect);
+					this.view.getTabla().clearSelection();
+					this.view.getTabla().setRowSelectionInterval(row, row);
+					TablaModeloMarca modelo = (TablaModeloMarca)this.view.getTabla().getModel();
+					modelo.fireTableDataChanged();*/
 				}
+				viewCategoria.dispose();
+				viewCategoria=null;
+				ctlMarca=null;
 			break;
 		case "ELIMINAR":
-			if(myMarcaDao.eliminarMarca(myMarca.getId())){//llamamos al metodo para agregar 
-				JOptionPane.showMessageDialog(this.view, "Se elimino exitosamente","Información",JOptionPane.INFORMATION_MESSAGE);
+			if(myCategoriaDao.eliminarCategoria(myCategoria.getId())){//llamamos al metodo para agregar 
+				JOptionPane.showMessageDialog(this.view, "Se elimino exitosamente","Informaciï¿½n",JOptionPane.INFORMATION_MESSAGE);
 				this.view.getModelo().eliminarMarca(filaPulsada);
 				this.view.getBtnEliminar().setEnabled(false);
 				
@@ -98,10 +109,10 @@ public class CtlMarcaLista implements ActionListener, MouseListener,WindowListen
 		case "BUSCAR":
 			//si se seleciono el boton ID
 			if(this.view.getRdbtnId().isSelected()){  
-				myMarca=myMarcaDao.buscarMarca(Integer.parseInt(this.view.getTxtBuscar().getText()));
-				if(myMarca!=null){
+				myCategoria=myCategoriaDao.buscarCategoria(Integer.parseInt(this.view.getTxtBuscar().getText()));
+				if(myCategoria!=null){
 					this.view.getModelo().limpiarMarcas();
-					this.view.getModelo().agregarMarca(myMarca);
+					this.view.getModelo().agregarMarca(myCategoria);
 				}else{
 					JOptionPane.showMessageDialog(view, "No se encuentro el proveedor");
 				}
@@ -109,19 +120,34 @@ public class CtlMarcaLista implements ActionListener, MouseListener,WindowListen
 			
 			if(this.view.getRdbtnObservacion().isSelected()){ //si esta selecionado la busqueda por nombre	
 				
-				cargarTabla(myMarcaDao.buscarMarcasObservacion(this.view.getTxtBuscar().getText()));
+				cargarTabla(myCategoriaDao.buscarCategoriasObservacion(this.view.getTxtBuscar().getText()));
 		        
 				}
-			if(this.view.getRdbtnMarca().isSelected()){  
-				cargarTabla(myMarcaDao.buscarMarcas(this.view.getTxtBuscar().getText()));
+			if(this.view.getRdbtnCategoria().isSelected()){  
+				cargarTabla(myCategoriaDao.buscarCategorias(this.view.getTxtBuscar().getText()));
 				}
 			
-			if(this.view.getRdbtnTodos().isSelected()){  
-				cargarTabla(myMarcaDao.todoMarcas());
+			if(this.view.getRdbtnTodos().isSelected()){
+				view.getModelo().setPaginacion();
+				cargarTabla(myCategoriaDao.todoCategorias(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+				//cargarTabla(myMarcaDao.todoMarcas());
 				this.view.getTxtBuscar().setText("");
 				}
 			//if(myProveedorDao.buscarPro(Integer.parseInt(this.view.getTxtBuscar().getText())))
 			//JOptionPane.showMessageDialog(view, "Apreto buscar");
+			break;
+			
+		case "NEXT":
+			view.getModelo().netPag();
+			cargarTabla(myCategoriaDao.todoCategorias(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
+			break;
+		case "LAST":
+			view.getModelo().lastPag();
+			cargarTabla(myCategoriaDao.todoCategorias(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
 			break;
 		}
 		
@@ -131,31 +157,31 @@ public class CtlMarcaLista implements ActionListener, MouseListener,WindowListen
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
-		//Recoger qué fila se ha pulsadao en la tabla
-        filaPulsada = this.view.getTablaMarca().getSelectedRow();
+		//Recoger quï¿½ fila se ha pulsadao en la tabla
+        filaPulsada = this.view.getTabla().getSelectedRow();
         
         //si seleccion una fila
         if(filaPulsada>=0){
         	
         	//Se recoge el id de la fila marcada
             int identificador= (int)this.view.getModelo().getValueAt(filaPulsada, 0);
-            myMarca=this.view.getModelo().getMarca(filaPulsada);//se consigue el proveedore de la fila seleccionada
+            myCategoria=this.view.getModelo().getMarca(filaPulsada);//se consigue el proveedore de la fila seleccionada
         
             
         	//si fue doble click mostrar modificar
         	if (e.getClickCount() == 2) {
         		
 	        	//myProveedor=myProveedorDao.buscarPro(identificador);
-	        	myMarca=this.view.getModelo().getMarca(filaPulsada);//se consigue el Marca de la fila seleccionada
+	        	myCategoria=this.view.getModelo().getMarca(filaPulsada);//se consigue el Marca de la fila seleccionada
 	           
 	        	//se crea la vista para modificar proveedor con un proveedor ya hecho
-	        	viewMarca= new ViewCrearMarca(myMarca,this.view);
+	        	ViewCrearCategoria viewCategoria= new ViewCrearCategoria(myCategoria,this.view);
 	        	
 	        	//se crea el controlador para la vista modificar
-				CtlMarca ctlMarcaActualizar=new CtlMarca(viewMarca,myMarcaDao);
+				CtlCategoria ctlMarcaActualizar=new CtlCategoria(viewCategoria,myCategoriaDao);
 				
 				//se asigna el contrador a los elementos de la vista
-				viewMarca.conectarControlador(ctlMarcaActualizar);
+				viewCategoria.conectarControlador(ctlMarcaActualizar);
 				
 				//se llama del metodo actualizar marca para que se muestre la ventanda y procesa la modificacion
 				boolean resultado=ctlMarcaActualizar.actualizarMarca();
@@ -164,8 +190,12 @@ public class CtlMarcaLista implements ActionListener, MouseListener,WindowListen
 				if(resultado){
 					this.view.getModelo().cambiarMarca(filaPulsada, ctlMarcaActualizar.getMarca());//se cambia en la vista
 					this.view.getModelo().fireTableDataChanged();//se refrescan los cambios
-					this.view.getTablaMarca().getSelectionModel().setSelectionInterval(filaPulsada,filaPulsada);//se seleciona lo cambiado
-				}			
+					this.view.getTabla().getSelectionModel().setSelectionInterval(filaPulsada,filaPulsada);//se seleciona lo cambiado
+				}	
+				
+				viewCategoria.dispose();
+				viewCategoria=null;
+				ctlMarcaActualizar=null;
 				
 				
 				
@@ -205,11 +235,13 @@ public class CtlMarcaLista implements ActionListener, MouseListener,WindowListen
 		
 	}
 	
-	public void cargarTabla(List<Marca> marcas){
+	public void cargarTabla(List<Categoria> marcas){
 		
 		this.view.getModelo().limpiarMarcas();
-		for(int c=0;c<marcas.size();c++)
-			this.view.getModelo().agregarMarca(marcas.get(c));
+		if(marcas!=null){
+			for(int c=0;c<marcas.size();c++)
+				this.view.getModelo().agregarMarca(marcas.get(c));
+		}
 		
 	}
 

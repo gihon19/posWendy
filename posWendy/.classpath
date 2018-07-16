@@ -27,5 +27,13 @@
 	<classpathentry kind="lib" path="extraLib/java-json.jar"/>
 	<classpathentry kind="lib" path="extraLib/apache-httpcomponents-httpclient.jar"/>
 	<classpathentry kind="lib" path="extraLib/apache-httpcomponents-httpcore.jar"/>
+	<classpathentry kind="lib" path="extraLib/retrofit-2.4.0.jar"/>
+	<classpathentry kind="lib" path="extraLib/converter-gson-2.3.0.jar"/>
+	<classpathentry kind="lib" path="extraLib/gson-2.7.jar"/>
+	<classpathentry kind="lib" path="extraLib/okhttp-3.8.0.jar"/>
+	<classpathentry kind="lib" path="extraLib/okio-1.13.0.jar"/>
+	<classpathentry kind="lib" path="extraLib/reactive-streams-1.0.2.jar"/>
+	<classpathentry kind="lib" path="extraLib/rxjava-2.0.0-RC1.jar"/>
+	<classpathentry kind="lib" path="extraLib/adapter-rxjava-2.0.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

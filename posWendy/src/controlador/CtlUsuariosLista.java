@@ -14,7 +14,7 @@ import modelo.Usuario;
 import modelo.dao.UsuarioDao;
 import view.ViewCrearUsuario;
 import view.ViewListaUsuarios;
-import view.tablemodel.TablaModeloMarca;
+import view.tablemodel.TmCategorias;
 import view.tablemodel.TmUsuarios;
 
 public class CtlUsuariosLista implements ActionListener, MouseListener {
@@ -36,7 +36,7 @@ public class CtlUsuariosLista implements ActionListener, MouseListener {
 		conexion=conn;
 		myDao=new UsuarioDao(conexion);
 		
-		cargarTabla(myDao.todos());
+		cargarTabla(myDao.todos(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 		
 		view.conectarCtl(this);
 		
@@ -49,8 +49,9 @@ public class CtlUsuariosLista implements ActionListener, MouseListener {
 	private void cargarTabla(List<Usuario> usuarios) {
 		// TODO Auto-generated method stub
 		view.getModelo().limpiar();
-		for(int x=0;x<usuarios.size();x++)
-			view.getModelo().agregar(usuarios.get(x));
+		if(usuarios!=null)
+			for(int x=0;x<usuarios.size();x++)
+				view.getModelo().agregar(usuarios.get(x));
 	}
 
 	@Override
@@ -126,6 +127,9 @@ public class CtlUsuariosLista implements ActionListener, MouseListener {
 		// TODO Auto-generated method stub
 		String comando=e.getActionCommand();
 		switch(comando){
+		case "ESCRIBIR":
+			view.setTamanioVentana(1);
+			break;
 		case "INSERTAR":
 			ViewCrearUsuario viewCrearUsuario=new ViewCrearUsuario(view);
 			CtlUsuario ctlCrearUsuario=new CtlUsuario(viewCrearUsuario,conexion);
@@ -159,7 +163,7 @@ public class CtlUsuariosLista implements ActionListener, MouseListener {
 		case "BUSCAR":
 			if(view.getRdbtnTodos().isSelected()){
 				view.getTxtBuscar().setText("");;
-				cargarTabla(myDao.todos());
+				cargarTabla(myDao.todos(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 			}else
 				if(view.getRdbtnNombre().isSelected()){
 					cargarTabla(myDao.porNombre(view.getTxtBuscar().getText()));
@@ -167,6 +171,17 @@ public class CtlUsuariosLista implements ActionListener, MouseListener {
 					if(view.getRdbtnUser().isSelected()){
 						cargarTabla(myDao.porUser(view.getTxtBuscar().getText()));
 					}
+			break;
+			
+		case "NEXT":
+			view.getModelo().netPag();
+			cargarTabla(myDao.todos(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
+			break;
+		case "LAST":
+			view.getModelo().lastPag();
+			cargarTabla(myDao.todos(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
 			break;
 		}
 		

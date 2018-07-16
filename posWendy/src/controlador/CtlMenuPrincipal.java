@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import modelo.AbstractJasperReports;
+import modelo.dao.ArticuloDao;
 import modelo.dao.CierreCajaDao;
 import modelo.Conexion;
 import view.ViewAgregarCompras;
@@ -22,31 +23,44 @@ import view.ViewListaArticulo;
 import view.ViewListaCierresCaja;
 import view.ViewListaClientes;
 import view.ViewListaEmpleados;
-import view.ViewListaFactura;
+import view.ViewListaCotizacion;
+import view.ViewListaCuentaBancos;
 import view.ViewListaFacturasCompra;
-import view.ViewListaMarca;
+import view.ViewListaCategorias;
 import view.ViewListaPagos;
+import view.ViewListaPagosProveedores;
 import view.ViewListaPrecioProgramar;
 import view.ViewListaProveedor;
 import view.ViewListaRequisiciones;
+import view.ViewListaSalidas;
 import view.ViewListaUsuarios;
 import view.ViewMenuPrincipal;
+import view.ViewPagoProveedor;
 import view.ViewRequisicion;
 
 public class CtlMenuPrincipal implements ActionListener {
 	
 	public ViewMenuPrincipal view;
 	public Conexion conexion=null;
+	private ArticuloDao myArticuloDao=null;
 	
 	
 	
 	public CtlMenuPrincipal(ViewMenuPrincipal view, Conexion conn){
 		conexion=conn;
 		this.view=view;
+		myArticuloDao=new ArticuloDao(conexion);
 		
-		view.getLblUserName().setText(conexion.getUsuarioLogin().getNombre());
+		setAlertaExistencia();
+		
+		view.getLblUserName().setText(conexion.getUsuarioLogin().getUser());
 		//view.setMaximumSize(maximumSize);
 		
+		
+	}
+	private void setAlertaExistencia() {
+		// TODO Auto-generated method stub
+		view.getBtnAlertaExistencia().setText(myArticuloDao.getAlertaExistencia()+" articulos con poca existencia");
 		
 	}
 
@@ -60,11 +74,49 @@ public class CtlMenuPrincipal implements ActionListener {
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		switch(comando){
 		
-			case "REQUISICION":
-					ViewRequisicion viewRequi=new ViewRequisicion(view);
-					CtlRequisicion ctlRequi=new CtlRequisicion(viewRequi,conexion);
-					viewRequi.dispose();
-					ctlRequi=null;
+		
+		
+		case "ALERTAEXISTENCIAS":
+			try {
+				//AbstractJasperReports.createReportFactura( conexion.getPoolConexion().getConnection(), "Cierre_Caja_Saint_Paul.jasper",1 );
+				AbstractJasperReports.createReportAlertaExistencia(conexion.getPoolConexion().getConnection(), 4);
+				
+				//this.view.setModal(false);
+				//AbstractJasperReports.imprimierFactura();
+				AbstractJasperReports.showViewer(this.view);
+				
+				
+			} catch (SQLException ee) {
+				// TODO Auto-generated catch block
+				ee.printStackTrace();
+			}
+			break;
+	
+		
+			case "CUENTASBANCOS":
+				ViewListaCuentaBancos vCuentasBancos=new ViewListaCuentaBancos(view);
+				CtlCuentasBancosLista cCuentasBancos=new CtlCuentasBancosLista(vCuentasBancos,conexion);
+				vCuentasBancos.setVisible(true);
+				break;
+		
+				case "COTIZACIONES":
+					ViewListaCotizacion vCotizaciones=new ViewListaCotizacion(view);
+					CtlCotizacionLista cCotizaciones=new CtlCotizacionLista(vCotizaciones,conexion);
+					vCotizaciones.setVisible(true);
+					break;
+		
+		
+			case "PAGOPROVEEDORES":
+				ViewListaPagosProveedores vPagosProveedores= new ViewListaPagosProveedores(view);
+				CtlPagosProveedoresLista cPagoProveedores=new CtlPagosProveedoresLista(vPagosProveedores,conexion);
+				
+				vPagosProveedores.dispose();
+				cPagoProveedores=null;
+				/*
+					ViewPagoProveedor vPagoProveedores=new ViewPagoProveedor(view);
+					CtlPagoProveedor cPagoProveedores=new CtlPagoProveedor(vPagoProveedores,conexion);
+					vPagoProveedores.dispose();
+					cPagoProveedores=null;*/
 				break;
 				
 			case "REQUISICIONES":
@@ -127,22 +179,18 @@ public class CtlMenuPrincipal implements ActionListener {
 				vistaFacturar.pack();
 				CtlFacturar ctlFacturar=new CtlFacturar(vistaFacturar,conexion );
 				vistaFacturar.setVisible(true);
-				
-				
-				
-				
 		
 				
 				break;
-			case "MARCAS":
-				//se crea la lista de marcas
-				ViewListaMarca viewMarcas=new ViewListaMarca(this.view);
+			case "CATEGORIAS":
+				//se crea la lista de categorias
+				ViewListaCategorias vlCategorias=new ViewListaCategorias(this.view);
 				
 				// se crea el control para la view lista marcas
-				CtlMarcaLista ctlMarca =new CtlMarcaLista(viewMarcas,conexion); 
+				CtlCategoriaLista ctlListaCategorias =new CtlCategoriaLista(vlCategorias,conexion); 
 				
-				viewMarcas.dispose();
-				ctlMarca=null;
+				vlCategorias.dispose();
+				ctlListaCategorias=null;
 				
 				break;
 			case "CLIENTES":
@@ -179,8 +227,8 @@ public class CtlMenuPrincipal implements ActionListener {
 				ViewListaPagos viewListaPagos=new ViewListaPagos(view);
 				CtlPagoLista ctlPagoLista =new CtlPagoLista(viewListaPagos, conexion);
 				viewListaPagos.dispose();
-				viewListaPagos=null;
-				ctlPagoLista=null;
+				//viewListaPagos=null;
+				//ctlPagoLista=null;
 				break;
 			case "PROGRAMARPRECIOS":
 				ViewListaPrecioProgramar viewProgramarPrecio=new ViewListaPrecioProgramar(view);
@@ -251,6 +299,12 @@ public class CtlMenuPrincipal implements ActionListener {
 				viewComisiones=null;
 				ctlComisiones=null;
 				
+				break;
+				
+			case "SALIDASCAJAS":
+				
+				ViewListaSalidas viewSalidas=new ViewListaSalidas(view);
+				CtlSalidasListas ctlSalidas=new CtlSalidasListas(viewSalidas,conexion);
 				break;
 		}
 		

@@ -10,7 +10,7 @@ import javax.swing.table.AbstractTableModel;
 
 import modelo.Requisicion;
 
-public class TmRequisicionesEncabezados extends AbstractTableModel {
+public class TmRequisicionesEncabezados extends TablaModelo {
 	
 	private String []columnNames={"codigo","Fecha","De","Para","Total","Estado"};
 	
@@ -28,7 +28,7 @@ public class TmRequisicionesEncabezados extends AbstractTableModel {
 	public Requisicion getRequisicion(int row){
 		return requisiciones.get(row);
 	}
-	public void setRequisicion(Requisicion requi){
+	public void addRequisicion(Requisicion requi){
 		 requisiciones.add(requi);
 		 fireTableDataChanged();
 	}

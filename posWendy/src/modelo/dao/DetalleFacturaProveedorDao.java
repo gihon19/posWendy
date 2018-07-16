@@ -36,20 +36,21 @@ public class DetalleFacturaProveedorDao {
 		}*/
 	}
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Metodo para agreagar detalle>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
-	public boolean agregarDetalle(DetalleFacturaProveedor detalle,int noCompra){
+	public boolean agregarDetalle(DetalleFacturaProveedor detalle,int noCompra,int codBodega){
 		boolean resultado=false;
 		Connection conn=null;
 		
 		
 		try{
 			conn=conexion.getPoolConexion().getConnection();
-			agregarDetalle=conn.prepareStatement( "INSERT INTO detalle_factura_compra(numero_compra,codigo_articulo,precio,cantidad,impuesto,subtotal) VALUES (?,?,?,?,?,?)");
+			agregarDetalle=conn.prepareStatement( "INSERT INTO detalle_factura_compra(numero_compra,codigo_articulo,precio,cantidad,impuesto,subtotal,codigo_bodega) VALUES (?,?,?,?,?,?,?)");
 			agregarDetalle.setInt(1, noCompra);
 			agregarDetalle.setInt(2, detalle.getArticulo().getId());
 			agregarDetalle.setBigDecimal(3, detalle.getPrecioCompra());
 			agregarDetalle.setBigDecimal(4, detalle.getCantidad());
 			agregarDetalle.setBigDecimal(5, detalle.getImpuesto());
 			agregarDetalle.setBigDecimal(6, detalle.getTotal());
+			agregarDetalle.setInt(7, codBodega);
 			agregarDetalle.executeUpdate();
 			
 			

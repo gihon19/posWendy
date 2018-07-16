@@ -8,9 +8,9 @@ import javax.swing.table.AbstractTableModel;
 
 import modelo.Proveedor;
 
-public class TablaModeloProveedor extends AbstractTableModel {
+public class TablaModeloProveedor extends TablaModelo {
 	
-	private String []columnNames={"Id","Nombre","Telefono","Celular","Direccion"};
+	private String []columnNames={"Id","Nombre","Telefono","Celular","Saldo"};
 	private List<Proveedor> proveedores = new ArrayList<Proveedor>();
 	
 	
@@ -34,7 +34,7 @@ public class TablaModeloProveedor extends AbstractTableModel {
         fireTableDataChanged();
     }
      
-    public void limpiarClientes() {
+    public void limpiarProveedores() {
     	proveedores.clear();
         fireTableDataChanged();
     }
@@ -68,7 +68,7 @@ public class TablaModeloProveedor extends AbstractTableModel {
         case 3:
             return proveedores.get(rowIndex).getCelular();
         case 4:
-            return proveedores.get(rowIndex).getDireccion();
+            return proveedores.get(rowIndex).getSaldo();
         default:
             return null;
 		}

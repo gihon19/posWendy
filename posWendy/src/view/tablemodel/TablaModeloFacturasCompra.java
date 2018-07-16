@@ -12,11 +12,12 @@ import javax.swing.table.AbstractTableModel;
 
 import modelo.FacturaCompra;
 
-public class TablaModeloFacturasCompra extends AbstractTableModel {
+public class TablaModeloFacturasCompra extends TablaModelo {
 	
 	final private String []columnNames= {
 			"No Ingreso","Fecha","No Factura","Proveedor", "Telefono", "Total","Estado"
 		};
+	
 	
 	private List<FacturaCompra> facturas=new ArrayList<FacturaCompra>();
 	

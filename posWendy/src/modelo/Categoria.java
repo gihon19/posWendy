@@ -1,11 +1,11 @@
 package modelo;
 
-public class Marca {
+public class Categoria {
 	private int id;
 	private String marca;
 	private String observacion;
 	
-	public Marca(){
+	public Categoria(){
 		
 	}
 	public void setId(int i){

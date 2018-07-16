@@ -106,6 +106,8 @@ public class CierreCajaDao {
 		return resultado;
 	}
 	public boolean actualizarCierre(BigDecimal total){
+		
+		
 		boolean resultado=false;
 		 Connection con = null;
 		 
@@ -113,7 +115,7 @@ public class CierreCajaDao {
 		 
 		 //SE calculan todos los datos para el actualizar el cierre
 		 CierreCaja unCierre=this.getCalcularCierre();
-		 
+		
 		 
 		 unCierre.setEfectivoCaja(total);
 		 
@@ -136,11 +138,16 @@ public class CierreCajaDao {
 		 		+ "total_salida=? ,"
 		 		+ "no_cobro_final=?, "
 		 		+ "total_cobro=?,"
-		 		+ "efectivo_caja =? "
+		 		+ "efectivo_caja =?,"
+		 		+ "no_pago_final=?,"
+		 		+ "total_pago=? "
 		 		+ "where "
 		 		+ "idCierre=?";
 		 		//+ "
+		
 			 if(unCierre!=null&&unCierre.getNoFacturaFinal()!=0){
+				 
+				
 				 try {
 					 	con = conexion.getPoolConexion().getConnection();
 						registrarCierre=con.prepareStatement(sql);
@@ -154,17 +161,25 @@ public class CierreCajaDao {
 					 	
 					 	//se manda el cierre para que sea modificado con las salidas
 					 	salidaDao.calcularTotal(unCierre);
+					 
+					 	
 					 	//unCierre.setTotalSalida(salidaDao.calcularTotal1(unCierre));
 					 	unCierre.setTotalEfectivo(unCierre.getTotalEfectivo().subtract(unCierre.getTotalSalida()));
+					 	
+					 	
 					 	
 					 	//se crea el objeto que para consultar los cobros
 					 	ReciboPagoDao reciboDao=new ReciboPagoDao(conexion);
 					 	
 					 	//se manda el cierre para que sea modificado con las salidas y el total
 					 	reciboDao.calcularTotalCierre(unCierre);
-					 	
 					 	//se calcula el total en efectivo sumando los cobros
 					 	unCierre.setTotalEfectivo(unCierre.getTotalEfectivo().add(unCierre.getTotalCobro()));
+					 	
+					 	//se manda el cierre para que sea modificado con los pagos y el total
+					 	reciboDao.calcularTotalPagosCierre(unCierre);
+					 	//se calcula el total en efectivo restandoles los pagos
+					 	unCierre.setTotalEfectivo(unCierre.getTotalEfectivo().subtract(unCierre.getTotalPago()));
 					 	
 						
 						
@@ -195,7 +210,11 @@ public class CierreCajaDao {
 						
 						registrarCierre.setBigDecimal(17, unCierre.getEfectivoCaja().setScale(2, BigDecimal.ROUND_HALF_EVEN));
 						
-						registrarCierre.setInt(18, unCierre.getId());
+						registrarCierre.setInt(18, unCierre.getNoPagoFinal());
+						
+						registrarCierre.setBigDecimal(19, unCierre.getTotalPago().setScale(2, BigDecimal.ROUND_HALF_EVEN));
+						
+						registrarCierre.setInt(20, unCierre.getId());
 						
 						
 						
@@ -237,7 +256,10 @@ public class CierreCajaDao {
 				} // fin de finally
 		
 		 }else{
+			 
 			 resultado=false;
+			 
+			 
 		 }
 		
 		return resultado;
@@ -370,10 +392,16 @@ public CierreCaja getCierreUltimoUser(){
 				unaCierre.setUsuario(res.getString("usuario"));//.setTotal(res.getBigDecimal("total"));
 				unaCierre.setEstado(res.getBoolean("estado"));
 				unaCierre.setEfectivoInicial(res.getBigDecimal("efectivo_inicial"));
+				
 				unaCierre.setNoSalidaFinal(res.getInt("no_salida_final"));
 				unaCierre.setNoSalidaInicial(res.getInt("no_salida_inicial"));
+				
 				unaCierre.setNoCobroInicial(res.getInt("no_cobro_inicial"));
 				unaCierre.setNoCobroFinal(res.getInt("no_cobro_final"));
+				
+				unaCierre.setNoPagoInicial(res.getInt("no_pago_inicial"));
+				unaCierre.setNoPagoFinal(res.getInt("no_pago_final"));
+				
 				
 			
 			 }
@@ -415,7 +443,7 @@ public CierreCaja getCierreUltimoUser(){
 		BigDecimal total=null;
 		
 		//total=total.add(t);
-		String sql="select sum(total) AS total_efectivo from encabezado_factura where tipo_factura = 1 and estado_factura = 'ACT' and numero_factura > ? and numero_factura <= ? and tipo_pago = 1 and usuario =? ";
+		String sql="select sum(cobro_efectivo) AS total_efectivo from encabezado_factura where tipo_factura = 1 and estado_factura = 'ACT' and numero_factura >= ? and numero_factura <= ? and usuario =? ";
 		Connection con = null;
         
         
@@ -488,8 +516,8 @@ public CierreCaja getCierreUltimoUser(){
 			
 			String sql="select "
 	    			+ "			sum("
-	    			+ "				`encabezado_factura`.`total` "
-	    			+ "			) AS `total_efectivo` "
+	    			+ "				`encabezado_factura`.`cobro_tarjeta` "
+	    			+ "			) AS `total_tarjeta` "
 	    			+ "		from "
 	    			+ "			`encabezado_factura` "
 	    			+ "		where "
@@ -497,11 +525,9 @@ public CierreCaja getCierreUltimoUser(){
 	    			+ "				and "
 	    			+ "					`encabezado_factura`.`estado_factura` = 'ACT' "
 	    			+ "				and "
-	    			+ "					`encabezado_factura`.`numero_factura` > ?"
+	    			+ "					`encabezado_factura`.`numero_factura` >= ?"
 	    			+ "				and "
 	    			+ "					`encabezado_factura`.`numero_factura` <= ?"
-	    			+ "				and "
-	    			+ "					`encabezado_factura`.`tipo_pago` = 2"
 	    			+ "				and "
 	    			+ "					encabezado_factura.usuario =?";
 			Connection con = null;
@@ -523,7 +549,7 @@ public CierreCaja getCierreUltimoUser(){
 				while(res.next()){
 					
 					existe=true;
-					total=new BigDecimal(res.getDouble("total_efectivo"));
+					total=new BigDecimal(res.getDouble("total_tarjeta"));
 					
 					
 					
@@ -577,7 +603,7 @@ public CierreCaja getCierreUltimoUser(){
 		    			+ "				and "
 		    			+ "					`encabezado_factura`.`estado_factura` = 'ACT' "
 		    			+ "				and "
-		    			+ "					`encabezado_factura`.`numero_factura` > ?"
+		    			+ "					`encabezado_factura`.`numero_factura` >= ?"
 		    			+ "				and "
 		    			+ "					`encabezado_factura`.`numero_factura` <= ?"
 		    			+ "				and "
@@ -897,8 +923,6 @@ public CierreCaja getCierreUltimoUser(){
 	
 private CierreCaja getCalcularCierre(){
 		
-		//se crear un referencia al pool de conexiones
-		//DataSource ds = DBCPDataSourceFactory.getDataSource("mysql");
 	
 		//el cierre donde se volcaran todos los datos para regresarlo
 		CierreCaja unaCierre=new CierreCaja();
@@ -916,6 +940,8 @@ private CierreCaja getCalcularCierre(){
 		 String sql="SELECT "
 		 			+ "sum(subtotal15)AS subtotal15,"
 		 			+ "SUM(subtotal18)AS subtotal18,"
+		 			+ "SUM(cobro_tarjeta)AS cobro_tarjeta,"
+		 			+ "SUM(cobro_efectivo)AS cobro_efectivo,"
 		 			+ "SUM(subtotal_excento)AS subtotal_excento,"
 		 			+ "SUM(total)AS total,"
 		 			+ "sum(impuesto) as impuesto,"
@@ -924,17 +950,17 @@ private CierreCaja getCalcularCierre(){
 		 			+ "where usuario=? "
 		 			+ "and "
 		 			+ "numero_factura >= ? "
-		 			+ "and numero_factura <=?";
+		 			+ "and numero_factura <=? and estado_factura='ACT'";
         
 		 
 		 //se consigue de la base de datos la ultima factura realizada por el usuario
 		 Factura ultimaFacturaUsuario=myFacturaDao.getUltimaFacturaUser(conexion.getUsuarioLogin().getUser());
 		 
 		 //se consigue de la base de datos el total de en efectivo de un terminando grupos de facturas para un usuario
-		 BigDecimal totalEfectivo=this.getTotalEfectivo(ultimoCierreUser.getNoFacturaInicio(), ultimaFacturaUsuario.getIdFactura());
+		// BigDecimal totalEfectivo=this.getTotalEfectivo(ultimoCierreUser.getNoFacturaInicio(), ultimaFacturaUsuario.getIdFactura());
 		
 		//se consigue de la base de datos el total de en tarjeta de un terminando grupos de facturas para un usuario
-		 BigDecimal totalTarjeta=this.getTotalTarjeta(ultimoCierreUser.getNoFacturaInicio(), ultimaFacturaUsuario.getIdFactura());
+		// BigDecimal totalTarjeta=this.getTotalTarjeta(ultimoCierreUser.getNoFacturaInicio(), ultimaFacturaUsuario.getIdFactura());
 		
 		//se consigue de la base de datos el total de en creditos de un terminando grupos de facturas para un usuario
 		 BigDecimal totalCredito=this.getTotalCredito(ultimoCierreUser.getNoFacturaInicio(), ultimaFacturaUsuario.getIdFactura());
@@ -971,10 +997,11 @@ private CierreCaja getCalcularCierre(){
 				unaCierre.setNoFacturaInicio(ultimoCierreUser.getNoFacturaInicio());
 				unaCierre.setNoSalidaInicial(ultimoCierreUser.getNoSalidaInicial());/// este es el error
 				unaCierre.setNoCobroInicial(ultimoCierreUser.getNoCobroInicial());
+				unaCierre.setNoPagoInicial(ultimoCierreUser.getNoPagoInicial());
 				
-				unaCierre.setEfectivo(totalEfectivo);
+				unaCierre.setEfectivo(res.getBigDecimal("cobro_efectivo"));
 				unaCierre.setCredito(totalCredito);
-				unaCierre.setTarjeta(totalTarjeta);
+				unaCierre.setTarjeta(res.getBigDecimal("cobro_tarjeta"));
 				
 				unaCierre.setTotalExcento(res.getBigDecimal("subtotal_excento"));
 				unaCierre.setTotalIsv15(res.getBigDecimal("subtotal15"));
@@ -1023,7 +1050,7 @@ private CierreCaja getCalcularCierre(){
 		
 	}
 
-	public List<CierreCaja> todos() {
+	public List<CierreCaja> todos(int limInf,int limSupe) {
 		List<CierreCaja> cierres =new ArrayList<CierreCaja>();
 		
 		ResultSet res=null;
@@ -1034,7 +1061,9 @@ private CierreCaja getCalcularCierre(){
 		
 		try{
 			conn=conexion.getPoolConexion().getConnection();
-			seleccionarCierre=conn.prepareStatement("SELECT * FROM v_cierre_caja ORDER BY idCierre Desc");
+			seleccionarCierre=conn.prepareStatement("SELECT * FROM v_cierre_caja ORDER BY idCierre DESC LIMIT ?,?;");
+			seleccionarCierre.setInt(1, limInf);
+			seleccionarCierre.setInt(2, limSupe);
 			res = seleccionarCierre.executeQuery();
 			while(res.next()){
 				existe=true;

@@ -9,6 +9,7 @@ public class SalidaCaja {
 	private BigDecimal cantidad= new BigDecimal(0.00); 
 	private String fecha="";
 	private String usuario="";
+	private Empleado empleado=new Empleado();
 	
 	
 	public void setCodigoSalida(int c){
@@ -58,6 +59,18 @@ public class SalidaCaja {
 
 	public SalidaCaja() {
 		// TODO Auto-generated constructor stub
+	}
+	/**
+	 * @return the empleado
+	 */
+	public Empleado getEmpleado() {
+		return empleado;
+	}
+	/**
+	 * @param empleado the empleado to set
+	 */
+	public void setEmpleado(Empleado empleado) {
+		this.empleado = empleado;
 	}
 
 }

@@ -30,6 +30,7 @@ public class ArticuloDao {
 	private CodBarraDao myCodBarraDao=null;
 	private Connection conexionBD=null;
 	private PrecioArticuloDao preciosDao=null;
+	private PreparedStatement buscarArticuloExistencia=null;
 	
 	public ArticuloDao(Conexion conn){
 		conexion=conn;
@@ -91,6 +92,60 @@ public class ArticuloDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	
+	public double getAlertaExistencia(){
+		
+		
+		ResultSet res=null;
+		Connection conn=null;
+		boolean existe=false;
+		double existencia=0;
+		
+		try {
+			conn=conexion.getPoolConexion().getConnection();
+			buscarArticuloExistencia=conn.prepareStatement("SELECT COUNT(cod) as cantidad from v_existencia_alerta;");
+			res = buscarArticuloExistencia.executeQuery();
+			while(res.next()){
+				existe=true;
+				existencia=res.getDouble("cantidad");
+				
+				//unArticulo.setPreciosVenta(preciosDao.getPreciosArticulo(unArticulo.getId()));
+				
+			 }
+			//JOptionPane.showMessageDialog(null, unArticulo);		
+					
+			} catch (SQLException e) {
+					JOptionPane.showMessageDialog(null, "Error, no se conecto");
+					System.out.println(e);
+			}
+			finally
+			{
+				try{
+					if(res!=null)res.close();
+					if(buscarArticuloExistencia != null)buscarArticuloExistencia.close();
+	                if(conn != null) conn.close();
+				} // fin de try
+				catch ( SQLException excepcionSql )
+				{
+				excepcionSql.printStackTrace();
+				//conexion.desconectar();
+				} // fin de catch
+			} // fin de finally
+		
+			if (existe) {
+				return existencia;
+			}
+			else{
+				
+				/*unArticulo=buscarArticuloBarraCod(i+"");
+				if(unArticulo!=null){
+					return unArticulo;
+				}else*/
+					return existencia;
+			}
+		
 	}
 	
 	
@@ -180,6 +235,7 @@ public class ArticuloDao {
 				unArticulo.setPrecioVenta(res.getDouble("precio_articulo"));
 				unArticulo.setTipoArticulo(res.getInt("tipo_articulo"));
 				//unArticulo.setPreciosVenta(preciosDao.getPreciosArticulo(unArticulo.getId()));
+				unArticulo.setExistencia(this.getExistencia(unArticulo.getId(), 1));
 				articulos.add(unArticulo);
 			 }
 					
@@ -290,6 +346,7 @@ public class ArticuloDao {
 				unArticulo.setPrecioVenta(res.getDouble("precio_articulo"));
 				unArticulo.setTipoArticulo(res.getInt("tipo_articulo"));
 				//unArticulo.setPreciosVenta(preciosDao.getPreciosArticulo(unArticulo.getId()));
+				
 				
 			 }
 					
@@ -717,7 +774,7 @@ public class ArticuloDao {
 				unArticulo.setTipoArticulo(res.getInt("tipo_articulo"));
 				//unArticulo.setPreciosVenta(preciosDao.getPreciosArticulo(unArticulo.getId()));
 				
-				
+				unArticulo.setExistencia(this.getExistencia(unArticulo.getId(), 1));
 				articulos.add(unArticulo);
 			 }
 					
@@ -874,6 +931,61 @@ public class ArticuloDao {
 				//conexion.desconectar();
 			} // fin de catch
 		} // fin de finally
+		
+	}
+	
+public double getExistencia(int codigoArticulo,int codigoBodega){
+		
+		
+		ResultSet res=null;
+		Connection conn=null;
+		boolean existe=false;
+		double existencia=0;
+		
+		try {
+			conn=conexion.getPoolConexion().getConnection();
+			buscarArticuloExistencia=conn.prepareStatement("SELECT can_saldo FROM v_kardex where codigo_articulo=? and codigo_bodega=? ORDER BY codigo_movimiento desc limit 1");
+			buscarArticuloExistencia.setInt(1, codigoArticulo);
+			buscarArticuloExistencia.setInt(2, codigoBodega);
+			res = buscarArticuloExistencia.executeQuery();
+			while(res.next()){
+				existe=true;
+				existencia=res.getDouble("can_saldo");
+				
+				//unArticulo.setPreciosVenta(preciosDao.getPreciosArticulo(unArticulo.getId()));
+				
+			 }
+			//JOptionPane.showMessageDialog(null, unArticulo);		
+					
+			} catch (SQLException e) {
+					JOptionPane.showMessageDialog(null, "Error, no se conecto");
+					System.out.println(e);
+			}
+			finally
+			{
+				try{
+					if(res!=null)res.close();
+					if(buscarArticuloExistencia != null)buscarArticuloExistencia.close();
+	                if(conn != null) conn.close();
+				} // fin de try
+				catch ( SQLException excepcionSql )
+				{
+				excepcionSql.printStackTrace();
+				//conexion.desconectar();
+				} // fin de catch
+			} // fin de finally
+		
+			if (existe) {
+				return existencia;
+			}
+			else{
+				
+				/*unArticulo=buscarArticuloBarraCod(i+"");
+				if(unArticulo!=null){
+					return unArticulo;
+				}else*/
+					return existencia;
+			}
 		
 	}
 

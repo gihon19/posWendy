@@ -12,12 +12,13 @@ import javax.swing.JOptionPane;
 
 import modelo.CierreCaja;
 import modelo.Conexion;
+import modelo.Empleado;
 import modelo.SalidaCaja;
 
 public class SalidaCajaDao {
 
 	private Conexion conexion=null;
-	private PreparedStatement seleccionarCierre=null;
+	private PreparedStatement seleccionar=null;
 	private PreparedStatement registrarCierre=null;
 	public int idUltimoRequistro=0;
 	private int idRegistrado;
@@ -27,82 +28,7 @@ public class SalidaCajaDao {
 		conexion =conn;
 	}
 	
-	public boolean registrarCierre(){
-		boolean resultado=false;
-		 Connection con = null;
-		 
-		 ResultSet rs=null;
-		 
-		 //SE CONSIGUE EL ITEM PARA EL CIERRE DE CAJA
-		 CierreCaja unCierre=this.getCierre();
-		 String sql= "INSERT INTO cierre_caja("
-					+ "fecha,"
-					+ "factura_inicial,"
-					+ "factura_final,"
-					+ "efectivo,"
-					+ "creditos,"
-					+ "totalventa,"
-					+ "tarjeta,"
-					+ "usuario,"
-					+ "isv15,"
-					+ "isv18)"
-					+ " VALUES (now(),?,?,?,?,?,?,?,?,?)";
-			 if(unCierre!=null&&unCierre.getNoFacturaFinal()!=0){
-				 try {
-						con = conexion.getPoolConexion().getConnection();
-						registrarCierre=
-								con.prepareStatement(sql);
-						
-						registrarCierre.setInt(1,unCierre.getNoFacturaInicio() );
-						registrarCierre.setInt(2,unCierre.getNoFacturaFinal() );
-						registrarCierre.setBigDecimal(3, unCierre.getEfectivo());
-						registrarCierre.setBigDecimal(4, unCierre.getCredito());
-						registrarCierre.setBigDecimal(5, unCierre.getTotal());
-						registrarCierre.setBigDecimal(6, unCierre.getTarjeta());
-						registrarCierre.setString(7, unCierre.getUsuario());
-						registrarCierre.setBigDecimal(8, unCierre.getIsv15());
-						registrarCierre.setBigDecimal(9, unCierre.getIsv18());
-						
-						
-						
-						
-						registrarCierre.executeUpdate();//se guarda el encabezado de la factura
-						
-						
-						rs=registrarCierre.getGeneratedKeys(); //obtengo las ultimas llaves generadas
-						while(rs.next()){
-							this.idUltimoRequistro=rs.getInt(1);
-							//this.setIdArticuloRegistrado(rs.getInt(1));
-						}
-						resultado=true;
-						
-				 }catch (SQLException e) {
-						e.printStackTrace();
-						resultado=false;
-					}
-				finally
-				{
-					try{
-						
-						if(rs != null) rs.close();
-						if(registrarCierre != null)registrarCierre.close();
-						if(con != null) con.close();
-		             
-						
-						} // fin de try
-						catch ( SQLException excepcionSql )
-						{
-							excepcionSql.printStackTrace();
-							//conexion.desconectar();
-						} // fin de catch
-				} // fin de finally
-		
-		 }else{
-			 resultado=false;
-		 }
-		
-		return resultado;
-	}
+	
 	public boolean actualizarCierre(){
 		boolean resultado=false;
 		 Connection con = null;
@@ -298,10 +224,10 @@ public SalidaCaja getSalidaUltimoUser(){
 		try {
 			con = conexion.getPoolConexion().getConnection();
 			
-			seleccionarCierre = con.prepareStatement(sql2);
+			seleccionar = con.prepareStatement(sql2);
 			
-			seleccionarCierre.setString(1, conexion.getUsuarioLogin().getUser());
-			res = seleccionarCierre.executeQuery();
+			seleccionar.setString(1, conexion.getUsuarioLogin().getUser());
+			res = seleccionar.executeQuery();
 			while(res.next()){
 				
 				existe=true;
@@ -321,7 +247,7 @@ public SalidaCaja getSalidaUltimoUser(){
 			try{
 				
 				if(res != null) res.close();
-                if(seleccionarCierre != null)seleccionarCierre.close();
+                if(seleccionar != null)seleccionar.close();
                 if(con != null) con.close();
                 
 				
@@ -549,10 +475,10 @@ public SalidaCaja getSalidaUltimoUser(){
 		try {
 			con = conexion.getPoolConexion().getConnection();
 			
-			seleccionarCierre = con.prepareStatement(sql2);
+			seleccionar = con.prepareStatement(sql2);
 			
 			//seleccionarCierre.setString(1, conexion.getUsuarioLogin().getUser());
-			res = seleccionarCierre.executeQuery();
+			res = seleccionar.executeQuery();
 			while(res.next()){
 				
 				existe=true;
@@ -579,7 +505,7 @@ public SalidaCaja getSalidaUltimoUser(){
 			try{
 				
 				if(res != null) res.close();
-                if(seleccionarCierre != null)seleccionarCierre.close();
+                if(seleccionar != null)seleccionar.close();
                 if(con != null) con.close();
                 
 				
@@ -655,13 +581,13 @@ public CierreCaja getCierre(int x){
 			con = conexion.getPoolConexion().getConnection();
 			
 			
-			seleccionarCierre = con.prepareStatement(sql);
-			seleccionarCierre.setString(1,ultimoCierreUser.getUsuario() );
+			seleccionar = con.prepareStatement(sql);
+			seleccionar.setString(1,ultimoCierreUser.getUsuario() );
 			
-			seleccionarCierre.setInt(2, ultimoCierreUser.getNoFacturaInicio());
-			seleccionarCierre.setString(3,ultimoCierreUser.getUsuario() );
+			seleccionar.setInt(2, ultimoCierreUser.getNoFacturaInicio());
+			seleccionar.setString(3,ultimoCierreUser.getUsuario() );
 			//seleccionarCierre.setString(1, conexion.getUsuarioLogin().getUser());
-			res = seleccionarCierre.executeQuery();
+			res = seleccionar.executeQuery();
 			while(res.next()){
 				
 				existe=true;
@@ -697,7 +623,7 @@ public CierreCaja getCierre(int x){
 			try{
 				
 				if(res != null) res.close();
-                if(seleccionarCierre != null)seleccionarCierre.close();
+                if(seleccionar != null)seleccionar.close();
                 if(con != null) con.close();
                 
 				
@@ -717,8 +643,8 @@ public CierreCaja getCierre(int x){
 		
 	}
 
-	public List<CierreCaja> todos() {
-		List<CierreCaja> cierres =new ArrayList<CierreCaja>();
+	public List<SalidaCaja> todos(int limInf,int limSupe) {
+		List<SalidaCaja> salidas =new ArrayList<SalidaCaja>();
 		
 		ResultSet res=null;
 		
@@ -728,27 +654,30 @@ public CierreCaja getCierre(int x){
 		
 		try{
 			conn=conexion.getPoolConexion().getConnection();
-			seleccionarCierre=conn.prepareStatement("SELECT * FROM v_cierre_caja ORDER BY idCierre Desc");
-			res = seleccionarCierre.executeQuery();
+			seleccionar=conn.prepareStatement("SELECT * FROM v_salidas ORDER BY codigo_salida Desc LIMIT ?,?;");
+			seleccionar.setInt(1, limInf);
+			seleccionar.setInt(2, limSupe);
+			res = seleccionar.executeQuery();
 			while(res.next()){
 				existe=true;
-				CierreCaja unaCierre=new CierreCaja();
-				unaCierre.setFecha(res.getString("fecha"));
-				unaCierre.setId(res.getInt("idCierre"));
-				unaCierre.setNoFacturaInicio(res.getInt("factura_inicial"));
-				unaCierre.setNoFacturaFinal(res.getInt("factura_final"));
-				unaCierre.setEfectivo(res.getBigDecimal("efectivo"));
-				unaCierre.setCredito(res.getBigDecimal("creditos"));
-				unaCierre.setTarjeta(res.getBigDecimal("tarjeta"));
+				SalidaCaja unaSalida=new SalidaCaja();
 				
-				unaCierre.setIsv15(res.getBigDecimal("isv15"));
-				unaCierre.setIsv18(res.getBigDecimal("isv18"));
+				unaSalida.setCodigoSalida(res.getInt("codigo_salida"));
+				unaSalida.setConcepto(res.getString("concepto"));
+				unaSalida.setCantidad(res.getBigDecimal("cantidad"));
+				unaSalida.setFecha(res.getString("fecha"));
+				unaSalida.setUsuario(res.getString("usuario"));
 				
-				unaCierre.setTotal(res.getBigDecimal("totalventa"));
-				unaCierre.setUsuario(res.getString("usuario"));
+				Empleado unEmpleado=new Empleado();
+				
+				unEmpleado.setCodigo(res.getInt("codigo_empleado"));
+				unEmpleado.setNombre(res.getString("nombre"));
+				unEmpleado.setApellido(res.getString("apellido"));
+				
+				unaSalida.setEmpleado(unEmpleado);
 				
 				
-				cierres.add(unaCierre);
+				salidas.add(unaSalida);
 				
 				
 			}
@@ -760,7 +689,7 @@ public CierreCaja getCierre(int x){
 	{
 		try{
 			if(res != null) res.close();
-	        if(seleccionarCierre != null)seleccionarCierre.close();
+	        if(seleccionar != null)seleccionar.close();
 	        if(conn != null) conn.close();
 			
 			} // fin de try
@@ -773,7 +702,7 @@ public CierreCaja getCierre(int x){
 		
 		
 		if (existe) {
-			return cierres;
+			return salidas;
 		}
 		else return null;
 	}
@@ -789,10 +718,10 @@ public CierreCaja getCierre(int x){
 		
 		try{
 			conn=conexion.getPoolConexion().getConnection();
-			seleccionarCierre=conn.prepareStatement("SELECT * FROM v_cierre_caja where fecha2 BETWEEN ? and ?");
-			seleccionarCierre.setString(1, date);
-			seleccionarCierre.setString(2, date2);
-			res = seleccionarCierre.executeQuery();
+			seleccionar=conn.prepareStatement("SELECT * FROM v_cierre_caja where fecha2 BETWEEN ? and ?");
+			seleccionar.setString(1, date);
+			seleccionar.setString(2, date2);
+			res = seleccionar.executeQuery();
 			while(res.next()){
 				existe=true;
 				CierreCaja unaCierre=new CierreCaja();
@@ -823,7 +752,7 @@ public CierreCaja getCierre(int x){
 	{
 		try{
 			if(res != null) res.close();
-	        if(seleccionarCierre != null)seleccionarCierre.close();
+	        if(seleccionar != null)seleccionar.close();
 	        if(conn != null) conn.close();
 			
 			} // fin de try
@@ -863,15 +792,15 @@ public CierreCaja getCierre(int x){
 		try {
 			con = conexion.getPoolConexion().getConnection();
 			
-			seleccionarCierre = con.prepareStatement(sql);
+			seleccionar = con.prepareStatement(sql);
 			
-			seleccionarCierre.setInt(1, unaCierre.getNoSalidaInicial());
-			seleccionarCierre.setInt(2, unaCierre.getNoSalidaFinal());
-			seleccionarCierre.setString(3, unaCierre.getUsuario());
+			seleccionar.setInt(1, unaCierre.getNoSalidaInicial());
+			seleccionar.setInt(2, unaCierre.getNoSalidaFinal());
+			seleccionar.setString(3, unaCierre.getUsuario());
 			
 			
 			//seleccionarCierre.setString(1, conexion.getUsuarioLogin().getUser());
-			res = seleccionarCierre.executeQuery();
+			res = seleccionar.executeQuery();
 			while(res.next()){
 				
 				
@@ -892,7 +821,7 @@ public CierreCaja getCierre(int x){
 			try{
 				
 				if(res != null) res.close();
-                if(seleccionarCierre != null)seleccionarCierre.close();
+                if(seleccionar != null)seleccionar.close();
                 if(con != null) con.close();
                 
 				
@@ -929,15 +858,15 @@ public CierreCaja getCierre(int x){
 		try {
 			con = conexion.getPoolConexion().getConnection();
 			
-			seleccionarCierre = con.prepareStatement(sql);
+			seleccionar = con.prepareStatement(sql);
 			
-			seleccionarCierre.setInt(1, unaCierre.getNoSalidaInicial());
-			seleccionarCierre.setInt(2, unaCierre.getNoSalidaFinal());
-			seleccionarCierre.setString(3, unaCierre.getUsuario());
+			seleccionar.setInt(1, unaCierre.getNoSalidaInicial());
+			seleccionar.setInt(2, unaCierre.getNoSalidaFinal());
+			seleccionar.setString(3, unaCierre.getUsuario());
 			
 			
 			//seleccionarCierre.setString(1, conexion.getUsuarioLogin().getUser());
-			res = seleccionarCierre.executeQuery();
+			res = seleccionar.executeQuery();
 			while(res.next()){
 				
 				
@@ -957,7 +886,7 @@ public CierreCaja getCierre(int x){
 			try{
 				
 				if(res != null) res.close();
-                if(seleccionarCierre != null)seleccionarCierre.close();
+                if(seleccionar != null)seleccionar.close();
                 if(con != null) con.close();
                 
 				
@@ -982,16 +911,17 @@ public CierreCaja getCierre(int x){
 		{
 			con = conexion.getPoolConexion().getConnection();
 			
-			seleccionarCierre=con.prepareStatement( "INSERT INTO salidas_caja(concepto,cantidad,usuario,fecha) VALUES (?,?,?,now())");
+			seleccionar=con.prepareStatement( "INSERT INTO salidas_caja(concepto,cantidad,usuario,fecha,codigo_empleado) VALUES (?,?,?,now(),?)");
 			
-			seleccionarCierre.setString( 1, mySalida.getConcepto());
-			seleccionarCierre.setBigDecimal( 2, mySalida.getCantidad().setScale(2, BigDecimal.ROUND_HALF_EVEN) );
-			seleccionarCierre.setString( 3, conexion.getUsuarioLogin().getUser());
+			seleccionar.setString( 1, mySalida.getConcepto());
+			seleccionar.setBigDecimal( 2, mySalida.getCantidad().setScale(2, BigDecimal.ROUND_HALF_EVEN) );
+			seleccionar.setString( 3, conexion.getUsuarioLogin().getUser());
+			seleccionar.setInt( 4,mySalida.getEmpleado().getCodigo() );
 			
 			
-			resultado=seleccionarCierre.executeUpdate();
+			resultado=seleccionar.executeUpdate();
 			
-			rs=seleccionarCierre.getGeneratedKeys(); //obtengo las ultimas llaves generadas
+			rs=seleccionar.getGeneratedKeys(); //obtengo las ultimas llaves generadas
 			while(rs.next()){
 				this.setIdRegistrado(rs.getInt(1));
 			}
@@ -1011,7 +941,7 @@ public CierreCaja getCierre(int x){
 		{
 			try{
 				if(rs!=null)rs.close();
-				 if(seleccionarCierre != null)seleccionarCierre.close();
+				 if(seleccionar != null)seleccionar.close();
 	              if(con != null) con.close();
 			} // fin de try
 			catch ( SQLException excepcionSql )
@@ -1029,5 +959,131 @@ public CierreCaja getCierre(int x){
 	public int getIdRegistrado(){
 		return idRegistrado;
 	} 
+	
+	public List<SalidaCaja> buscarPorEmpleado(String busqueda) {
+		List<SalidaCaja> salidas =new ArrayList<SalidaCaja>();
+		
+		ResultSet res=null;
+		
+		Connection conn=null;
+		
+		boolean existe=false;
+		
+		try{
+			conn=conexion.getPoolConexion().getConnection();
+			seleccionar=conn.prepareStatement("SELECT * FROM v_salidas where nombre LIKE ? ORDER BY codigo_salida Desc;");
+			seleccionar.setString(1, "%" + busqueda + "%");
+			
+			res = seleccionar.executeQuery();
+			while(res.next()){
+				existe=true;
+				SalidaCaja unaSalida=new SalidaCaja();
+				
+				unaSalida.setCodigoSalida(res.getInt("codigo_salida"));
+				unaSalida.setConcepto(res.getString("concepto"));
+				unaSalida.setCantidad(res.getBigDecimal("cantidad"));
+				unaSalida.setFecha(res.getString("fecha"));
+				unaSalida.setUsuario(res.getString("usuario"));
+				
+				Empleado unEmpleado=new Empleado();
+				
+				unEmpleado.setCodigo(res.getInt("codigo_empleado"));
+				unEmpleado.setNombre(res.getString("nombre"));
+				unEmpleado.setApellido(res.getString("apellido"));
+				
+				unaSalida.setEmpleado(unEmpleado);
+				
+				
+				salidas.add(unaSalida);
+				
+				
+			}
+		}catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Error, no se conecto");
+			System.out.println(e);
+	}
+	finally
+	{
+		try{
+			if(res != null) res.close();
+	        if(seleccionar != null)seleccionar.close();
+	        if(conn != null) conn.close();
+			
+			} // fin de try
+			catch ( SQLException excepcionSql )
+			{
+				excepcionSql.printStackTrace();
+				//conexion.desconectar();
+			} // fin de catch
+	} // fin de finally
+		
+		
+		if (existe) {
+			return salidas;
+		}
+		else return null;
+	} 
+	public SalidaCaja bucarPorId(int id){
+		
+		//se crear un referencia al pool de conexiones
+		//DataSource ds = DBCPDataSourceFactory.getDataSource("mysql");
+		
+		
+        Connection con = null;
+        
+    	//String sql="select * from cierre where usuario = ?";
+    	
+    	String sql2="SELECT * FROM salidas_caja WHERE salidas_caja.codigo_salida=? ORDER BY salidas_caja.codigo_salida DESC LIMIT 1";
+        //Statement stmt = null;
+    	SalidaCaja unaSalida=new SalidaCaja();
+		
+		ResultSet res=null;
+		
+		boolean existe=false;
+		try {
+			con = conexion.getPoolConexion().getConnection();
+			
+			seleccionar = con.prepareStatement(sql2);
+			
+			seleccionar.setInt(1, id);
+			res = seleccionar.executeQuery();
+			while(res.next()){
+				
+				existe=true;
+				unaSalida.setCodigoSalida(res.getInt("codigo_salida"));
+				unaSalida.setConcepto(res.getString("concepto"));
+				unaSalida.setCantidad(res.getBigDecimal("cantidad"));
+				unaSalida.setFecha(res.getString("fecha"));
+				unaSalida.setUsuario(res.getString("usuario"));
+			
+			 }
+					
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		finally
+		{
+			try{
+				
+				if(res != null) res.close();
+                if(seleccionar != null)seleccionar.close();
+                if(con != null) con.close();
+                
+				
+				} // fin de try
+				catch ( SQLException excepcionSql )
+				{
+					excepcionSql.printStackTrace();
+					//conexion.desconectar();
+				} // fin de catch
+		} // fin de finally
+		
+		return unaSalida;
+			/*if (existe) {
+				return unaCierre;
+			}
+			else return null;*/
+		
+	}
 
 }

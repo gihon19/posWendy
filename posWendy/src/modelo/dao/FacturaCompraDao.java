@@ -22,12 +22,14 @@ public class FacturaCompraDao {
 	private ProveedorDao myProveedorDao=null;
 	private PreparedStatement actualizarFactura = null;
 	private KardexDao kardexDao=null;
+	private CuentaPorPagarDao myCuentaPagarDao=null;
 	
 	public FacturaCompraDao(Conexion conn){
 		conexion=conn;
 		detallesDao=new DetalleFacturaProveedorDao(conexion);
 		myProveedorDao=new ProveedorDao(conexion);
 		kardexDao=new KardexDao(conexion);
+		myCuentaPagarDao=new CuentaPorPagarDao(conexion);
 		/*try {
 			agregarFactura=conexion.getConnection().prepareStatement( "INSERT INTO encabezado_factura_compra(fecha,subtotal,impuesto,total,codigo_cliente,no_factura_compra,tipo_factura,fecha_vencimiento,estado_factura,fecha_ingreso) VALUES (?,?,?,?,?,?,?,?,?,now())");
 		} catch (SQLException e) {
@@ -79,8 +81,13 @@ public class FacturaCompraDao {
 			for(int x=0;x<fac.getDetalles().size();x++){
 				//solo los articulos validos que no tengan id nulos
 				if(fac.getDetalles().get(x).getArticulo().getId()>0){
-					boolean resul=detallesDao.agregarDetalle(fac.getDetalles().get(x), idFactura);
+					boolean resul=detallesDao.agregarDetalle(fac.getDetalles().get(x), idFactura,fac.getDepartamento().getId());
 				}
+			}
+			
+			//si la factura es al credito se guarda el debito del cliente
+			if(fac.getTipoFactura()==2){
+				boolean resultado2=this.myCuentaPagarDao.reguistrarCredito(fac);
 			}
 			
 			resultado= true;
@@ -144,8 +151,88 @@ public class FacturaCompraDao {
 		
 		return fecha;
 	}
+	
+	
+public List<FacturaCompra> porProveedor(String proveedor) {
+		
+		//se crear un referencia al pool de conexiones
+		//DataSource ds = DBCPDataSourceFactory.getDataSource("mysql");
+		
+		
+        Connection con = null;
+        
+    	String sql="SELECT * FROM encabezado_factura_compra INNER JOIN proveedor ON encabezado_factura_compra.codigo_proveedor = proveedor.codigo_proveedor where nombre_proveedor LIKE ? ";
+        //Statement stmt = null;
+       	List<FacturaCompra> facturas=new ArrayList<FacturaCompra>();
+		ResultSet res=null;
+		
+		boolean existe=false;
+		try {
+			con = conexion.getPoolConexion().getConnection();
+			
+			seleccionarFacturas = con.prepareStatement(sql);
+			seleccionarFacturas.setString(1,  "%" + proveedor + "%");
+			
+			
+			res = seleccionarFacturas.executeQuery();
+			while(res.next()){
+				FacturaCompra unaFactura=new FacturaCompra();
+				existe=true;
+				unaFactura.setNoCompra(res.getInt("numero_compra"));
+				unaFactura.setFechaCompra(res.getString("fecha"));
+				
+				unaFactura.setIdFactura(res.getString("no_factura_compra"));
+				Proveedor unProveedor=myProveedorDao.buscarPro(res.getInt("codigo_proveedor"));           // .buscarCliente(res.getInt("codigo_cliente"));
+				
+				unaFactura.setProveedor(unProveedor);
+				
+				
+				unaFactura.setSubTotal(res.getBigDecimal("subtotal"));
+				unaFactura.setTotalImpuesto(res.getBigDecimal("impuesto"));
+				unaFactura.setTotal(res.getBigDecimal("total"));
+				//unaFactura.setEstado(res.getInt("estado_factura"));
+				//unaFactura.setTotalDescuento(res.getDouble("descuento"));
+				
+				unaFactura.setEstado(res.getString("estado_factura"));
+				unaFactura.setTipoFactura(res.getInt("tipo_factura"));
+				unaFactura.setAgregadoAkardex(res.getInt("agrega_kardex"));
+				
+				//unaFactura.setDetalles(detallesDao.getDetallesFactura(res.getInt("numero_compra"))); //para cargar en la view los detalles de la factura
+				
+				
+				facturas.add(unaFactura);
+			 }
+					
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		finally
+		{
+			try{
+				
+				if(res != null) res.close();
+                if(seleccionarFacturas != null)seleccionarFacturas.close();
+                if(con != null) con.close();
+                
+				
+				} // fin de try
+				catch ( SQLException excepcionSql )
+				{
+					excepcionSql.printStackTrace();
+					//conexion.desconectar();
+				} // fin de catch
+		} // fin de finally
+		
+		
+			if (existe) {
+				return facturas;
+			}
+			else return null;
+		
+	}
 
-	public List<FacturaCompra> todasfacturas() {
+
+	public List<FacturaCompra> todasfacturas(int limInf,int limSupe) {
 		
 		//se crear un referencia al pool de conexiones
 		//DataSource ds = DBCPDataSourceFactory.getDataSource("mysql");
@@ -171,7 +258,7 @@ public class FacturaCompraDao {
 					" FROM "+
 						" encabezado_factura_compra "+
 						" ORDER BY "+
-						" encabezado_factura_compra.numero_compra DESC";
+						" encabezado_factura_compra.numero_compra DESC LIMIT ?,?;";
         //Statement stmt = null;
        	List<FacturaCompra> facturas=new ArrayList<FacturaCompra>();
 		ResultSet res=null;
@@ -181,6 +268,8 @@ public class FacturaCompraDao {
 			con = conexion.getPoolConexion().getConnection();
 			
 			seleccionarFacturas = con.prepareStatement(sql);
+			seleccionarFacturas.setInt(1, limInf);
+			seleccionarFacturas.setInt(2, limSupe);
 			
 			res = seleccionarFacturas.executeQuery();
 			while(res.next()){
@@ -376,7 +465,8 @@ public class FacturaCompraDao {
         
     	String sql="SELECT "+
 				" encabezado_factura_compra.numero_compra,"+
-				"DATE_FORMAT(encabezado_factura_compra.fecha, '%d/%m/%Y') as fecha,"+
+				"DATE_FORMAT(encabezado_factura_compra.fecha, '%d/%m/%Y') as fecha2,"
+				+ "encabezado_factura_compra.fecha as fecha,"+
 				"encabezado_factura_compra.subtotal,"+
 				"encabezado_factura_compra.impuesto,"+
 				"encabezado_factura_compra.total,"+
@@ -390,7 +480,7 @@ public class FacturaCompraDao {
 				"encabezado_factura_compra.isv18,"+
 				"encabezado_factura_compra.agrega_kardex "+
 				" FROM encabezado_factura_compra "
-				+ "where DATE_FORMAT(encabezado_factura_compra.fecha, '%d/%m/%Y')>=? and DATE_FORMAT(encabezado_factura_compra.fecha, '%d/%m/%Y')<=?";
+				+ "where fecha BETWEEN ? and ?";
         //Statement stmt = null;
     	List<FacturaCompra> facturas=new ArrayList<FacturaCompra>();
 		
@@ -410,7 +500,7 @@ public class FacturaCompraDao {
 				FacturaCompra unaFactura=new FacturaCompra();
 				existe=true;
 				unaFactura.setNoCompra(res.getInt("numero_compra"));
-				unaFactura.setFechaCompra(res.getString("fecha"));
+				unaFactura.setFechaCompra(res.getString("fecha2"));
 				
 				unaFactura.setIdFactura(res.getString("no_factura_compra"));
 				Proveedor unProveedor=myProveedorDao.buscarPro(res.getInt("codigo_proveedor"));           // .buscarCliente(res.getInt("codigo_cliente"));
@@ -428,7 +518,7 @@ public class FacturaCompraDao {
 				unaFactura.setTipoFactura(res.getInt("tipo_factura"));
 				unaFactura.setAgregadoAkardex(res.getInt("agrega_kardex"));
 				
-				unaFactura.setDetalles(detallesDao.getDetallesFactura(res.getInt("numero_compra")));
+				//unaFactura.setDetalles(detallesDao.getDetallesFactura(res.getInt("numero_compra")));
 				
 				
 				facturas.add(unaFactura);

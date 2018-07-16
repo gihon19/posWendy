@@ -7,11 +7,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import modelo.AbstractJasperReports;
 import modelo.Conexion;
 import modelo.Proveedor;
 import modelo.dao.ProveedorDao;
@@ -42,7 +44,7 @@ public class CtlProveedorLista  implements ActionListener, MouseListener, Window
 		myProveedorDao=new ProveedorDao(conexion);
 		view.conectarControlador(this);
 		
-		cargarTabla(myProveedorDao.todoProveedor());
+		cargarTabla(myProveedorDao.todoProveedor(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 		view.setVisible(true);
 	}
 
@@ -62,6 +64,9 @@ public class CtlProveedorLista  implements ActionListener, MouseListener, Window
 		
 		switch(comando){
 		
+		case "ESCRIBIR":
+			view.setTamanioVentana(1);
+			break;
 		case "INSERTAR":
 			viewProveedor= new ViewCrearProveedor(this.view);//crea la ventana para ingresar un nuevo proveedor
 			CtlProveedor ctl=new CtlProveedor(viewProveedor, myProveedorDao);//se crea el controlador de la ventana y se le pasa la view
@@ -80,7 +85,7 @@ public class CtlProveedorLista  implements ActionListener, MouseListener, Window
 			
 			
 			if(myProveedorDao.eliminarProveedor(idProveedor)){//llamamos al metodo para agregar 
-				JOptionPane.showMessageDialog(null, "Se elimino exitosamente","Información",JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Se elimino exitosamente","Informaciï¿½n",JOptionPane.INFORMATION_MESSAGE);
 				this.view.modelo.eliminarProveedor(filaTabla);
 				this.view.getBtnEliminar().setEnabled(false);
 				
@@ -100,7 +105,7 @@ public class CtlProveedorLista  implements ActionListener, MouseListener, Window
 			if(this.view.getRdbtnId().isSelected()){  
 				myProveedor=myProveedorDao.buscarPro(Integer.parseInt(this.view.getTxtBuscar().getText()));
 				if(myProveedor!=null){
-					this.view.modelo.limpiarClientes();
+					this.view.modelo.limpiarProveedores();
 					this.view.modelo.agregarProveedor(myProveedor);
 				}else{
 					JOptionPane.showMessageDialog(view, "No se encuentro el proveedor");
@@ -117,12 +122,52 @@ public class CtlProveedorLista  implements ActionListener, MouseListener, Window
 				}
 			
 			if(this.view.getRdbtnTodos().isSelected()){  
-				cargarTabla(myProveedorDao.todoProveedor());
+				cargarTabla(myProveedorDao.todoProveedor(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 				this.view.getTxtBuscar().setText("");
 				}
 			//if(myProveedorDao.buscarPro(Integer.parseInt(this.view.getTxtBuscar().getText())))
 			//JOptionPane.showMessageDialog(view, "Apreto buscar");
 			break;
+			
+		case "NEXT":
+			view.getModelo().netPag();
+			cargarTabla(myProveedorDao.todoProveedor(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
+			break;
+		case "LAST":
+			view.getModelo().lastPag();
+			cargarTabla(myProveedorDao.todoProveedor(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
+			break;
+			
+		case "CUENTASCLIENTES":
+			try {
+    			AbstractJasperReports.createReportSaltosProveedores(conexion.getPoolConexion().getConnection());
+    			AbstractJasperReports.showViewer(this.view);
+    			
+    		}catch (SQLException ee) {
+				// TODO Auto-generated catch block
+				ee.printStackTrace();
+			}
+			
+			break;
+		case "CUENTACLIENTE":
+			
+			
+            
+          //se consigue el proveedore de la fila seleccionada
+            myProveedor=this.view.getModelo().getProveedor(view.getTabla().getSelectedRow());
+            
+            
+            try {
+				AbstractJasperReports.createReportCuentaProveedor(conexion.getPoolConexion().getConnection(),myProveedor.getId());
+				AbstractJasperReports.showViewer(this.view);
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			
 			
 		}
@@ -133,8 +178,8 @@ public class CtlProveedorLista  implements ActionListener, MouseListener, Window
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		
-		//Recoger qué fila se ha pulsadao en la tabla
-        int filaPulsada = this.view.tablaProvedores.getSelectedRow();
+		//Recoger quï¿½ fila se ha pulsadao en la tabla
+        int filaPulsada = this.view.getTabla().getSelectedRow();
         
         //si seleccion una fila
         if(filaPulsada>=0){
@@ -160,7 +205,7 @@ public class CtlProveedorLista  implements ActionListener, MouseListener, Window
 				if(ctl.verificadorAcualizacion){//se verifica si se actualizo en la BD
 					this.view.modelo.cambiarProveedor(filaPulsada, ctl.getProveedor());//se cambia en la vista
 					this.view.modelo.fireTableDataChanged();//se refrescan los cambios
-					this.view.tablaProvedores.getSelectionModel().setSelectionInterval(filaPulsada,filaPulsada);//se seleciona lo cambiado
+					this.view.getTabla().getSelectionModel().setSelectionInterval(filaPulsada,filaPulsada);//se seleciona lo cambiado
 					
 				}
 				
@@ -207,9 +252,12 @@ public class CtlProveedorLista  implements ActionListener, MouseListener, Window
 	
 	public void cargarTabla(List<Proveedor> proveedores){
 		
-		this.view.modelo.limpiarClientes();
-		for(int c=0;c<proveedores.size();c++)
-			this.view.modelo.agregarProveedor(proveedores.get(c));
+		this.view.modelo.limpiarProveedores();
+		if(proveedores!=null){
+			
+			for(int c=0;c<proveedores.size();c++)
+				this.view.modelo.agregarProveedor(proveedores.get(c));
+		}
 		
 	}
 

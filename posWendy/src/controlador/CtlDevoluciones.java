@@ -227,6 +227,9 @@ public void cargarFacturaView(){
 		this.view.getTxtIdcliente().setText(""+myFactura.getCliente().getId());;
 		this.view.getTxtNombrecliente().setText(myFactura.getCliente().getNombre());
 		
+		
+		view.getModeloEmpleados().addEmpleado(myFactura.getVendedor());
+		
 		//se establece el total e impuesto en el vista
 		this.view.getTxtTotal().setText(""+myFactura.getTotal().setScale(2, BigDecimal.ROUND_HALF_EVEN));
 		this.view.getTxtImpuesto().setText(""+myFactura.getTotalImpuesto().setScale(2, BigDecimal.ROUND_HALF_EVEN));

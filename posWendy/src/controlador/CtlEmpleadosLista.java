@@ -36,7 +36,7 @@ public class CtlEmpleadosLista implements ActionListener, MouseListener {
 		
 		myEmpleado=new Empleado();
 		
-		cargarTabla(myDao.todos());
+		cargarTabla(myDao.todos(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 		
 		view.setVisible(true);
 	}
@@ -44,8 +44,10 @@ public class CtlEmpleadosLista implements ActionListener, MouseListener {
 	private void cargarTabla(List<Empleado> empleados) {
 		// TODO Auto-generated method stub
 		view.getModelo().limpiar();
+		if(empleados!=null){
 		for(int x=0;x<empleados.size();x++)
 			view.getModelo().agregar(empleados.get(x));
+		}
 	}
 
 	@Override
@@ -123,6 +125,10 @@ public class CtlEmpleadosLista implements ActionListener, MouseListener {
 		
 		String comando=e.getActionCommand();
 		switch(comando){
+		
+		case "ESCRIBIR":
+			view.setTamanioVentana(1);
+			break;
 		case "INSERTAR":
 			ViewCrearEmpleado viewCrearEmpleado=new ViewCrearEmpleado(view);
 			CtlEmpleado ctlCrearEmpleado=new CtlEmpleado(viewCrearEmpleado, conexion);
@@ -130,21 +136,14 @@ public class CtlEmpleadosLista implements ActionListener, MouseListener {
 			
 			boolean resul=ctlCrearEmpleado.agregarEmpleado();
 			if(resul){
-				this.view.getModelo().agregar(ctlCrearEmpleado.getEmpleado());
-				
-				/*<<<<<<<<<<<<<<<selecionar la ultima fila creada>>>>>>>>>>>>>>>*/
-				int row =  this.view.getTabla().getRowCount () - 1;
-				Rectangle rect = this.view.getTabla().getCellRect(row, 0, true);
-				this.view.getTabla().scrollRectToVisible(rect);
-				this.view.getTabla().clearSelection();
-				this.view.getTabla().setRowSelectionInterval(row, row);
-				TmEmpleados modelo = (TmEmpleados)this.view.getTabla().getModel();
-				modelo.fireTableDataChanged();
+				view.getModelo().setPaginacion();
+				cargarTabla(myDao.todos(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 			}
 			break;
 		case "BUSCAR":
 			if(view.getRdbtnTodos().isSelected()){
-				cargarTabla(myDao.todos());
+				view.getModelo().setPaginacion();
+				cargarTabla(myDao.todos(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 				view.getTxtBuscar().setText("");
 			}else
 				if(view.getRdbtnNombre().isSelected()){
@@ -175,6 +174,19 @@ public class CtlEmpleadosLista implements ActionListener, MouseListener {
 				JOptionPane.showMessageDialog(null, "No se Registro");
 			}
 			break;*/
+			
+		case "NEXT":
+			view.getModelo().netPag();
+			cargarTabla(myDao.todos(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
+			break;
+		case "LAST":
+			view.getModelo().lastPag();
+			cargarTabla(myDao.todos(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
+			break;
 		}
 		
 	}

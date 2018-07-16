@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2016-03-23T10:14:28 -->
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteDei" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="df013db5-f76e-44d3-b0df-bcbc46d93160">
-	<property name="com.jaspersoft.studio.data.sql.tables" value="Y2xpbmljYS52X2NpZXJyZV9jYWphIEFTICw4Nyw2NyxiYWZiN2E1Yi1jZWEzLTRlNTMtOGJiOS1i&#xA;NzhiNzk3ODJlODI7"/>
+	<property name="com.jaspersoft.studio.data.sql.tables">
+		<![CDATA[Y2xpbmljYS52X2NpZXJyZV9jYWphIEFTICw4Nyw2NyxiYWZiN2E1Yi1jZWEzLTRlNTMtOGJiOS1i
+NzhiNzk3ODJlODI7]]>
+	</property>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="inch"/>
 	<property name="com.jaspersoft.studio.unit.pageWidth" value="inch"/>
@@ -16,10 +18,10 @@
 	<property name="ireport.x" value="864"/>
 	<property name="ireport.y" value="108"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Wendy Remote"/>
-	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
+	<style name="Title" fontName="SansSerif" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
-	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<style name="Detail" fontName="SansSerif" fontSize="12"/>
 	<style name="Row" mode="Transparent">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
@@ -104,13 +106,15 @@ YEAR (fecha) =$P{Anio}]]>
 			<staticText>
 				<reportElement style="Title" x="2" y="58" width="570" height="22" uuid="bc1ce1da-8232-46ea-be55-cec4abb986dd"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="16"/>
+					<font fontName="SansSerif" size="16"/>
 				</textElement>
 				<text><![CDATA[Reporte de Ventas D.E.I]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="2" y="79" width="569" height="13" uuid="9728e7a6-4f41-4354-a5e8-0e638e21fa3d"/>
-				<textElement textAlignment="Center"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$P{Mes}+"/"+$P{Anio}]]></textFieldExpression>
 			</textField>
 			<subreport>
@@ -131,7 +135,7 @@ YEAR (fecha) =$P{Anio}]]>
 					<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#666666"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[Inicio]]></text>
 			</staticText>
@@ -144,7 +148,7 @@ YEAR (fecha) =$P{Anio}]]>
 					<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#666666"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[Final]]></text>
 			</staticText>
@@ -157,7 +161,7 @@ YEAR (fecha) =$P{Anio}]]>
 					<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[Excentas]]></text>
 			</staticText>
@@ -170,7 +174,7 @@ YEAR (fecha) =$P{Anio}]]>
 					<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[Total]]></text>
 			</staticText>
@@ -185,7 +189,7 @@ YEAR (fecha) =$P{Anio}]]>
 					<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[ ISV15]]></text>
 			</staticText>
@@ -200,7 +204,7 @@ YEAR (fecha) =$P{Anio}]]>
 					<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[Total ISV18]]></text>
 			</staticText>
@@ -213,7 +217,7 @@ YEAR (fecha) =$P{Anio}]]>
 					<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#666666"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[Fecha]]></text>
 			</staticText>
@@ -228,7 +232,7 @@ YEAR (fecha) =$P{Anio}]]>
 					<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[Total]]></text>
 			</staticText>
@@ -243,7 +247,7 @@ YEAR (fecha) =$P{Anio}]]>
 					<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10" isBold="true"/>
+					<font fontName="SansSerif" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[V ISV18]]></text>
 			</staticText>
@@ -256,7 +260,7 @@ YEAR (fecha) =$P{Anio}]]>
 					<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#666666"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[No Factura]]></text>
 			</staticText>
@@ -269,7 +273,7 @@ YEAR (fecha) =$P{Anio}]]>
 					<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#666666"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[Ventas 15%]]></text>
 			</staticText>
@@ -282,7 +286,7 @@ YEAR (fecha) =$P{Anio}]]>
 					<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#666666"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[Ventas 18%]]></text>
 			</staticText>
@@ -295,7 +299,7 @@ YEAR (fecha) =$P{Anio}]]>
 					<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#666666"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<text><![CDATA[Ventas]]></text>
 			</staticText>
@@ -316,7 +320,7 @@ YEAR (fecha) =$P{Anio}]]>
 						<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="10"/>
+						<font fontName="SansSerif" size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{isv15}]]></textFieldExpression>
 				</textField>
@@ -329,9 +333,9 @@ YEAR (fecha) =$P{Anio}]]>
 						<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10"/>
+						<font fontName="SansSerif" size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA[" "+$F{no_factura_inicio}+" "]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{no_factura_inicio}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="###0">
 					<reportElement style="Detail" x="98" y="0" width="38" height="15" uuid="dda20ac8-36df-4619-b0db-4ed038010d62"/>
@@ -342,7 +346,7 @@ YEAR (fecha) =$P{Anio}]]>
 						<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#666666"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10"/>
+						<font fontName="SansSerif" size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{no_factura_final}]]></textFieldExpression>
 				</textField>
@@ -355,11 +359,11 @@ YEAR (fecha) =$P{Anio}]]>
 						<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="10"/>
+						<font fontName="SansSerif" size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{t_exectos}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true">
+				<textField isStretchWithOverflow="true" pattern="d/M/yy">
 					<reportElement style="Detail" x="0" y="0" width="60" height="15" uuid="8b2d71e6-2571-41d7-8c89-91657dab1d31"/>
 					<box>
 						<topPen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
@@ -368,9 +372,9 @@ YEAR (fecha) =$P{Anio}]]>
 						<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="10"/>
+						<font fontName="SansSerif" size="10"/>
 					</textElement>
-					<textFieldExpression><![CDATA[" "+$F{fecha}+" "]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" pattern="¤ #,##0.00">
 					<reportElement style="Detail" x="278" y="0" width="75" height="15" uuid="095faa2f-56e1-4dd4-94e0-b2dd13624fef">
@@ -383,7 +387,7 @@ YEAR (fecha) =$P{Anio}]]>
 						<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="10"/>
+						<font fontName="SansSerif" size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{total_isv15}]]></textFieldExpression>
 				</textField>
@@ -398,7 +402,7 @@ YEAR (fecha) =$P{Anio}]]>
 						<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="10"/>
+						<font fontName="SansSerif" size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{isv18}]]></textFieldExpression>
 				</textField>
@@ -411,7 +415,7 @@ YEAR (fecha) =$P{Anio}]]>
 						<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="10"/>
+						<font fontName="SansSerif" size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{total_venta_dia}]]></textFieldExpression>
 				</textField>
@@ -424,7 +428,7 @@ YEAR (fecha) =$P{Anio}]]>
 						<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
 					</box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="10"/>
+						<font fontName="SansSerif" size="10"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{total_isv18}]]></textFieldExpression>
 				</textField>
@@ -449,21 +453,21 @@ YEAR (fecha) =$P{Anio}]]>
 					<rightPen lineWidth="0.2" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right">
-					<font size="10"/>
+					<font fontName="SansSerif" size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Usuario: "+$P{usuario}+" "]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
 				<reportElement style="Column header" x="53" y="2" width="40" height="17" forecolor="#736343" uuid="bbd3b315-c6b6-4593-be0f-3ea68478bfe3"/>
 				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="false"/>
+					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="Column header" x="0" y="2" width="51" height="17" forecolor="#736343" uuid="f6953e48-c066-4cfa-b7e5-ae4b207b2cb7"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="8" isBold="false"/>
+					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Pag "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
@@ -471,7 +475,7 @@ YEAR (fecha) =$P{Anio}]]>
 	</pageFooter>
 	<summary>
 		<band height="50">
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="false">
+			<textField evaluationTime="Report" pattern="¤ #,##0.00" isBlankWhenNull="false">
 				<reportElement x="138" y="0" width="71" height="17" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="e879c67e-a8bd-4308-801a-1f8211268bb4"/>
 				<box rightPadding="3">
 					<pen lineWidth="0.5"/>
@@ -485,7 +489,7 @@ YEAR (fecha) =$P{Anio}]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{t_exectos_2}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField evaluationTime="Report" pattern="¤ #,##0.00">
 				<reportElement x="209" y="0" width="71" height="17" uuid="1fdb6246-2d4b-4d97-8815-5844a1759869"/>
 				<box rightPadding="3">
 					<pen lineWidth="0.5"/>
@@ -499,7 +503,7 @@ YEAR (fecha) =$P{Anio}]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{isv15_1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField evaluationTime="Report" pattern="¤ #,##0.00">
 				<reportElement x="280" y="0" width="75" height="17" uuid="b24fbe2e-fbae-46a5-9a4d-a1f369ad27a3"/>
 				<box rightPadding="3">
 					<pen lineWidth="0.5"/>
@@ -513,7 +517,7 @@ YEAR (fecha) =$P{Anio}]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{total_isv15_2}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField evaluationTime="Report" pattern="¤ #,##0.00">
 				<reportElement style="Row" x="355" y="0" width="65" height="17" uuid="38b5218c-6bc8-469c-beeb-1b10e5dc92bb"/>
 				<box rightPadding="3">
 					<pen lineWidth="0.5"/>
@@ -527,7 +531,7 @@ YEAR (fecha) =$P{Anio}]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{isv18_1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField evaluationTime="Report" pattern="¤ #,##0.00">
 				<reportElement x="420" y="0" width="72" height="17" uuid="7aa5d7bd-eaf9-45d1-beb6-370fce98be74"/>
 				<box rightPadding="3">
 					<pen lineWidth="0.5"/>
@@ -541,7 +545,7 @@ YEAR (fecha) =$P{Anio}]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{total_isv18_1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField evaluationTime="Report" pattern="¤ #,##0.00">
 				<reportElement x="492" y="0" width="80" height="17" uuid="f1c890bf-0156-4749-9656-fc79ef2eb2d3"/>
 				<box rightPadding="3">
 					<pen lineWidth="0.5"/>

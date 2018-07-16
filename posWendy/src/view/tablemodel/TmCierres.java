@@ -7,7 +7,7 @@ import javax.swing.table.AbstractTableModel;
 
 import modelo.CierreCaja;
 
-public class TmCierres extends AbstractTableModel {
+public class TmCierres extends TablaModelo {
 	private String []columnNames={"Fecha","Cajero","Fact Inicio","Fact Final","T Efectivo","T Tarjeta","T Credito","ISV15","ISV18","Total"};
 	private List<CierreCaja> cierres = new ArrayList<CierreCaja>();
 	

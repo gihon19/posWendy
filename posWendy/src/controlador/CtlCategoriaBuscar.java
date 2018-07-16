@@ -14,35 +14,35 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import modelo.Conexion;
-import modelo.Marca;
-import modelo.dao.MarcaDao;
-import view.ViewCrearMarca;
-import view.ViewListaMarca;
+import modelo.Categoria;
+import modelo.dao.CategoriaDao;
+import view.ViewCrearCategoria;
+import view.ViewListaCategorias;
 
-public class CtlMarcaBuscar implements ActionListener, MouseListener,WindowListener, ItemListener{
+public class CtlCategoriaBuscar implements ActionListener, MouseListener,WindowListener, ItemListener{
 	
 	//formulario para Modificar, insertar marcas
-		public ViewCrearMarca viewMarca;
+		public ViewCrearCategoria viewMarca;
 		//lista de marcas
-		public ViewListaMarca view;
+		public ViewListaCategorias view;
 		
 		//modelo para consultar la base de datos
-		public MarcaDao myMarcaDao;
+		public CategoriaDao myMarcaDao;
 		
 		//modelo de datos
-		public Marca myMarca=null;
+		public Categoria myMarca=null;
 		
 		//fila selecciona enla lista
 		private int filaPulsada;
 		
 		private Conexion conexion;
 		
-		public CtlMarcaBuscar(ViewListaMarca view, Conexion conn){
+		public CtlCategoriaBuscar(ViewListaCategorias view, Conexion conn){
 			conexion=conn;
 			this.view=view;
-			myMarca=new Marca();
-			myMarcaDao=new MarcaDao(conexion);
-			cargarTabla(myMarcaDao.todoMarcas());
+			myMarca=new Categoria();
+			myMarcaDao=new CategoriaDao(conexion);
+			cargarTabla(myMarcaDao.todoCategorias(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 			
 		}
 
@@ -98,8 +98,8 @@ public class CtlMarcaBuscar implements ActionListener, MouseListener,WindowListe
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		//Recoger qué fila se ha pulsadao en la tabla
-        filaPulsada = this.view.getTablaMarca().getSelectedRow();
+		//Recoger quï¿½ fila se ha pulsadao en la tabla
+        filaPulsada = this.view.getTabla().getSelectedRow();
 		if (e.getClickCount() == 2){
 			myMarca=this.view.getModelo().getMarca(filaPulsada);
 			this.view.setVisible(false);
@@ -141,10 +141,14 @@ public class CtlMarcaBuscar implements ActionListener, MouseListener,WindowListe
 		String comando=e.getActionCommand();
 		
 		switch(comando){
+		
+		case "ESCRIBIR":
+			view.setTamanioVentana(1);
+			break;
 		case "BUSCAR":
 			//si se seleciono el boton ID
 			if(this.view.getRdbtnId().isSelected()){  
-				myMarca=myMarcaDao.buscarMarca(Integer.parseInt(this.view.getTxtBuscar().getText()));
+				myMarca=myMarcaDao.buscarCategoria(Integer.parseInt(this.view.getTxtBuscar().getText()));
 				if(myMarca!=null){
 					this.view.getModelo().limpiarMarcas();;
 					this.view.getModelo().agregarMarca(myMarca);
@@ -155,15 +159,15 @@ public class CtlMarcaBuscar implements ActionListener, MouseListener,WindowListe
 			
 			if(this.view.getRdbtnObservacion().isSelected()){ //si esta selecionado la busqueda por nombre	
 				
-				cargarTabla(myMarcaDao.buscarMarcasObservacion(this.view.getTxtBuscar().getText()));
+				cargarTabla(myMarcaDao.buscarCategoriasObservacion(this.view.getTxtBuscar().getText()));
 		        
 				}
-			if(this.view.getRdbtnMarca().isSelected()){  
-				cargarTabla(myMarcaDao.buscarMarcas(this.view.getTxtBuscar().getText()));
+			if(this.view.getRdbtnCategoria().isSelected()){  
+				cargarTabla(myMarcaDao.buscarCategorias(this.view.getTxtBuscar().getText()));
 				}
 			
 			if(this.view.getRdbtnTodos().isSelected()){  
-				cargarTabla(myMarcaDao.todoMarcas());
+				cargarTabla(myMarcaDao.todoCategorias(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 				this.view.getTxtBuscar().setText("");
 				}
 			//if(myProveedorDao.buscarPro(Integer.parseInt(this.view.getTxtBuscar().getText())))
@@ -174,7 +178,7 @@ public class CtlMarcaBuscar implements ActionListener, MouseListener,WindowListe
 	
 		
 	}
-	public void cargarTabla(List<Marca> marcas){
+	public void cargarTabla(List<Categoria> marcas){
 		
 		this.view.getModelo().limpiarMarcas();
 		for(int c=0;c<marcas.size();c++)
@@ -182,7 +186,7 @@ public class CtlMarcaBuscar implements ActionListener, MouseListener,WindowListe
 		
 	}
 	
-	public Marca buscarMarca(){
+	public Categoria buscarMarca(){
 		
 		this.view.setVisible(true);
 		return myMarca;

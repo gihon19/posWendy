@@ -53,10 +53,12 @@ import javax.swing.SwingConstants;
 import view.botones.BotonActualizar;
 import view.botones.BotonCancelar;
 import view.botones.BotonGuardar;
+import view.rendes.PanelPadre;
 import view.tablemodel.CbxTmDepartamento;
 import view.tablemodel.DmtFacturaProveedores;
 
 import javax.swing.JComboBox;
+import javax.swing.JButton;
 
 
 public class ViewAgregarCompras extends JDialog {
@@ -90,109 +92,132 @@ public class ViewAgregarCompras extends JDialog {
 	
 	private CbxTmDepartamento modeloCbx;
 	private JComboBox cbxDepart;
+	private JLabel lblContado;
+	private JLabel lblCredito;
+	private JButton btnBuscar;
 	
 	
 	public ViewAgregarCompras(Window view) {
 		super(view,"Registrar Compras",Dialog.ModalityType.DOCUMENT_MODAL);
 		getContentPane().setLayout(null);
-		modeloCbx=new CbxTmDepartamento();//comentar para ver en forma de diseño
+		modeloCbx=new CbxTmDepartamento();//comentar para ver en forma de diseï¿½o
 		
-		panelProveedor=new JPanel();
+		panelProveedor=new PanelPadre();
 		panelProveedor.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Proveedor", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panelProveedor.setBounds(10, 82, 764, 78);
+		panelProveedor.setBounds(10, 90, 764, 78);
 		panelProveedor.setLayout(null);
+		
+		Color color1 =new Color(60, 179, 113);
+		Color color2 =Color.decode("#33cccc");
+		Color color3 =Color.decode("#d4f4ff");
+		Color color4 =Color.decode("#f4fbfe");
+		
+		this.getContentPane().setBackground(color3);
 		
 		//JPanel panelProveedor = new JPanel();
 		
 		//
 		
 		JLabel lblIdProveedor = new JLabel("Id");
-		lblIdProveedor.setBounds(10, 21, 72, 14);
+		lblIdProveedor.setBounds(15, 21, 72, 14);
 		panelProveedor.add(lblIdProveedor);
 		
 		txtIdProveedor = new JTextField();
-		txtIdProveedor.setBounds(10, 36, 104, 31);
+		txtIdProveedor.setBounds(15, 36, 104, 31);
 		txtIdProveedor.setToolTipText("Id Proveedor");
 		panelProveedor.add(txtIdProveedor);
 		txtIdProveedor.setColumns(10);
 		
 		JLabel lblNombreProveedor = new JLabel("Nombre");
-		lblNombreProveedor.setBounds(144, 21, 104, 14);
+		lblNombreProveedor.setBounds(181, 21, 104, 14);
 		panelProveedor.add(lblNombreProveedor);
 		
 		txtNombreproveedor = new JTextField();
 		txtNombreproveedor.setEditable(false);
-		txtNombreproveedor.setBounds(144, 36, 276, 31);
+		txtNombreproveedor.setBounds(181, 36, 276, 31);
 		panelProveedor.add(txtNombreproveedor);
 		txtNombreproveedor.setColumns(10);
 		
 		getContentPane().add(panelProveedor);
 		
 		JLabel lblTelefono = new JLabel("Telefono");
-		lblTelefono.setBounds(455, 21, 58, 14);
+		lblTelefono.setBounds(472, 21, 58, 14);
 		panelProveedor.add(lblTelefono);
 		
 		txtTelefonoProveedor = new JTextField();
 		txtTelefonoProveedor.setEditable(false);
-		txtTelefonoProveedor.setBounds(455, 36, 276, 31);
+		txtTelefonoProveedor.setBounds(472, 36, 276, 31);
 		panelProveedor.add(txtTelefonoProveedor);
 		txtTelefonoProveedor.setColumns(10);
 		
-		JPanel panelInfoCompra = new JPanel();
-		panelInfoCompra.setBounds(10, 11, 764, 72);
-		panelInfoCompra.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "------------------", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		btnBuscar = new JButton("...");
+		btnBuscar.setBounds(116, 38, 32, 29);
+		panelProveedor.add(btnBuscar);
+		
+		JPanel panelInfoCompra = new PanelPadre();
+		panelInfoCompra.setBounds(10, 11, 764, 80);
+		panelInfoCompra.setBorder(new TitledBorder(new LineBorder(new Color(130, 135, 144)), "Datos Generales", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		getContentPane().add(panelInfoCompra);
 		panelInfoCompra.setLayout(null);
 		
 		JLabel lblFecha = new JLabel("Fecha Factura");
-		lblFecha.setBounds(10, 11, 80, 14);
+		lblFecha.setBounds(10, 18, 90, 14);
 		panelInfoCompra.add(lblFecha);
 		
 		dateCompra = new JDateChooser("dd/MM/yyyy", "##/##/####", '_');
-		dateCompra.setBounds(10, 30, 134, 31);
+		dateCompra.setBounds(10, 36, 134, 31);
 	
 		panelInfoCompra.add(dateCompra);
 		dateCompra.setDateFormatString("dd-MM-yyyy");
 		//dateCompra.setDate(Date.);
 		
 		JLabel lblNoFactura = new JLabel("No Factura");
-		lblNoFactura.setBounds(149, 11, 62, 14);
+		lblNoFactura.setBounds(149, 18, 90, 14);
 		panelInfoCompra.add(lblNoFactura);
 		
 		txtNofactura = new JTextField();
-		txtNofactura.setBounds(149, 30, 102, 31);
+		txtNofactura.setBounds(149, 36, 102, 31);
 		panelInfoCompra.add(txtNofactura);
 		txtNofactura.setColumns(10);
 		
 		grupoOpciones = new ButtonGroup();
-		rdbtnCredito = new JRadioButton("Credito");
-		rdbtnCredito.setBounds(326, 34, 72, 23);
+		rdbtnCredito = new JRadioButton("");
+		rdbtnCredito.setBounds(340, 40, 40, 23);
 		grupoOpciones.add(rdbtnCredito);
 		panelInfoCompra.add(rdbtnCredito);
 		
-		rdbtnContado = new JRadioButton("Contado");
+		rdbtnContado = new JRadioButton("");
 		rdbtnContado.setSelected(true);
-		rdbtnContado.setBounds(256, 34, 80, 23);
+		rdbtnContado.setBounds(274, 40, 40, 23);
 		grupoOpciones.add(rdbtnContado);
 		panelInfoCompra.add(rdbtnContado);
 		
 		lblFechaVencimiento = new JLabel("Vencimiento");
-		lblFechaVencimiento.setBounds(405, 11, 72, 14);
+		lblFechaVencimiento.setBounds(405, 18, 90, 14);
 		panelInfoCompra.add(lblFechaVencimiento);
 		
 		dateVencFactura = new JDateChooser();
 		dateVencFactura.setDateFormatString("dd-MM-yyyy");
-		dateVencFactura.setBounds(405, 30, 129, 31);
+		dateVencFactura.setBounds(405, 36, 129, 31);
 		dateVencFactura.setEnabled(false);
 		panelInfoCompra.add(dateVencFactura);
 		
 		JLabel lblDepartementoDeLa = new JLabel("Departemento de la compra");
-		lblDepartementoDeLa.setBounds(544, 11, 168, 14);
+		lblDepartementoDeLa.setBounds(544, 18, 200, 14);
 		panelInfoCompra.add(lblDepartementoDeLa);
 		
+		lblContado = new JLabel("Contado");
+		lblContado.setBounds(274, 17, 61, 16);
+		panelInfoCompra.add(lblContado);
+		
+		lblCredito = new JLabel("Credito");
+		lblCredito.setBounds(340, 17, 61, 16);
+		panelInfoCompra.add(lblCredito);
+		
+	
 		cbxDepart = new JComboBox();
 		cbxDepart.setModel(modeloCbx);
-		cbxDepart.setBounds(544, 30, 210, 31);
+		cbxDepart.setBounds(544, 36, 210, 31);
 		panelInfoCompra.add(cbxDepart);
 		
 		//botones
@@ -218,18 +243,21 @@ public class ViewAgregarCompras extends JDialog {
 		tablaArticulos=new JTable();
 		modelo = new DmtFacturaProveedores();//se crea el modelo de los datos de la tabla
 		tablaArticulos.setModel(modelo);
-		tablaArticulos.getColumnModel().getColumn(0).setPreferredWidth(140);     //Tamaño de las columnas de las tablas
+		tablaArticulos.getColumnModel().getColumn(0).setPreferredWidth(140);     //Tamaï¿½o de las columnas de las tablas
 		tablaArticulos.getColumnModel().getColumn(1).setPreferredWidth(200);	//
 		tablaArticulos.getColumnModel().getColumn(2).setPreferredWidth(90);	//
 		tablaArticulos.getColumnModel().getColumn(3).setPreferredWidth(90);	//
 		tablaArticulos.getColumnModel().getColumn(4).setPreferredWidth(90);	//
 		tablaArticulos.getColumnModel().getColumn(5).setPreferredWidth(90);	//
+		tablaArticulos.setRowHeight(25);
 		//tablaArticulos.getColumnModel().getColumn(6).setPreferredWidth(100);	//
 		//Estitlo para la tabla		
 		//TablaRenderizadorProveedor renderizador = new TablaRenderizadorProveedor();
 		//tablaArticulos.setDefaultRenderer(String.class, renderizador);
 		JScrollPane scrollPane = new JScrollPane(tablaArticulos);
 		scrollPane.setBounds(10, 171, 764, 250);
+		scrollPane.setBackground(color3);
+		scrollPane.getViewport().setBackground(color3);
 		getContentPane().add(scrollPane);
 		
 		txtTotalimpuesto = new JTextField();
@@ -324,6 +352,9 @@ public class ViewAgregarCompras extends JDialog {
 	}
 	public void conectarControlador(CtlAgregarCompras c){
 		
+		
+		btnBuscar.addActionListener(c);
+		btnBuscar.setActionCommand("BUSCARPROVEEDOR2");
 		
 		this.txtIdProveedor.addActionListener(c);
 		this.txtIdProveedor.setActionCommand("BUSCARPROVEEDOR");

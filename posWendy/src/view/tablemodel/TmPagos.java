@@ -8,11 +8,15 @@ import javax.swing.table.AbstractTableModel;
 import modelo.ReciboPago;
 
 
-public class TmPagos extends AbstractTableModel {
+public class TmPagos extends TablaModelo {
 	final private String []columnNames= {
 			"Fecha","No Recibo", "Cliente", "Total"
 		};
 	private List<ReciboPago> pagos=new ArrayList<ReciboPago>();
+	
+	public TmPagos(){
+		
+	}
 
 	@Override
 	public String getColumnName(int columnIndex) {

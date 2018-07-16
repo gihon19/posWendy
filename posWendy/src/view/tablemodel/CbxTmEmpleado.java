@@ -10,7 +10,7 @@ import modelo.Impuesto;
 
 public class CbxTmEmpleado extends DefaultComboBoxModel{
 	
-	private Vector<Empleado> empleados;
+	private Vector<Empleado> empleados=new Vector<Empleado>();
 
 	@Override
 	public int getSize() {
@@ -24,6 +24,11 @@ public class CbxTmEmpleado extends DefaultComboBoxModel{
 	
 	public void setLista(Vector<Empleado> im){
 		empleados=im;
+	}
+	public void addEmpleado(Empleado m){
+		empleados.addElement(m);
+		//this.f
+
 	}
 	
 	public CbxTmEmpleado(){

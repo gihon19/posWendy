@@ -12,6 +12,7 @@ public class DetalleFactura {
 	private int descuento=0;
 	private int idFactura=1;
 	private boolean accion=false;
+	private int id=0;
 	
 	public void setAccion(boolean d){
 		accion=d;
@@ -71,6 +72,18 @@ public class DetalleFactura {
 	}
 	public BigDecimal getTotal(){
 		return total;
+	}
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
 	}
 
 }

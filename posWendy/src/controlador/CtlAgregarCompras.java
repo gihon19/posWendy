@@ -32,7 +32,8 @@ import modelo.Proveedor;
 import modelo.dao.ProveedorDao;
 import view.ViewAgregarCompras;
 import view.ViewListaArticulo;
-import view.tablemodel.TablaModeloMarca;
+import view.ViewListaProveedor;
+import view.tablemodel.TmCategorias;
 
 
 public class CtlAgregarCompras implements ActionListener,MouseListener,TableModelListener, WindowListener,KeyListener {
@@ -76,7 +77,26 @@ public class CtlAgregarCompras implements ActionListener,MouseListener,TableMode
 		// TODO Auto-generated method stub
 		String comando=e.getActionCommand();
 		switch(comando){
+		
+			case "BUSCARPROVEEDOR2":
+				
+				ViewListaProveedor vListaProveedores= new ViewListaProveedor(view);
+				CtlProveedoresBuscar ctlProveedoresBuscar= new CtlProveedoresBuscar(vListaProveedores,conexion);
+				
+				boolean resultado=ctlProveedoresBuscar.buscarProveedores(view);
+				if(resultado){
+					myProveedor=ctlProveedoresBuscar.getProveedor();
+					view.getTxtIdProveedor().setText(myProveedor.getId()+"");
+					this.view.getTxtNombreproveedor().setText(myProveedor.getNombre());
+					this.view.gettxtTelefonoProveedor().setText(myProveedor.getTelefono());
+					this.myFactura.setProveedor(myProveedor);
+				}
+				
+				vListaProveedores.dispose();
+				ctlProveedoresBuscar=null;
+				break;
 			case "BUSCARPROVEEDOR":
+				
 				//String stIdProveedor=this.view.getTxtIdProveedor().getText();
 				//int inIdProveedor=Integer.parseInt(stIdProveedor);
 				myProveedor=myProveedorDao.buscarPro(Integer.parseInt(this.view.getTxtIdProveedor().getText()));
@@ -638,7 +658,7 @@ public class CtlAgregarCompras implements ActionListener,MouseListener,TableMode
 		this.view.getTablaArticulos().scrollRectToVisible(rect);
 		this.view.getTablaArticulos().clearSelection();
 		this.view.getTablaArticulos().setRowSelectionInterval(row, row);
-		TablaModeloMarca modelo = (TablaModeloMarca)this.view.getTablaArticulos().getModel();
+		TmCategorias modelo = (TmCategorias)this.view.getTablaArticulos().getModel();
 		modelo.fireTableDataChanged();
 	}
 

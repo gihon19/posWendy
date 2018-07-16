@@ -5,16 +5,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import modelo.AbstractJasperReports;
 import modelo.Articulo;
 import modelo.Cliente;
 import modelo.dao.ClienteDao;
 import modelo.dao.CodBarraDao;
 import modelo.Conexion;
-import view.tablemodel.TablaModeloMarca;
+import view.tablemodel.TmCategorias;
 import view.ViewCrearArticulo;
 import view.ViewCrearCliente;
 import view.ViewListaClientes;
@@ -34,7 +36,7 @@ public class CtlClienteLista implements ActionListener, MouseListener {
 		view.conectarControlador(this);
 		
 		clienteDao=new ClienteDao(conexion);
-		cargarTabla(clienteDao.todoClientes());
+		cargarTabla(clienteDao.todoClientes(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 		view.setVisible(true);
 	}
 
@@ -43,7 +45,9 @@ public class CtlClienteLista implements ActionListener, MouseListener {
 		// TODO Auto-generated method stub
 		String comando=e.getActionCommand();
 		switch (comando){
-		
+		case "ESCRIBIR":
+			view.setTamanioVentana(1);
+			break;
 		case "BUSCAR":
 			//si se seleciono el boton ID
 			if(this.view.getRdbtnId().isSelected()){  
@@ -65,38 +69,85 @@ public class CtlClienteLista implements ActionListener, MouseListener {
 				cargarTabla(clienteDao.buscarClienteRtn(this.view.getTxtBuscar().getText()));
 				}
 			
-			if(this.view.getRdbtnTodos().isSelected()){  
-				cargarTabla(clienteDao.todoClientes());
+			if(this.view.getRdbtnTodos().isSelected()){
+				view.getModelo().setPaginacion();
+				cargarTabla(clienteDao.todoClientes(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 				this.view.getTxtBuscar().setText("");
 				}
 			break;
 		case "NUEVO":
-			ViewCrearCliente view=new ViewCrearCliente();
-			CtlCliente ctlCliente=new CtlCliente(view,conexion);
+			ViewCrearCliente viewNewCliente=new ViewCrearCliente();
+			CtlCliente ctlCliente=new CtlCliente(viewNewCliente,conexion);
 			
 			boolean resuldoGuarda=ctlCliente.agregarCliente();
 			if(resuldoGuarda){
+				view.getModelo().setPaginacion();
+				cargarTabla(clienteDao.todoClientes(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+				/*
 				this.view.getModelo().agregarCliente(ctlCliente.getClienteGuardado());
 				
-				/*<<<<<<<<<<<<<<<selecionar la ultima fila creada>>>>>>>>>>>>>>>*/
-				int row =  this.view.getTablaClientes().getRowCount () - 1;
-				Rectangle rect = this.view.getTablaClientes().getCellRect(row, 0, true);
-				this.view.getTablaClientes().scrollRectToVisible(rect);
-				this.view.getTablaClientes().clearSelection();
-				this.view.getTablaClientes().setRowSelectionInterval(row, row);
-				TablaModeloMarca modelo = (TablaModeloMarca)this.view.getTablaClientes().getModel();
-				modelo.fireTableDataChanged();
+				/*<<<<<<<<<<<<<<<selecionar la ultima fila creada>>>>>>>>>>>>>>>
+				int row =  this.view.getTabla().getRowCount () - 1;
+				Rectangle rect = this.view.getTabla().getCellRect(row, 0, true);
+				this.view.getTabla().scrollRectToVisible(rect);
+				this.view.getTabla().clearSelection();
+				this.view.getTabla().setRowSelectionInterval(row, row);
+				TablaModeloMarca modelo = (TablaModeloMarca)this.view.getTabla().getModel();
+				modelo.fireTableDataChanged();*/
 			}
 			view=null;
 			ctlCliente=null;
+			break;
+			
+		case "NEXT":
+			view.getModelo().netPag();
+			cargarTabla(clienteDao.todoClientes(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
+			break;
+		case "LAST":
+			view.getModelo().lastPag();
+			cargarTabla(clienteDao.todoClientes(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
+			break;
+		case "CUENTASCLIENTES":
+			try {
+    			AbstractJasperReports.createReportSaltosClientes(conexion.getPoolConexion().getConnection());
+    			AbstractJasperReports.showViewer(this.view);
+    			
+    		}catch (SQLException ee) {
+				// TODO Auto-generated catch block
+				ee.printStackTrace();
+			}
+			
+			break;
+		case "CUENTACLIENTE":
+			
+			
+            
+          //se consigue el proveedore de la fila seleccionada
+            myCliente=this.view.getModelo().getCliente(filaPulsada);
+            
+            
+            try {
+				AbstractJasperReports.createReportCuentaCliente(conexion.getPoolConexion().getConnection(),myCliente.getId());
+				AbstractJasperReports.showViewer(this.view);
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+            
 			break;
 		}
 	}
 	public void cargarTabla(List<Cliente> clientes){
 		//JOptionPane.showMessageDialog(view, articulos);
 		this.view.getModelo().limpiarClientes();
-		for(int c=0;c<clientes.size();c++){
-			this.view.getModelo().agregarCliente(clientes.get(c));
+		if(clientes!=null){
+			for(int c=0;c<clientes.size();c++){
+				this.view.getModelo().agregarCliente(clientes.get(c));
+			}
 		}
 	}
 
@@ -104,8 +155,8 @@ public class CtlClienteLista implements ActionListener, MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
-		//Recoger qué fila se ha pulsadao en la tabla
-        filaPulsada = this.view.getTablaClientes().getSelectedRow();
+		//Recoger quï¿½ fila se ha pulsadao en la tabla
+        filaPulsada = this.view.getTabla().getSelectedRow();
         
         //si seleccion una fila
         if(filaPulsada>=0){
@@ -139,7 +190,7 @@ public class CtlClienteLista implements ActionListener, MouseListener {
 				if(resultado){
 					this.view.getModelo().cambiarCliente(filaPulsada, ctlActulizarCliente.getClienteGuardado());//se cambia en la vista
 					this.view.getModelo().fireTableDataChanged();//se refrescan los cambios
-					this.view.getTablaClientes().getSelectionModel().setSelectionInterval(filaPulsada,filaPulsada);//se seleciona lo cambiado
+					this.view.getTabla().getSelectionModel().setSelectionInterval(filaPulsada,filaPulsada);//se seleciona lo cambiado
 				}	
 			
 				ctlActulizarCliente=null;

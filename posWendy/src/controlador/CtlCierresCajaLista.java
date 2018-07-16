@@ -32,15 +32,17 @@ public class CtlCierresCajaLista implements ActionListener, MouseListener {
 		myDao=new CierreCajaDao(conexion);
 		myCierre=new CierreCaja();
 		view.conectarCtl(this);
-		cargarTabla(myDao.todos());
+		cargarTabla(myDao.todos(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 		view.setVisible(true);
 	}
 	
 	private void cargarTabla(List<CierreCaja> cierres) {
 		// TODO Auto-generated method stub
 		view.getModelo().limpiar();
-		for(int x=0;x<cierres.size();x++)
-			view.getModelo().agregar(cierres.get(x));
+		if(cierres!=null){
+			for(int x=0;x<cierres.size();x++)
+				view.getModelo().agregar(cierres.get(x));
+		}
 	}
 
 	@Override
@@ -117,18 +119,32 @@ public class CtlCierresCajaLista implements ActionListener, MouseListener {
 			break;
 		case "BUSCAR":
 			if(view.getRdbtnTodos().isSelected()){
-				cargarTabla(myDao.todos());
+				cargarTabla(myDao.todos(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
 			}
 			
-			if(view.getRdbtnFechas().isSelected()){
+			if(view.getRdbtnFecha().isSelected()){
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				String date1 = sdf.format(this.view.getBuscar1().getDate());
-				String date2 = sdf.format(this.view.getBuscar2().getDate());
+				String date1 = sdf.format(this.view.getDcFecha1().getDate());
+				String date2 = sdf.format(this.view.getDcFecha2().getDate());
 				
 				//JOptionPane.showMessageDialog(view, date1+" al  "+date2);
 				cargarTabla(myDao.porFecha(date1,date2));
 			}
 			break;
+			
+		case "NEXT":
+			view.getModelo().netPag();
+			cargarTabla(myDao.todos(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
+			break;
+		case "LAST":
+			view.getModelo().lastPag();
+			cargarTabla(myDao.todos(view.getModelo().getLimiteInferior(),view.getModelo().getLimiteSuperior()));
+			
+			view.getTxtPagina().setText(""+view.getModelo().getNoPagina());
+			break;
+			
 		}
 		
 	}

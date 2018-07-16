@@ -24,6 +24,12 @@ public class Empleado extends Persona {
 	public Empleado() {
 		// TODO Auto-generated constructor stub
 	}
+	public Empleado(String n, String a) {
+		// TODO Auto-generated constructor stub
+		//super(nombre,apellido);
+		super.setApellido(a);
+		super.setNombre(n);
+	}
 	/**
 
      * metodo para establecer el codigo empleado
@@ -36,7 +42,7 @@ public class Empleado extends Persona {
 	}
 	/**
 
-     * Método que devuelve el codigo del empleado
+     * Mï¿½todo que devuelve el codigo del empleado
      * @return codigo empleado
 
      */
@@ -56,7 +62,7 @@ public class Empleado extends Persona {
 	
 	/**
 
-     * Método que devuelve el sueldo base del empleado
+     * Mï¿½todo que devuelve el sueldo base del empleado
      * @return sueldo base
 
      */
@@ -77,7 +83,7 @@ public class Empleado extends Persona {
 	
 	/**
 
-     * Método que devuelve el total de la comision empleado
+     * Mï¿½todo que devuelve el total de la comision empleado
      * @return total comision empleado
 
      */
@@ -99,7 +105,7 @@ public class Empleado extends Persona {
 	
 	/**
 
-     * Método que devuelve el total de ventas del empleado
+     * Mï¿½todo que devuelve el total de ventas del empleado
      * @return total ventas del empleado
 
      */
@@ -119,7 +125,7 @@ public class Empleado extends Persona {
 	}
 	/**
 
-     * Método que devuelve el % las comision de ventas del empleado
+     * Mï¿½todo que devuelve el % las comision de ventas del empleado
      * @return porcentaje de comision ventas del empleado
 
      */

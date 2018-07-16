@@ -4,10 +4,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
 
@@ -20,34 +20,22 @@ import javax.swing.JLabel;
 
 import controlador.CtlMenuPrincipal;
 
-import java.awt.Color;
-import java.awt.Component;
-
-import javax.swing.Box;
-
 public class ViewMenuPrincipal extends JFrame {
 	private final JLabel usuario = new JLabel("Usuario:");
-	
-	private JMenuItem mntmCerrarFacturacion;
 	private JMenuItem mntmProveedores;
 	private JMenuItem mntmArticulos;
-	private JMenuItem mntmMarcas;
-	private JMenuItem mntmAgregarCompras;
+	private JMenuItem mntmCategorias;
 	private JMenuItem mntmFacturar;
 	private JMenuItem mntmClientes;
 	private JMenuItem mntmBuscarFacturas;
-	private JMenuItem mntmFacturasIngresadas;
-	private JMenuItem mntmRequisicion;
 	private JLabel lblUserName;
 	private JMenu mnArchivo;
 	private JMenuItem mntmUsuarios;
 	private JMenuItem mntmSalir;
-	private JMenu mnRequisiciones;
-	private JMenuItem mntmVerRequi;
+	private JMenuItem mnRequisiciones;
 	
-	private JMenuItem mntmPagosClientes;
+	
 	private JMenuItem mntmListaPagos;
-	private JMenuItem mntmProgramarPrecios;
 	private JMenu mnReportes;
 	private JMenuItem mntmDeclaracionDei;
 
@@ -57,9 +45,16 @@ public class ViewMenuPrincipal extends JFrame {
 
 	private JMenuItem mntmEmpleados;
 	private JMenuItem mntmComisiones;
+	private JMenu mnCompras;
+	private JMenuItem mntmGestionCompas;
+	private JMenuItem mntmSalidasCaja;
+	private JMenuItem mntmPagoAproveedores;
+	private JMenuItem mntmCotizaciones;
+	private JMenuItem mntmCuentasDeBancos;
+	private JButton btnAlertaExistencia;
 	
 	public ViewMenuPrincipal() {
-		setTitle("AdminTools");
+		setTitle("Admin Tools");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ViewMenuPrincipal.class.getResource("/view/recursos/logo-admin-tool1.png")));
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -86,20 +81,11 @@ public class ViewMenuPrincipal extends JFrame {
 		mntmArticulos = new JMenuItem("Articulos");
 		mnInventario.add(mntmArticulos);
 		
-		mntmMarcas = new JMenuItem("Categorias");
-		mnInventario.add(mntmMarcas);
+		mntmCategorias = new JMenuItem("Categorias");
+		mnInventario.add(mntmCategorias);
 		
-		mntmProgramarPrecios = new JMenuItem("Programar Precios");
-		mnInventario.add(mntmProgramarPrecios);
-		
-		mnRequisiciones = new JMenu("Requisiciones");
+		mnRequisiciones = new JMenuItem("Requisiciones");
 		mnInventario.add(mnRequisiciones);
-		
-		mntmRequisicion = new JMenuItem("Agregar");
-		mnRequisiciones.add(mntmRequisicion);
-		
-		mntmVerRequi = new JMenuItem("Ver");
-		mnRequisiciones.add(mntmVerRequi);
 		
 		JMenu mnFacturacion = new JMenu("Facturacion");
 		menuBar.add(mnFacturacion);
@@ -107,33 +93,31 @@ public class ViewMenuPrincipal extends JFrame {
 		mntmFacturar = new JMenuItem("Facturar");
 		mnFacturacion.add(mntmFacturar);
 		
-		mntmCerrarFacturacion = new JMenuItem("Cerrar Facturacion");
-		mnFacturacion.add(mntmCerrarFacturacion);
-		
 
 		mntmClientes = new JMenuItem("Clientes");
 		mnFacturacion.add(mntmClientes);
 		
-		mntmBuscarFacturas = new JMenuItem("Buscar Facturas");
+		mntmBuscarFacturas = new JMenuItem("Buscar facturas");
 		mnFacturacion.add(mntmBuscarFacturas);
 		
-		JMenu mnCompras = new JMenu("Compras");
+		mntmSalidasCaja = new JMenuItem("Salidas caja");
+		mnFacturacion.add(mntmSalidasCaja);
+		
+		mntmCotizaciones = new JMenuItem("Cotizaciones");
+		mnFacturacion.add(mntmCotizaciones);
+		
+		mnCompras = new JMenu("Compras");
 		menuBar.add(mnCompras);
 		
-		mntmAgregarCompras = new JMenuItem("Agregar");
-		mnCompras.add(mntmAgregarCompras);
+		mntmGestionCompas = new JMenuItem("Gestion compras");
+		mnCompras.add(mntmGestionCompas);
 		
-		mntmFacturasIngresadas = new JMenuItem("Facturas Ingresadas");
-		mnCompras.add(mntmFacturasIngresadas);
-		
-		JMenu mnCuentasPorCobrar = new JMenu("Cuentas por Cobrar");
+		JMenu mnCuentasPorCobrar = new JMenu("Cuentas por cobrar");
 		menuBar.add(mnCuentasPorCobrar);
 		
-		mntmListaPagos = new JMenuItem("Ver Pagos");
+		mntmListaPagos = new JMenuItem("Ver pagos");
 		mnCuentasPorCobrar.add(mntmListaPagos);
 		
-		mntmPagosClientes = new JMenuItem("Pagos Clientes");
-		mnCuentasPorCobrar.add(mntmPagosClientes);
 		
 		mnReportes = new JMenu("Reportes");
 		menuBar.add(mnReportes);
@@ -150,11 +134,15 @@ public class ViewMenuPrincipal extends JFrame {
 		mntmComisiones = new JMenuItem("Comisiones");
 		mnReportes.add(mntmComisiones);
 		
-		JMenu mnCuentasPorPagar = new JMenu("Cuentas Por Pagar");
+		JMenu mnCuentasPorPagar = new JMenu("Cuentas por pagar");
 		menuBar.add(mnCuentasPorPagar);
 		
-		JMenuItem mntmFacturasPendientes = new JMenuItem("Facturas pendientes");
-		mnCuentasPorPagar.add(mntmFacturasPendientes);
+		mntmPagoAproveedores = new JMenuItem("Pagos de aproveedores");
+		mnCuentasPorPagar.add(mntmPagoAproveedores);
+		
+		mntmCuentasDeBancos = new JMenuItem("Cuentas de bancos");
+		mnCuentasPorPagar.add(mntmCuentasDeBancos);
+		
 		
 		JMenuItem mntmAcercaDe = new JMenuItem("Acerca de..");
 		menuBar.add(mntmAcercaDe);
@@ -169,6 +157,9 @@ public class ViewMenuPrincipal extends JFrame {
 		
 		lblUserName = new JLabel("Unico");
 		panel.add(lblUserName);
+		
+		btnAlertaExistencia = new JButton("New button");
+		panel.add(btnAlertaExistencia);
 		
 		JPanel panel_1 = new panelFondo();
 		getContentPane().add(panel_1, BorderLayout.CENTER);
@@ -195,11 +186,17 @@ public class ViewMenuPrincipal extends JFrame {
 		mntmArticulos.addActionListener(c);
 		mntmArticulos.setActionCommand("ARTICULOS");
 		
-		mntmMarcas.addActionListener(c);
-		mntmMarcas.setActionCommand("MARCAS");
+		mntmCategorias.addActionListener(c);
+		mntmCategorias.setActionCommand("CATEGORIAS");
 		
-		mntmAgregarCompras.addActionListener(c);
-		mntmAgregarCompras.setActionCommand("AGREGARCOMPRAS");
+		
+		mntmGestionCompas.addActionListener(c);
+		mntmGestionCompas.setActionCommand("LISTAFACTURASCOMPRA");
+		
+		mntmCuentasDeBancos.addActionListener(c);
+		mntmCuentasDeBancos.setActionCommand("CUENTASBANCOS");
+		
+		
 		
 		mntmFacturar.addActionListener(c);
 		mntmFacturar.setActionCommand("FACTURAR");
@@ -210,30 +207,16 @@ public class ViewMenuPrincipal extends JFrame {
 		mntmBuscarFacturas.addActionListener(c);
 		mntmBuscarFacturas.setActionCommand("BUSCARFACTURAS");
 		
-		mntmCerrarFacturacion.addActionListener(c);
-		mntmCerrarFacturacion.setActionCommand("CERRARFACTURACION");
-		
-		
-		mntmFacturasIngresadas.addActionListener(c);
-		mntmFacturasIngresadas.setActionCommand("LISTAFACTURASCOMPRA");
-		
-		mntmRequisicion.addActionListener(c);
-		mntmRequisicion.setActionCommand("REQUISICION");
+		mnRequisiciones.addActionListener(c);
+		mnRequisiciones.setActionCommand("REQUISICIONES");
 		
 		mntmUsuarios.addActionListener(c);
 		mntmUsuarios.setActionCommand("USUARIOS");
 		
-		mntmVerRequi.addActionListener(c);
-		mntmVerRequi.setActionCommand("REQUISICIONES");
 		
-		mntmPagosClientes.addActionListener(c);
-		mntmPagosClientes.setActionCommand("PAGOCLIENTES");
 		
 		mntmListaPagos.addActionListener(c);
 		mntmListaPagos.setActionCommand("LISTAPAGOS");
-		
-		mntmProgramarPrecios.addActionListener(c);
-		mntmProgramarPrecios.setActionCommand("PROGRAMARPRECIOS");
 		
 		
 		mntmDeclaracionDei.addActionListener(c);
@@ -252,6 +235,19 @@ public class ViewMenuPrincipal extends JFrame {
 		mntmComisiones.addActionListener(c);
 		mntmComisiones.setActionCommand("COMISIONES");
 		
+		mntmSalidasCaja.addActionListener(c);
+		mntmSalidasCaja.setActionCommand("SALIDASCAJAS");
+		
+		mntmPagoAproveedores.addActionListener(c);
+		mntmPagoAproveedores.setActionCommand("PAGOPROVEEDORES");
+		
+		
+		mntmCotizaciones.addActionListener(c);
+		mntmCotizaciones.setActionCommand("COTIZACIONES");
+		
+		btnAlertaExistencia.addActionListener(c);
+		btnAlertaExistencia.setActionCommand("ALERTAEXISTENCIAS");
+		
 	}
 	public JLabel getLblUserName(){
 		return lblUserName;
@@ -268,6 +264,12 @@ public class ViewMenuPrincipal extends JFrame {
 		      setOpaque(false);
 		      super.paintComponent(g);
 		   }
+	}
+	/**
+	 * @return the btnAlertaExistencia
+	 */
+	public JButton getBtnAlertaExistencia() {
+		return btnAlertaExistencia;
 	}
 
 }

@@ -31,66 +31,70 @@ import view.botones.BotonCobrar;
 import java.awt.SystemColor;
 import java.awt.Color;
 import java.awt.event.WindowListener;
+import java.awt.GridLayout;
 
 public class ViewCambioPago extends JDialog {
 	private JTextField txtEfectivo;
 	private JTextField txtCambio;
 	//private final ToggleGroup grupo;
-	private ButtonGroup grupoOpciones;
+	//private ButtonGroup grupoOpciones;
 	
-	private JToggleButton tglbtnEfectivo;
-	private JToggleButton tglbtnTarjetaCredito;
-	private JPanel panel;
-	private JPanel panel_1;
+	//private JToggleButton tglbtnEfectivo;
+	//private JToggleButton tglbtnTarjetaCredito;
+	
 	private JTextField txtReferenciatarjeta;
 	private BotonCobrar btnCobrar;
 	private BotonCancelar btnCerrar;
-	private JPanel panel_2;
+	private JLabel lblTarjetaCreditodebito;
 	
 	public ViewCambioPago(Window v) {
 		
 		super(v,"Forma de pago",Dialog.ModalityType.DOCUMENT_MODAL);
 		//setUndecorated(true);
 		Font myFont=new Font("OCR A Extended", Font.PLAIN, 45);
-		 grupoOpciones = new ButtonGroup(); // crea ButtonGroup//para el grupo de la forma de pago
 		 //Color color1 =Color.decode("#0009999");
 		 Color color1 =Color.decode("#d4f4ff");
 		 this.getContentPane().setBackground(color1);
 		this.setSize(588, 316);
 		this.setPreferredSize(new Dimension(588, 316));
 		this.setResizable(false);
-		//setUndecorated(true);
-		getContentPane().setLayout(null);
 		
-		panel = new JPanel();
-		panel.setBounds(223, 6, 353, 161);
-		panel.setBackground(color1);
-		getContentPane().add(panel);
-		panel.setLayout(null);
-		
-		JLabel lblPagaCon = new JLabel("Paga con:");
-		lblPagaCon.setFont(new Font("Georgia", Font.BOLD, 13));
-		lblPagaCon.setForeground(Color.BLACK);
-		lblPagaCon.setBounds(6, 6, 77, 14);
-		panel.add(lblPagaCon);
+		JLabel lblEfectivo = new JLabel("      Efectivo");
+		lblEfectivo.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		getContentPane().add(lblEfectivo);
 		
 		txtEfectivo = new JTextField();
 		txtEfectivo.setBounds(6, 26, 341, 54);
 		txtEfectivo.setFont(myFont);
-		panel.add(txtEfectivo);
 		txtEfectivo.setColumns(10);
+		getContentPane().add(txtEfectivo);
 		
-		JLabel lblCambio = new JLabel("Cambio:");
-		lblCambio.setFont(new Font("Georgia", Font.BOLD, 13));
+		
+		
+		
+		lblTarjetaCreditodebito = new JLabel("      Tarjeta Credito/Debito");
+		lblTarjetaCreditodebito.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		getContentPane().add(lblTarjetaCreditodebito);
+		
+		txtReferenciatarjeta = new JTextField();
+		txtReferenciatarjeta.setBounds(6, 26, 341, 54);
+		txtReferenciatarjeta.setColumns(10);
+		txtReferenciatarjeta.setFont(myFont);
+		getContentPane().add(txtReferenciatarjeta);
+		
+		
+		
+		JLabel lblCambio = new JLabel("        Cambio:");
+		lblCambio.setFont(new Font("Georgia", Font.BOLD, 16));
 		lblCambio.setForeground(Color.BLACK);
 		lblCambio.setBounds(6, 92, 77, 14);
-		panel.add(lblCambio);
+		getContentPane().add(lblCambio);
 		
 		txtCambio = new JTextField();
 		txtCambio.setEditable(false);
 		txtCambio.setFont(myFont);
 		txtCambio.setBounds(6, 106, 341, 49);
-		panel.add(txtCambio);
+		getContentPane().add(txtCambio);
 		txtCambio.setColumns(10);
 		
 		//imagen para el boton efectivo
@@ -109,73 +113,32 @@ public class ViewCambioPago extends JDialog {
 		image = image.getScaledInstance(image.getWidth(null)/6, image.getHeight(null)/6, Image.SCALE_SMOOTH);
 		imgTarjeta.setImage(image);
 		
-		panel_1 = new JPanel();
-		panel_1.setBackground(color1);
-		panel_1.setBounds(223, 6, 355, 161);
-		getContentPane().add(panel_1);
-		panel_1.setLayout(null);
+		getContentPane().setLayout(new GridLayout(0, 2, 0, 0));
 		
-		JLabel lblReferencia = new JLabel("Referencia:");
-		lblReferencia.setForeground(Color.BLACK);
-		lblReferencia.setFont(new Font("Georgia", Font.BOLD, 13));
-		lblReferencia.setBounds(6, 6, 102, 14);
-		panel_1.add(lblReferencia);
 		
-		txtReferenciatarjeta = new JTextField();
-		txtReferenciatarjeta.setBounds(6, 26, 341, 54);
-		panel_1.add(txtReferenciatarjeta);
-		txtReferenciatarjeta.setColumns(10);
-		txtReferenciatarjeta.setFont(myFont);
-		panel_1.setVisible(false);
 		
-		btnCobrar = new BotonCobrar();
-		btnCobrar.setFont(new Font("Georgia", Font.BOLD, 13));
-		btnCobrar.setForeground(Color.BLACK);
-		btnCobrar.setBackground(color1);
-		btnCobrar.setText("F2 Cobrar");
-		btnCobrar.setBounds(418, 199, 144, 82);
-		getContentPane().add(btnCobrar);
 		
 		btnCerrar = new BotonCancelar();
 		btnCerrar.setFont(new Font("Georgia", Font.BOLD, 13));
 		btnCerrar.setForeground(Color.BLACK);
 		btnCerrar.setBackground(color1);
 		btnCerrar.setText("Esc Cerrar");
-		btnCerrar.setBounds(233, 199, 156, 82);
 		getContentPane().add(btnCerrar);
 		
-		panel_2 = new JPanel();
-		panel_2.setBackground(new Color(60, 179, 113));
-		panel_2.setBounds(0, 0, 219, 300);
-		getContentPane().add(panel_2);
-		panel_2.setLayout(null);
+		btnCobrar = new BotonCobrar();
+		btnCobrar.setFont(new Font("Georgia", Font.BOLD, 13));
+		btnCobrar.setForeground(Color.BLACK);
+		btnCobrar.setBackground(color1);
+		btnCobrar.setText("F2 Cobrar");
+		getContentPane().add(btnCobrar);
 		
-		tglbtnTarjetaCredito = new JToggleButton("Tarjeta Credito");
-		tglbtnTarjetaCredito.setBounds(10, 73, 194, 39);
-		panel_2.add(tglbtnTarjetaCredito);
-		tglbtnTarjetaCredito.setHorizontalAlignment(SwingConstants.LEFT);
-		tglbtnTarjetaCredito.setIcon(imgTarjeta);
-		grupoOpciones.add(tglbtnTarjetaCredito);
 		
-		tglbtnEfectivo = new JToggleButton("Efectivo");
-		tglbtnEfectivo.setBounds(10, 27, 194, 39);
-		panel_2.add(tglbtnEfectivo);
 		
-		tglbtnEfectivo.setHorizontalAlignment(SwingConstants.LEFT);
-		tglbtnEfectivo.setIcon(imgEfectivo);
-		grupoOpciones.add(tglbtnEfectivo);
-		tglbtnEfectivo.setSelected(true);
 		this.setResizable(false);
 		//centrar la ventana en la pantalla
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		this.pack();
-	}
-	public JPanel getPanelEfectivo(){
-		return panel_1;
-	}
-	public JPanel getPanelTarjeta(){
-		return panel;
 	}
 	public JTextField getTxtCambio(){
 		return txtCambio;
@@ -186,12 +149,7 @@ public class ViewCambioPago extends JDialog {
 	public JTextField getTxtReferencia(){
 		return txtReferenciatarjeta;
 	}
-	public JToggleButton getTglbtnEfectivo(){
-		return tglbtnEfectivo;
-	}
-	public  JToggleButton getTglbtnTarjetaCredito(){
-		return tglbtnTarjetaCredito;
-	}
+	
 	public JButton getBtnCobrar(){
 		return btnCobrar;
 	}
@@ -199,17 +157,15 @@ public class ViewCambioPago extends JDialog {
 		// TODO Auto-generated method stub
 		
 		//tglbtnEfectivo.addActionListener(c);
-		tglbtnEfectivo.addItemListener(c);
-		tglbtnTarjetaCredito.addItemListener(c);
+		
 		txtEfectivo.addActionListener(c);
 		txtEfectivo.addKeyListener(c);
-		
 		txtEfectivo.setActionCommand("CAMBIO");
+		
+		txtReferenciatarjeta.addActionListener(c);
+		txtReferenciatarjeta.setActionCommand("TARJETA");
 		txtReferenciatarjeta.addKeyListener(c);
-		
-		
-		tglbtnEfectivo.addKeyListener(c);
-		tglbtnTarjetaCredito.addKeyListener(c);
+	
 		
 		btnCerrar.addActionListener(c);
 		btnCerrar.setActionCommand("CERRAR");
